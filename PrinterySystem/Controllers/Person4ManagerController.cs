@@ -6,14 +6,14 @@ using System.Web.Mvc;
 
 namespace PrinterySystem.Controllers
 {
-    public class SystemOpController : Controller
+    public class Person4ManagerController : Controller
     {
-        // GET: SystemOp
-        public ActionResult Dashborad4employee()
+        // GET: Person4Manager
+        public ActionResult CustomerInfo()
         {
             return View();
         }
-        public ActionResult Dashborad4Manager()
+        public ActionResult EmployeeInfo()
         {
             return View();
         }

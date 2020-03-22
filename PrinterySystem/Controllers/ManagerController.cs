@@ -13,5 +13,17 @@ namespace PrinterySystem.Controllers
         {
             return View();
         }
+        public ActionResult StockManagement()
+        {
+            return View();
+        }
+        public ActionResult CustomerManagement()
+        {
+            return View();
+        }
+        public ActionResult EmployeeManagement()
+        {
+            return View();
+        }
     }
 }
