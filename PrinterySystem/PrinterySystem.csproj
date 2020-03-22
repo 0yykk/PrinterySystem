@@ -124,6 +124,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\SystemOpController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -149,6 +150,7 @@
     <Content Include="Content\Dashboradasset\js\bootstrap.min.js" />
     <Content Include="Content\Dashboradasset\js\popper.min.js" />
     <Content Include="Content\Dashboradasset\js\jquery-3.2.1.slim.min.js" />
+    <Content Include="Content\imges\icon\logo.jpg" />
     <Content Include="Content\Loginasset\signin.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -290,6 +292,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\SystemOp\Dashborad.cshtml" />
     <Content Include="Views\Shared\_LayoutSys.cshtml" />
+    <Content Include="Views\Manager\OrderManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
