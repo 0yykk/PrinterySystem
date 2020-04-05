@@ -1,15 +1,15 @@
 ﻿@{
-    ViewBag.Title = "订单管理";
+    ViewBag.Title = "纸品管理";
     Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
 
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>订单管理后台</title>
     <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 </head>
@@ -23,10 +23,16 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
-            <div class="col-md-8 text-right my-2 my-lg-0">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-title="新订单创建">
+            <div class="col-md-6 text-right my-2 my-lg-0">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-title="加入纸品">
                     <fa class="fa fa-shopping-cart"></fa>
-                    创建新订单
+                    加入新产品
+                </button>
+            </div>
+            <div class="col-md-2 text-right my-2 my-lg-0">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-title="纸品采购工单">
+                    <fa class="fa fa-shopping-cart"></fa>
+                    采购纸品
                 </button>
             </div>
         </div>
@@ -355,7 +361,25 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label>油墨名称</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

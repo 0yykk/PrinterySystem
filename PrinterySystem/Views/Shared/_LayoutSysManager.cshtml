@@ -26,19 +26,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">控制台 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="@Url.Action("Dashborad4Manager","SystemOp")">控制台 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">首页</a>
+                    <a class="nav-link" href="@Url.Action("MyInfo", "Person4Manager")">个人信息</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         人员管理
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">个人信息</a>
-                        <a class="dropdown-item" href="#">雇员信息</a>
-                        <a class="dropdown-item" href="#">客户信息</a>
+                        <a class="dropdown-item" href="@Url.Action("EmployeeInfo", "Person4Manager")">雇员管理</a>
+                        <a class="dropdown-item" href="@Url.Action("CustomerInfo", "Person4Manager")">客户管理</a>
                         @*<div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>*@
                     </div>
@@ -48,6 +47,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("OrderManagement", "Manager")">订单管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("WorkflowManagement", "Manager")">工单处理</a>
                 </li>
                 @*<li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>

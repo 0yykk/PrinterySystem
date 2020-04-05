@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Printery.Domain
+namespace Printery.Domain.ViewModel
 {
-    public class Class1
+    /// <summary>
+    /// 控制台视图
+    /// </summary>
+    class DashboradViewModel
     {
     }
 }

@@ -17,5 +17,9 @@ namespace PrinterySystem.Controllers
         {
             return View();
         }
+        public ActionResult MyInfo()
+        {
+            return View();
+        }
     }
 }

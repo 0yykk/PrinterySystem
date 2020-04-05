@@ -1,22 +1,22 @@
 ﻿@{
-    ViewBag.Title = "库存管理";
+    ViewBag.Title = "工单处理";
     Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
 
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>库存管理后台</title>
     <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 </head>
 <body>
 
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <h1 class="display-4">库存管理</h1>
+        <h1 class="display-4">工单管理系统</h1>
         <p class="lead">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
     </div>
 
@@ -24,7 +24,7 @@
         <div class="card-deck mb-3 text-center">
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">纸品管理</h4>
+                    <h4 class="my-0 font-weight-normal">订单处理</h4>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
@@ -34,12 +34,12 @@
                         <li>Email support</li>
                         <li>Help center access</li>
                     </ul>
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="@Url.Action("PaperStockManagement","Manager")">进入</a>
+                    <a class="btn btn-lg btn-block btn-outline-primary" href="@Url.Action("OrderProcessing","Manager")">进入</a>
                 </div>
             </div>
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">样品管理</h4>
+                    <h4 class="my-0 font-weight-normal">采购处理</h4>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
@@ -49,12 +49,12 @@
                         <li>Priority email support</li>
                         <li>Help center access</li>
                     </ul>
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="@Url.Action("ProduceStockManagement","Manager")">进入</a>
+                    <a class="btn btn-lg btn-block btn-outline-primary" href="@Url.Action("PurchasingManagement","Manager")">进入</a>
                 </div>
             </div>
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">油墨管理</h4>
+                    <h4 class="my-0 font-weight-normal">生产处理</h4>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
@@ -64,7 +64,7 @@
                         <li>Phone and email support</li>
                         <li>Help center access</li>
                     </ul>
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="@Url.Action("PrintingInkStockManagement","Manager")">进入</a>
+                    <a class="btn btn-lg btn-block btn-outline-primary" href="@Url.Action("ProduceManagement","Manager")">进入</a>
                 </div>
             </div>
         </div>
