@@ -14,9 +14,12 @@ namespace PrinterySystem.Controllers
     {
         // GET: Manager
         private readonly IOrderProvider _orderProvider;
-        public ManagerController(IOrderProvider orderProvider)
+        private readonly IProductProvider _productProvider;
+
+        public ManagerController(IOrderProvider orderProvider,IProductProvider productProvider)
         {
             _orderProvider = orderProvider;
+            _productProvider = productProvider;
         }
         public async Task<ActionResult> OrderManagement()
         {
@@ -52,8 +55,25 @@ namespace PrinterySystem.Controllers
         {
             return View();
         }
-        public ActionResult ProductStockManagement()
+        public async Task<ActionResult> ProductStockManagement()
         {
+
+            var productlist = new List<ProductsViewModel>();
+            productlist = await _productProvider.GetAllProduct();
+            int pageindex = 1;
+            var recordCount = productlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 15;
+            ViewBag.ProductList = productlist.OrderByDescending(art => art.ProductID)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
             return View();
         }
         public ActionResult WorkflowManagement()

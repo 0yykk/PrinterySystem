@@ -50,7 +50,7 @@
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\PaperCViewModel.cs" />
     <Compile Include="ViewModel\ProductGoodViewModel.cs" />
-    <Compile Include="ViewModel\ProductsVIewModel.cs" />
+    <Compile Include="ViewModel\ProductsViewModel.cs" />
     <Compile Include="ViewModel\PurchasingInkViewModel.cs" />
     <Compile Include="ViewModel\PurchasingPaperViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />

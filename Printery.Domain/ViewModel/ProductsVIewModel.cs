@@ -9,7 +9,7 @@ namespace Printery.Domain.ViewModel
     /// <summary>
     /// 产品视图
     /// </summary>
-    public class ProductsVIewModel
+    public class ProductsViewModel
     {
         /// <summary>
         /// 产品ID

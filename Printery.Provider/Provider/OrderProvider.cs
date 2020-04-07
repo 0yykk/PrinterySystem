@@ -10,6 +10,10 @@ namespace Printery.Provider.Provider
 {
     public interface IOrderProvider
     {
+        /// <summary>
+        /// 取得所有订单
+        /// </summary>
+        /// <returns>订单列表</returns>
         Task<List<OrderViewModel>> GetAllOrder();
     }
     public class OrderProvider:IOrderProvider

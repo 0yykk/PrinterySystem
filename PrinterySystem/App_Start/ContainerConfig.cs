@@ -24,10 +24,11 @@ namespace PrinterySystem.App_Start
 
             //Repositories
             builder.RegisterType<OrderRespository>().As<IOrderRespository>().InstancePerRequest();
-            
+            builder.RegisterType<ProductRespository>().As<IProductRespository>().InstancePerRequest();
 
             //Provider
             builder.RegisterType<OrderProvider>().As<IOrderProvider>().InstancePerRequest();
+            builder.RegisterType<ProductProvider>().As<IProductProvider>().InstancePerRequest();
             //other
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\OrderProvider.cs" />
+    <Compile Include="Provider\ProductProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Printery.Data\Printery.Data.csproj">
