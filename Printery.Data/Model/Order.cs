@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Printery.Domain.ViewModel
+namespace Printery.Data.Model
 {
-    /// <summary>
-    /// 订单视图
-    /// </summary>
-    public class OrderViewModel
+    [Table("Order")]
+    public class Order
     {
+        [Key]
         /// <summary>
         /// 订单号
         /// </summary>
@@ -34,7 +35,7 @@ namespace Printery.Domain.ViewModel
         /// <summary>
         /// 备注
         /// </summary>
-        public string tips { get; set; }
+        public string Tips { get; set; }
         /// <summary>
         /// 订单创建人ID
         /// </summary>
@@ -67,5 +68,6 @@ namespace Printery.Domain.ViewModel
         /// 电子邮箱
         /// </summary>
         public string Email { get; set; }
+
     }
 }

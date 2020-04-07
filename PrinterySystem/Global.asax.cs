@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrinterySystem.App_Start;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,8 @@ namespace PrinterySystem
     {
         protected void Application_Start()
         {
+            //依赖注入
+            ContainerConfig.RegisterComponets();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
