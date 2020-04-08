@@ -30,11 +30,11 @@ namespace Printery.Data.Model
         /// <summary>
         /// 纸品数量
         /// </summary>
-        public string Count { get; set; }
+        public int Count { get; set; }
         /// <summary>
         /// 总价格
         /// </summary>
-        public string Price { get; set; }
+        public decimal Price { get; set; }
         /// <summary>
         /// 创建人ID
         /// </summary>

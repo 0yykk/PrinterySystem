@@ -141,11 +141,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label>油墨名称</label>
+                    <label>产品名称</label>
+                    <input type="text" name="ProductName" id="ProductName" class="form-control" required="" autofocus="">
+                    <label>单价</label>
+                    <input type="number" name="eachPrice" id="eachPrice" class='form-control input-sm' min='1' value='1'/>
+                    <label>库存数</label>
+                    <input type="number" name="CCount" id="CCount" class='form-control input-sm' min='1' value='1' />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="addProduct()">提交</button>
                 </div>
             </div>
         </div>
@@ -202,6 +207,38 @@
                 modal.find('.modal-title').text('确认删除 ' + title);
             });
         });
+
+        function addProduct() {
+            debugger;
+            
+            var pname = document.getElementById('ProductName').value
+            var pprice = document.getElementById('eachPrice').value
+            var pcount=document.getElementById('CCount').value
+            var result = {
+                "ProductID": "",
+                "ProductName": pname,
+                "eachPrice": pprice,
+                "CCount": pcount
+            }
+            $('#addModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+        $.ajax({
+            type: "POST",
+            url: "../Manager/AddProduct",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(result),
+
+            success: function (e) {
+                debugger;
+                if (e != null)
+                    alert("添加成功！")
+                    location.reload()  
+            }
+
+        })
+    }
     </script>
 </body>
 </html>

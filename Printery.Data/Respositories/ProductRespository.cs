@@ -4,6 +4,7 @@ using Printery.Domain.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Printery.Data.Respositories
     public interface IProductRespository
     {
         Task<List<ProductsViewModel>> GetAllProduct();
+        void UpdateProduct(ProductsViewModel product);
     }
     public class ProductRespository:IProductRespository
     {
@@ -39,6 +41,32 @@ namespace Printery.Data.Respositories
                 productList.Add(product);
             }
             return productList;
+        }
+        public void UpdateProduct(ProductsViewModel product)
+        {
+            var exitPaper = _db.Product.FirstOrDefault(s => s.ProductName == product.ProductName);
+            if (exitPaper == null)
+            {
+                var storeProcedureName = "[dbo].[Add_Product]";
+                var Result = _dbContext.Database.SqlQuery<ProductsViewModel>(
+                    $"{storeProcedureName} @ProductID,@ProductName,@eachPrice,@Ccount",
+                    new SqlParameter("@ProductID", product.ProductID),
+                    new SqlParameter("@ProductName", product.ProductName),
+                    new SqlParameter("@eachPrice", product.eachPrice),
+                    new SqlParameter("@CCount", product.CCOunt)
+                    ).SingleOrDefault();
+            }
+            else
+            {
+                var storeProcedureName = "[dbo].[Update_Product]";
+                var Result = _dbContext.Database.SqlQuery<ProductsViewModel>(
+                    $"{storeProcedureName} @ProductID,@ProductName,@eachPrice,@Ccount",
+                    new SqlParameter("@ProductID", product.ProductID),
+                    new SqlParameter("@ProductName", product.ProductName),
+                    new SqlParameter("@eachPrice", product.eachPrice),
+                    new SqlParameter("@CCount", product.CCOunt)
+                    ).SingleOrDefault();
+            }
         }
     }
 }

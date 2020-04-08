@@ -26,7 +26,7 @@ namespace Printery.Domain.ViewModel
         /// <summary>
         /// 产品数量
         /// </summary>
-        public string Count { get; set; }
+        public int Count { get; set; }
         /// <summary>
         /// 总价格
         /// </summary>

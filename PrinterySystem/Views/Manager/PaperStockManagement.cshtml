@@ -2,7 +2,7 @@
     ViewBag.Title = "纸品管理";
     Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
-
+@model Printery.Domain.ViewModel.PaperCViewModel
 <!DOCTYPE html>
 
 <html>
@@ -19,14 +19,14 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control mr-sm-2" type="search" placeholder="纸品名称" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
             <div class="col-md-6 text-right my-2 my-lg-0">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-title="加入纸品">
                     <fa class="fa fa-shopping-cart"></fa>
-                    加入新产品
+                    加入新纸品
                 </button>
             </div>
             <div class="col-md-2 text-right my-2 my-lg-0">
@@ -47,42 +47,61 @@
                     <th class="text-center" width="150">操作</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><a href="#">《西游记第x版》</a></td>
-                    <td>已出货</td>
-                    <td>已出货</td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
-                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="編輯 超纖細肥皂 1盒" data-backdrop="static">編輯</button>
-                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="订单编号：12321421321" data-backdrop="static">查看</button>
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    ...
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Other action</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#removeModal" data-title="超纖細肥皂 1盒">刪除</a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+            @{
+                var list = ViewBag.PaperList as List<Printery.Domain.ViewModel.PaperCViewModel>;
+                if (list != null && list.Count > 0)
+                {
+                    <tbody>
+                        @{
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelitem => item.PaperId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelitem => item.PaperName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelitem => item.Ccount)
+                                        张
+                                    </td>
+                                    <td>
+                                        正常
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="編輯 超纖細肥皂 1盒" data-backdrop="static">編輯</button>
+                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="订单编号：12321421321" data-backdrop="static">查看</button>
+                                            <div class="btn-group" role="group">
+                                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    ...
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Other action</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#removeModal" data-title="超纖細肥皂 1盒">刪除</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                }
+            }
         </table>
 
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
+        @{
+
+            if (list != null && list.Count > 0)
+            {
+                @Html.Partial("Pager")
+
+            }
+        }
     </div>
 
     <footer class="mt-5 py-3 bg-light text-secondary text-center">
@@ -118,11 +137,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label>油墨名称</label>
+                        <label>纸品名称</label>
+                        <input type="text" name="PaperName" id="PaperName" class="form-control" required="" autofocus="">
+                        <label>库存数</label>
+                        <input type="number" name="Ccount" id="Ccount" class='form-control input-sm' min='1' value='1' />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" onclick="addPaper()">提交</button>
                 </div>
             </div>
         </div>
@@ -162,6 +184,14 @@
                 modal.find('.modal-title').text(title);
             });
 
+            $('#addModal').on('show.bs.modal', function (event) {
+                var btn = $(event.relatedTarget);
+                var title = btn.data('title');
+
+                var modal = $(this);
+                modal.find('.modal-title').text(title);
+            });
+
             $('#removeModal').on('show.bs.modal', function (event) {
                 var btn = $(event.relatedTarget);
                 var title = btn.data('title');
@@ -170,6 +200,35 @@
                 modal.find('.modal-title').text('确认删除 ' + title);
             });
         });
+
+        function addPaper() {
+            debugger;
+            var pname = document.getElementById('PaperName').value
+            var pcount=document.getElementById('Ccount').value
+            var result = {
+                "PaperId": "",
+                "PaperName": pname,
+                "Ccount": pcount
+            }
+            $('#addModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+        $.ajax({
+            type: "POST",
+            url: "../Manager/AddPaper",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(result),
+
+            success: function (e) {
+                debugger;
+                if (e != null)
+                    alert("添加成功！")
+                    location.reload()  
+            }
+
+        })
+    }
     </script>
 </body>
 </html>

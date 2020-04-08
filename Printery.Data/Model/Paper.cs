@@ -23,6 +23,6 @@ namespace Printery.Data.Model
         /// <summary>
         /// 纸品库存数
         /// </summary>
-        public string Ccount { get; set; }
+        public int Ccount { get; set; }
     }
 }

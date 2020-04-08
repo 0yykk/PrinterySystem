@@ -61,6 +61,14 @@
     <Compile Include="Migrations\202004070611566_addnewModels.designer.cs">
       <DependentUpon>202004070611566_addnewModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004080624590_modifycolPaper.cs" />
+    <Compile Include="Migrations\202004080624590_modifycolPaper.designer.cs">
+      <DependentUpon>202004080624590_modifycolPaper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004080633136_modifycolotherModel.cs" />
+    <Compile Include="Migrations\202004080633136_modifycolotherModel.designer.cs">
+      <DependentUpon>202004080633136_modifycolotherModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\InkStock.cs" />
     <Compile Include="Model\InkPurchasing.cs" />
@@ -71,6 +79,7 @@
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductGoods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Respositories\InkRespository.cs" />
     <Compile Include="Respositories\OrderRespository.cs" />
     <Compile Include="Respositories\PaperRespository.cs" />
     <Compile Include="Respositories\ProductRespository.cs" />
@@ -81,6 +90,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004070611566_addnewModels.resx">
       <DependentUpon>202004070611566_addnewModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004080624590_modifycolPaper.resx">
+      <DependentUpon>202004080624590_modifycolPaper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004080633136_modifycolotherModel.resx">
+      <DependentUpon>202004080633136_modifycolotherModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
