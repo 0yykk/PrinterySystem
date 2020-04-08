@@ -185,6 +185,8 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap3.3.css" />
+    <Content Include="Scripts\bootstrap3.3.js" />
     <Content Include="Content\Dashboradasset\css\Bootstrap v4.0.0-beta.3.css" />
     <Content Include="Content\Dashboradasset\css\starter-template.css" />
     <Content Include="Content\Dashboradasset\fonts\font-awesome.min.css" />
@@ -354,6 +356,7 @@
     <Content Include="Views\Manager\ProduceManagement.cshtml" />
     <Content Include="Views\Manager\OrderProcessing.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
+    <Content Include="Views\Shared\Pager1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

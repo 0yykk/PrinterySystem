@@ -14,7 +14,9 @@ namespace Printery.Data.Respositories
     public interface IInkRespository
     {
         Task<List<InkCViewModel>> GetAllInk();
+        Task<List<PurchasingInkViewModel>> GetAllInkPurchasing();
         void UpdateInk(InkCViewModel ink);
+        void CreatePurchaseOrder4Ink(PurchasingInkViewModel ink);
     }
     public class InkRespository : IInkRespository
     {
@@ -41,6 +43,28 @@ namespace Printery.Data.Respositories
             }
             return InkList;
         }
+        public async Task<List<PurchasingInkViewModel>> GetAllInkPurchasing()
+        {
+            var InkList = new List<PurchasingInkViewModel>();
+            var Inklist = new List<InkPurchasing>();
+            Inklist = await _db.InkPurchasing.ToListAsync();
+            foreach(var item in Inklist)
+            {
+                PurchasingInkViewModel ink = new PurchasingInkViewModel();
+                ink.PurchasingID = item.PurchasingID;
+                ink.InkId = item.InkId;
+                ink.InkName = item.InkName;
+                ink.Count = item.Count;
+                ink.Price = item.Price;
+                ink.CreatePersonId = item.CreatePersonId;
+                ink.ProcessPersonId = item.ProcessPersonId;
+                ink.Status = item.Status;
+                ink.CreateDate = item.CreateDate;
+                ink.ProcessDate = item.ProcessDate;
+                InkList.Add(ink);
+            }
+            return InkList;
+        }
         public void UpdateInk(InkCViewModel ink)
         {
             var exitink = _db.InkStock.FirstOrDefault(s => s.InkName == ink.InkName);
@@ -64,6 +88,22 @@ namespace Printery.Data.Respositories
                     new SqlParameter("@Ccount", ink.Ccount)
                     ).SingleOrDefault();
             }
+        }
+        public void CreatePurchaseOrder4Ink(PurchasingInkViewModel ink)
+        {
+            var storeProcedureName = "[dbo].[Create_Ink_PurchaseOrder]";
+            var Result = _dbContext.Database.SqlQuery<PurchasingInkViewModel>(
+                    $"{storeProcedureName} @PurchasingID,@InkName,@Count,@Price,@CreatePersonId,@ProcessPersonId,@Status,@CreateDate,@ProcessDate",
+                    new SqlParameter("@PurchasingID", ink.PurchasingID),
+                    new SqlParameter("@InkName", ink.InkName),
+                    new SqlParameter("@Count", ink.Count),
+                    new SqlParameter("@Price",ink.Price),
+                    new SqlParameter("@CreatePersonId",ink.CreatePersonId),
+                    new SqlParameter("@ProcessPersonId",ink.ProcessPersonId),
+                    new SqlParameter("@Status",ink.Status),
+                    new SqlParameter("@CreateDate",ink.CreateDate),
+                    new SqlParameter("@ProcessDate",ink.ProcessDate)
+                ).SingleOrDefault();
         }
     }
 }

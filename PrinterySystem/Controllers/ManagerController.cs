@@ -109,13 +109,23 @@ namespace PrinterySystem.Controllers
         #endregion
 
         #region 库存采购api
-        public JsonResult PurchasingPaper(PaperCViewModel paper)
+        public JsonResult PurchasingPaper(PurchasingPaperViewModel paper)
         {
+            //PurchasingPaperViewModel par = new PurchasingPaperViewModel();
+            paper.PurchasingID = Guid.NewGuid().ToString();
+            paper.CreateDate = DateTime.Now;
+            paper.ProcessDate = DateTime.Now;
+            _paperProvider.CreatePurchaseOrder4Paper(paper);
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult PurchasingInk(InkCViewModel ink)
+        public JsonResult PurchasingInk(PurchasingInkViewModel ink)
         {
+            //PurchasingInkViewModel pur = new PurchasingInkViewModel();
+            ink.PurchasingID = Guid.NewGuid().ToString();
+            ink.CreateDate = DateTime.Now;
+            ink.ProcessDate = DateTime.Now;
+            _inkProvider.CreatePurchaseOrder4Ink(ink);
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
         }
@@ -187,8 +197,36 @@ namespace PrinterySystem.Controllers
         {
             return View();
         }
-        public ActionResult PurchasingManagement()
+        public async Task<ActionResult> PurchasingManagement()
         {
+            var inklist = new List<PurchasingInkViewModel>();
+            var paperlist = new List<PurchasingPaperViewModel>();
+            inklist = await _inkProvider.GetAllInkPurchasing();
+            paperlist = await _paperProvider.GetAllPaperPurchasing();
+            int pageindex = 1;
+            var recordCount = inklist.Count();
+            var recordCount1 = paperlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 15;
+            ViewBag.InkPurchase = inklist.OrderByDescending(art => art.CreateDate)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.PaperPurchase = paperlist.OrderByDescending(art => art.CreateDate)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            ViewBag.Pager1 = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount1,
+            };
             return View();
         }
     }

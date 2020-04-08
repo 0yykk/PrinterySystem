@@ -11,7 +11,9 @@ namespace Printery.Provider.Provider
     public interface IInkProvider
     {
         Task<List<InkCViewModel>> GetAllInk();
+        Task<List<PurchasingInkViewModel>> GetAllInkPurchasing();
         void UpdateInk(InkCViewModel ink);
+        void CreatePurchaseOrder4Ink(PurchasingInkViewModel ink);
     }
     public class InkProvider:IInkProvider
     {
@@ -27,9 +29,19 @@ namespace Printery.Provider.Provider
             list = await _inkRespository.GetAllInk();
             return (list != null) ? list : new List<InkCViewModel>();
         }
+        public async Task<List<PurchasingInkViewModel>> GetAllInkPurchasing()
+        {
+            var list = new List<PurchasingInkViewModel>();
+            list = await _inkRespository.GetAllInkPurchasing();
+            return (list != null) ? list : new List<PurchasingInkViewModel>();
+        }
         public void UpdateInk(InkCViewModel ink)
         {
             _inkRespository.UpdateInk(ink);
+        }
+        public void CreatePurchaseOrder4Ink(PurchasingInkViewModel ink)
+        {
+            _inkRespository.CreatePurchaseOrder4Ink(ink);
         }
     }
 }

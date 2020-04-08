@@ -14,6 +14,8 @@ namespace Printery.Data.Respositories
     public interface IPaperRespository
     {
         Task<List<PaperCViewModel>> GetAllPaper();
+        Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing();
+        void CreatePurchaseOrder4Paper(PurchasingPaperViewModel Paper);
         void UpdatePaper(PaperCViewModel paper);
     }
     public class PaperRespository:IPaperRespository
@@ -41,6 +43,28 @@ namespace Printery.Data.Respositories
             }
             return paperList;
         }
+        public async Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing()
+        {
+            var PaperList = new List<PurchasingPaperViewModel>();
+            var Paperlist = new List<PaperPurchasing>();
+            Paperlist = await _db.PaperPurchasing.ToListAsync();
+            foreach (var item in Paperlist)
+            {
+                PurchasingPaperViewModel par = new PurchasingPaperViewModel();
+                par.PurchasingID = item.PurchasingID;
+                par.PaperId = item.PaperId;
+                par.PaperName = item.PaperName;
+                par.Count = item.Count;
+                par.Price = item.Price;
+                par.CreatePersonId = item.CreatePersonId;
+                par.ProcessPersonId = item.ProcessPersonId;
+                par.Status = item.Status;
+                par.CreateDate = item.CreateDate;
+                par.ProcessDate = item.ProcessDate;
+                PaperList.Add(par);
+            }
+            return PaperList;
+        }
         public void UpdatePaper(PaperCViewModel paper)
         {
             var exitPaper = _db.Paper.FirstOrDefault(s => s.PaperName == paper.PaperName);
@@ -64,6 +88,22 @@ namespace Printery.Data.Respositories
                     new SqlParameter("@Ccount", paper.Ccount)
                     ).SingleOrDefault();
             }
+        }
+        public void CreatePurchaseOrder4Paper(PurchasingPaperViewModel Paper)
+        {
+            var storeProcedureName = "[dbo].[Create_Paper_PurchaseOrder]";
+            var Result = _dbContext.Database.SqlQuery<PurchasingInkViewModel>(
+                    $"{storeProcedureName} @PurchasingID,@PaperName,@Count,@Price,@CreatePersonId,@ProcessPersonId,@Status,@CreateDate,@ProcessDate",
+                    new SqlParameter("@PurchasingID", Paper.PurchasingID),
+                    new SqlParameter("@PaperName", Paper.PaperName),
+                    new SqlParameter("@Count", Paper.Count),
+                    new SqlParameter("@Price", Paper.Price),
+                    new SqlParameter("@CreatePersonId", Paper.CreatePersonId),
+                    new SqlParameter("@ProcessPersonId", Paper.ProcessPersonId),
+                    new SqlParameter("@Status", Paper.Status),
+                    new SqlParameter("@CreateDate", Paper.CreateDate),
+                    new SqlParameter("@ProcessDate", Paper.ProcessDate)
+                ).SingleOrDefault();
         }
     }
 }

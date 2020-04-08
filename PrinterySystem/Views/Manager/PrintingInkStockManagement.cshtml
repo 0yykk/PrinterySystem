@@ -118,11 +118,28 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label>客户姓名</label>
+                    <label>油墨名称</label>
+                    <select id="PInkName" data-toggle="select" class="form-control select select-default" name="PInkName">
+                        <option value="default" selected="selected">--请选择选购的油墨--</option>
+                        @{
+                            var PInklist = ViewBag.InkList as List<Printery.Domain.ViewModel.InkCViewModel>;
+                            if (PInklist != null && PInklist.Count > 0)
+                            {
+                                foreach (var item in PInklist)
+                                {
+                                    <option value="@item.InkName">
+                                        @item.InkName
+                                    </option>
+                                }
+                            }
+                        }
+                    </select>
+                    <label>采购数</label>
+                    <input type="number" name="PCcount" id="PCcount" class='form-control input-sm' min='1' value='1' />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="CreatePurchaseOrder()">提交</button>
                 </div>
             </div>
         </div>
@@ -229,7 +246,42 @@
             }
 
         })
-    }
+        }
+        function CreatePurchaseOrder() {
+            debugger;
+            var pname = document.getElementById('PInkName').value
+            var pcount=document.getElementById('PCcount').value
+            var result = {
+                "PurchasingID":"",
+                "InkId": "",
+                "InkName": pname,
+                "Count": pcount,
+                "Price": 0,
+                "CreatePersonId": "123456",
+                "ProcessPersonId": "7654321",
+                "Status": "待处理",
+                "CreateDate": "",
+                "ProcessDate":""
+            }
+            $('#editModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+        $.ajax({
+            type: "POST",
+            url: "../Manager/PurchasingInk",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(result),
+
+            success: function (e) {
+                debugger;
+                if (e != null)
+                    alert("添加成功！")
+                    location.reload()  
+            }
+
+        })
+        }
     </script>
 </body>
 </html>
