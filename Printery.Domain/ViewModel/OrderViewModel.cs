@@ -67,5 +67,13 @@ namespace Printery.Domain.ViewModel
         /// 电子邮箱
         /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// 联系人姓名
+        /// </summary>
+        public string Contact { get; set; }
+        /// <summary>
+        /// 产品名称
+        /// </summary>
+        public string ProductName { get; set; }
     }
 }

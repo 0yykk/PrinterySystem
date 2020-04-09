@@ -57,6 +57,10 @@ namespace Printery.Data.Model
         /// </summary>
         public string CustomerName { get; set; }
         /// <summary>
+        /// 联系人姓名
+        /// </summary>
+        public string Contact { get; set; }
+        /// <summary>
         /// 订单送货地址
         /// </summary>
         public string Addressed { get; set; }
@@ -68,6 +72,9 @@ namespace Printery.Data.Model
         /// 电子邮箱
         /// </summary>
         public string Email { get; set; }
-
+        /// <summary>
+        /// 产品名称
+        /// </summary>
+        public string ProductName { get; set; }
     }
 }

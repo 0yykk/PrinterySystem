@@ -29,7 +29,8 @@ namespace PrinterySystem.Controllers
         }
         public async Task<ActionResult> OrderManagement()
         {
-
+            var productlist = new List<ProductsViewModel>();
+            productlist = await _productProvider.GetAllProduct();
             var Orderlist = new List<OrderViewModel>();
             Orderlist = await _orderProvider.GetAllOrder();
             int pageindex = 1;
@@ -40,6 +41,7 @@ namespace PrinterySystem.Controllers
             ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderId)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
+            ViewBag.ProductList = productlist;
             ViewBag.Pager = new PagerHelper()
             {
                 PageIndex = pageindex,
@@ -133,6 +135,28 @@ namespace PrinterySystem.Controllers
         {
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #region 获取商品单价
+        public JsonResult GetPriceList(string pri)
+        {
+            string pro = pri;
+            List<ProductsViewModel> proList = _productProvider.GetProductByProductName(pro);
+            return Json(proList, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #region 下单Api
+        public JsonResult AddOrder(OrderViewModel order)
+        {
+            string Id = Guid.NewGuid().ToString();
+            order.OrderId= Id;
+            order.OrderCreate = DateTime.Now;
+            order.OrderProcess = DateTime.Now;
+            order.Status = "待处理";
+            _orderProvider.CreateOrder(order);
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+
         }
         #endregion
         public async Task<ActionResult> PrintingInkStockManagement()

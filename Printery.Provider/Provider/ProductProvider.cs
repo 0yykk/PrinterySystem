@@ -14,6 +14,7 @@ namespace Printery.Provider.Provider
     public interface IProductProvider
     {
         Task<List<ProductsViewModel>> GetAllProduct();
+        List<ProductsViewModel> GetProductByProductName(string ProductName);
         void UpdateProduct(ProductsViewModel product);
     }
     public class ProductProvider:IProductProvider
@@ -28,6 +29,12 @@ namespace Printery.Provider.Provider
             var list = new List<ProductsViewModel>();
             list = await _productRespository.GetAllProduct();
             return (list != null) ? list : new List<ProductsViewModel>();
+        }
+        public List<ProductsViewModel> GetProductByProductName(string ProductName)
+        {
+            var list = new List<ProductsViewModel>();
+            list = _productRespository.GetProductByProductName(ProductName);
+            return list;
         }
         public void UpdateProduct(ProductsViewModel product)
         {

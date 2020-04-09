@@ -21,5 +21,9 @@ namespace PrinterySystem.Controllers
         {
             return View();
         }
+        public ActionResult MyInfoEdit()
+        {
+            return View();
+        }
     }
 }

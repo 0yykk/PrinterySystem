@@ -9,14 +9,8 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @*<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">印刷管理后台</a>
-            <ul class="navbar-nav px-3">
-                <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="@Url.Action("Login", "Account")">Sign in</a>
-                </li>
-            </ul>
-        </nav>*@
+    @{ string LoginUserGuid = Session["LoginId"] == null ? string.Empty : Session["LoginId"].ToString();}
+    @{ string loginUserDisplayName = Session["LoginUserName"] == null ? string.Empty : Session["LoginUserName"].ToString();}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="#">印刷管理后台</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,8 +32,6 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="@Url.Action("EmployeeInfo", "Person4Manager")">雇员管理</a>
                         <a class="dropdown-item" href="@Url.Action("CustomerInfo", "Person4Manager")">客户管理</a>
-                        @*<div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>*@
                     </div>
                 </li>
                 <li class="nav-item">
@@ -51,15 +43,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("WorkflowManagement", "Manager")">工单处理</a>
                 </li>
-                @*<li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>*@
             </ul>
-            @*<form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>*@
-            <a class="nav-link btn btn-outline-success" href="@Url.Action("Login", "Account")">Sign in</a>
+            <div class="text-hide" id="personid">@LoginUserGuid</div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Hi,亲爱的 @loginUserDisplayName!
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="@Url.Action("MyInfo","Person4Manager")">个人信息</a>
+                    <a class="dropdown-item" href="#">修改密码</a>
+                    <a class="dropdown-item" href="@Url.Action("MyInfoEdit","Person4Manager")">退出</a>
+                </div>
+            </div>
         </div>
     </nav>
     <div class="container body-content">

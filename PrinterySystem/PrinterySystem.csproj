@@ -357,6 +357,7 @@
     <Content Include="Views\Manager\OrderProcessing.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
     <Content Include="Views\Shared\Pager1.cshtml" />
+    <Content Include="Views\Person4Manager\MyInfoEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

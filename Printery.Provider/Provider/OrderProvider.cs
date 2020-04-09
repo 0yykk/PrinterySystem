@@ -15,6 +15,7 @@ namespace Printery.Provider.Provider
         /// </summary>
         /// <returns>订单列表</returns>
         Task<List<OrderViewModel>> GetAllOrder();
+        void CreateOrder(OrderViewModel order);
     }
     public class OrderProvider:IOrderProvider
     {
@@ -28,6 +29,10 @@ namespace Printery.Provider.Provider
             var list = new List<OrderViewModel>();
             list = await _orderRespository.GetAllOrder();
             return (list != null) ? list : new List<OrderViewModel>();
+        }
+        public void CreateOrder(OrderViewModel order)
+        {
+            _orderRespository.CreateOrder(order);
         }
     }
 }

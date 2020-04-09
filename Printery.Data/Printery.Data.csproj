@@ -69,16 +69,39 @@
     <Compile Include="Migrations\202004080633136_modifycolotherModel.designer.cs">
       <DependentUpon>202004080633136_modifycolotherModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004090649354_addnewModel1.cs" />
+    <Compile Include="Migrations\202004090649354_addnewModel1.designer.cs">
+      <DependentUpon>202004090649354_addnewModel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004090708140_addPowerControl.cs" />
+    <Compile Include="Migrations\202004090708140_addPowerControl.designer.cs">
+      <DependentUpon>202004090708140_addPowerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004090719109_addnewModelPower.cs" />
+    <Compile Include="Migrations\202004090719109_addnewModelPower.designer.cs">
+      <DependentUpon>202004090719109_addnewModelPower.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004091052107_addnewcol4Order.cs" />
+    <Compile Include="Migrations\202004091052107_addnewcol4Order.designer.cs">
+      <DependentUpon>202004091052107_addnewcol4Order.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\EmpGroup.cs" />
+    <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\InkStock.cs" />
     <Compile Include="Model\InkPurchasing.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\OrderDetail.cs" />
     <Compile Include="Model\Paper.cs" />
     <Compile Include="Model\PaperPurchasing.cs" />
+    <Compile Include="Model\PowerControlList.cs" />
+    <Compile Include="Model\PowerList.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductGoods.cs" />
+    <Compile Include="Model\SuperUserList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Respositories\EmpRepository.cs" />
     <Compile Include="Respositories\InkRespository.cs" />
     <Compile Include="Respositories\OrderRespository.cs" />
     <Compile Include="Respositories\PaperRespository.cs" />
@@ -96,6 +119,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004080633136_modifycolotherModel.resx">
       <DependentUpon>202004080633136_modifycolotherModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004090649354_addnewModel1.resx">
+      <DependentUpon>202004090649354_addnewModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004090708140_addPowerControl.resx">
+      <DependentUpon>202004090708140_addPowerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004090719109_addnewModelPower.resx">
+      <DependentUpon>202004090719109_addnewModelPower.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004091052107_addnewcol4Order.resx">
+      <DependentUpon>202004091052107_addnewcol4Order.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@ namespace Printery.Data.Respositories
     public interface IProductRespository
     {
         Task<List<ProductsViewModel>> GetAllProduct();
+        List<ProductsViewModel> GetProductByProductName(string ProductName);
         void UpdateProduct(ProductsViewModel product);
     }
     public class ProductRespository:IProductRespository
@@ -41,6 +42,23 @@ namespace Printery.Data.Respositories
                 productList.Add(product);
             }
             return productList;
+        }
+        public List<ProductsViewModel> GetProductByProductName(string ProductName)
+        {
+            var proList = new List<ProductsViewModel>();
+            var prolist = from u in _db.Product
+                          where u.ProductName == ProductName
+                          select u;
+            foreach(var item in prolist)
+            {
+                ProductsViewModel product = new ProductsViewModel();
+                product.ProductID = item.ProductID;
+                product.ProductName = item.ProductName;
+                product.eachPrice = item.eachPrice;
+                product.CCOunt = item.CCOunt;
+                proList.Add(product);
+            }
+            return proList;
         }
         public void UpdateProduct(ProductsViewModel product)
         {

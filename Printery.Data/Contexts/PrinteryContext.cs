@@ -18,6 +18,12 @@ namespace Printery.Data.Contexts
         DbSet<PaperPurchasing> PaperPurchasing { get; set; }
         DbSet<Product> Product { get; set; }
         DbSet<ProductGoods> ProductGoods { get; set; }
+        DbSet<Customer> Customer { get; set; }
+        DbSet<Employee> Employee { get; set; }
+        DbSet<EmpGroup> EmpGroup { get; set; }
+        DbSet<PowerList> PowerList { get; set; }
+        DbSet<PowerControlList> PowerControlList { get; set; }
+        DbSet<SuperUserList> SuperUserList { get; set; }
         Database GetDb();
         DbContext GetDbContext();
     }
@@ -36,12 +42,19 @@ namespace Printery.Data.Contexts
         public virtual DbSet<PaperPurchasing> PaperPurchasing { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductGoods> ProductGoods { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<EmpGroup> EmpGroup { get; set; }
+        public virtual DbSet<PowerList> PowerList { get; set; }
+        public virtual DbSet<PowerControlList> PowerControlList { get; set; }
+        public virtual DbSet<SuperUserList> SuperUserList { get; set; }
         public Database GetDb()
         {
             return Database;
         }
         public DbContext GetDbContext()
         {
+            
             return this;
         }
     }
