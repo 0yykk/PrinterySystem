@@ -15,7 +15,10 @@ namespace Printery.Data.Respositories
     public interface IOrderRespository
     {
         Task<List<OrderViewModel>> GetAllOrder();
+        List<OrderViewModel> GetOrderByOrderId(string orderid);
         void CreateOrder(OrderViewModel order);
+        void EditOrder(OrderViewModel order);
+        void DeleteOrder(string orderid);
     }
     public class OrderRespository:IOrderRespository
     {
@@ -72,6 +75,59 @@ namespace Printery.Data.Respositories
                 new SqlParameter("@Email", order.Email),
                 new SqlParameter("@ProductName",order.ProductName)
                 ).SingleOrDefault();
+        }
+        public List<OrderViewModel> GetOrderByOrderId(string orderid)
+        {
+            var order = from u in _db.Order
+                        where u.OrderId == orderid
+                        select u;
+            var ord = new OrderViewModel();
+            var ordlist = new List<OrderViewModel>();
+            foreach(var i in order)
+            {
+                ord.CustomerName = i.CustomerName;
+                ord.Addressed = i.Addressed;
+                ord.Phone = i.Phone;
+                ord.Email = i.Email;
+                ord.Contact = i.Contact;
+                ord.ProductName = i.ProductName;
+                ordlist.Add(ord);
+            }
+            return ordlist;
+        }
+        public void EditOrder(OrderViewModel order)
+        {
+            var storeProcedureName = "[dbo].[Edit_Order]";
+            var result = _dbContext.Database.SqlQuery<OrderViewModel>(
+                $"{storeProcedureName} @Orderid,@Tips,@Addressed,@Phone,@Email,@Contact",
+                new SqlParameter("@Orderid", ModelItemIsNow(order.OrderId)),
+                new SqlParameter("@Tips", ModelItemIsNow(order.tips)),
+                new SqlParameter("@Addressed", ModelItemIsNow(order.Addressed)),
+                new SqlParameter("@Phone", ModelItemIsNow(order.Phone)),
+                new SqlParameter("@Email", ModelItemIsNow(order.Email)),
+                new SqlParameter("@Contact", ModelItemIsNow(order.Contact))
+                ).SingleOrDefault();
+        }
+        #region 传Null工具
+        public object ModelItemIsNow(object str)
+        {
+            if (str == null || str.ToString().Trim().Length <= 0)
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return str;
+            }
+        }
+        #endregion
+        public void DeleteOrder(string orderid)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.Order.Remove(pr.Order.Where(p => p.OrderId == orderid).FirstOrDefault());
+            pr.SaveChanges();
+            //_db.Order.Remove(_db.Order.Where(p => p.OrderId == orderid).FirstOrDefault());
+            
         }
     }
 }

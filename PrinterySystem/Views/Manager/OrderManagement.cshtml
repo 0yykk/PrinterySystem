@@ -62,39 +62,38 @@
                             foreach (var item in list)
                             {
                                 <tr>
-                                    <td>
+                                    <td class="td1 guid">
                                         @Html.DisplayFor(modelitem => item.OrderId)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.Deadline)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         <a href="#">@Html.DisplayFor(modelitem => item.CustomerName)</a>
                                         <span class="badge badge-pill badge-danger">熟客</span>
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.Status)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.Phone)
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center td1">
                                         @Html.DisplayFor(modelitem => item.Price)
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center td1">
                                         @Html.DisplayFor(modelitem => item.OrderCreate)
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center td1">
                                         @Html.DisplayFor(modelitem => item.OrderProcess)
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center td1">
                                         @Html.DisplayFor(modelitem => item.CreatePersonId)
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="action">
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="订单编号：12321421321" data-backdrop="static">編輯</button>
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#ViewModal" data-title="订单编号：12321421321" data-backdrop="static">查看</button>
-                                            <button type="button" class="btn btn-outline-secondary">删除</button>
+                                            <button type="button" class="btn btn-outline-secondary editbtn">編輯</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -227,17 +226,45 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="removeModalLabel">Modal title</h5>
+                    <h5>订单号：</h5><h5 class="modal-title" id="editModalLabel">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>地址：</label>
+                            <input type="text" class="form-control" id="edaddress" placeholder="输入新地址" value="" required="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="text" class="form-control" id="edphone" placeholder="输入电话" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Email</label>
+                                <input type="text" class="form-control" id="edemail" placeholder="输入电子邮箱" value="" required="">
+                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label>联系人</label>
+                            <input type="text" class="form-control" id="edcontact" placeholder="输入联系人" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>备注</label>
+                            <input type="text" class="form-control" id="edtips" placeholder="输入备注（可选）" value="" required="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-outline-danger">保存</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="editorder()">保存</button>
                 </div>
             </div>
         </div>
@@ -247,13 +274,42 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="removeModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="viewmodeltitle">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>客户名称:</label>
+                            <label id="cuName"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>地址:</label>
+                            <label id="cuAddress"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Email:</label>
+                            <label id="cuEmail"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>联系人:</label>
+                            <label id="cuContact"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>商品名称:</label>
+                            <label id="cuProduct"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label></label>
+                            <label></label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
@@ -266,17 +322,17 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="removeModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="removeorder">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    确认删除该订单？
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-danger">Save changes</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deletOrder()">确定</button>
                 </div>
             </div>
         </div>
@@ -290,11 +346,11 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             $('#editModal').on('show.bs.modal', function (event) {
-                var btn = $(event.relatedTarget);
-                var title = btn.data('title');
+                //var btn = $(event.relatedTarget);
+                //var title = btn.data('title');
 
-                var modal = $(this);
-                modal.find('.modal-title').text(title);
+                //var modal = $(this);
+                //modal.find('.modal-title').text(title);
             });
             $('#addModal').on('show.bs.modal', function (event) {
                 var btn = $(event.relatedTarget);
@@ -305,20 +361,87 @@
             });
             $('#ViewModal').on('show.bs.modal', function (event) {
                 var btn = $(event.relatedTarget);
-                var title = btn.data('title');
+                //var title = btn.data('title');
 
-                var modal = $(this);
-                modal.find('.modal-title').text(title);
+                //var modal = $(this);
+                //modal.find('.modal-title').text(title);
             });
 
             $('#removeModal').on('show.bs.modal', function (event) {
-                var btn = $(event.relatedTarget);
-                var title = btn.data('title');
+                //var btn = $(event.relatedTarget);
+                //var title = btn.data('title');
 
-                var modal = $(this);
-                modal.find('.modal-title').text('确认删除 ' + title);
+                //var modal = $(this);
+                //modal.find('.modal-title').text('确认删除 ' + title);
             });
         });
+        function deletOrder() {
+            debugger;
+            var orderid = document.getElementById('removeorder').innerText
+            $('#removeModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+            type: "POST",
+            url: "../Manager/DeleteOrder",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(
+                { orderguid: orderid }
+            ),
+            success: function (result) {
+                debugger;
+                if (result != null)
+                     alert("删除成功！")
+                    location.reload()
+            }
+        })
+        }
+        function editorder() {
+            debugger;
+            var orderid = document.getElementById('editModalLabel').innerText
+            var address = document.getElementById('edaddress').value
+            var phone = document.getElementById('edphone').value
+            var email = document.getElementById('edemail').value
+            var contact = document.getElementById('edcontact').value
+            var tips = document.getElementById('edtips').value
+            var result = {
+                "OrderId": orderid,
+                "OrderCreate": "",
+                "OrderProcess": "",
+                "Price": "",
+                "Deadline": "",
+                "tips": tips,
+                "CreatePersonId": "",
+                "ProcessPersonId": "",
+                "Status": "",
+                "CustomerId": "",
+                "CustomerName": "",
+                "Addressed": address,
+                "Phone": phone,
+                "Email": email,
+                "Contact": contact,
+                "ProductName":""
+            }
+            $('#editModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+            type: "POST",
+            url: "../Manager/EditOrder",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(result),
+
+            success: function (e) {
+                debugger;
+                if (e != null)
+                    alert("修改成功！")
+                    location.reload()
+            }
+
+        })
+        }
         function addOrder() {
             debugger;
             eachPrice = document.getElementById('eachPrice').value
@@ -394,6 +517,59 @@
             });
         })
     })
+
+        $(".td1").click(function () {
+        debugger;
+        var id = $(this).parent("tr");
+        var a = id.find(".guid");
+        var b = a.text();
+        $("#ctbody1").find('tr').empty();
+        $.ajax({
+            type: "POST",
+            url: "../Manager/GetOrder",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(
+                { orderguid: b }
+            ),
+
+            success: function (result) {
+                debugger;
+                if (result != null)
+                    $("#viewmodeltitle").text("订单号："+b);
+                    $.each(result, function (i, data) {
+                        $("#cuName").text(data.CustomerName);
+                        $("#cuAddress").text(data.Addressed);
+                        $("#cuEmail").text(data.Email);
+                        $("#cuContact").text(data.Contact);
+                        $("#cuProduct").text(data.ProductName);
+                    });
+                $('#ViewModal').modal('show');
+            }
+        })
+    });
+
+        $(".editbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#editModalLabel").text(b);
+            $('#editModal').modal('show');
+        })
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeorder").text(b);
+            $('#removeModal').modal('show');
+        })
     </script>
 </body>
 </html>

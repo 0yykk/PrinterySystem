@@ -145,7 +145,7 @@ namespace PrinterySystem.Controllers
             return Json(proList, JsonRequestBehavior.AllowGet);
         }
         #endregion
-        #region 下单Api
+        #region 订单处理Api
         public JsonResult AddOrder(OrderViewModel order)
         {
             string Id = Guid.NewGuid().ToString();
@@ -157,6 +157,25 @@ namespace PrinterySystem.Controllers
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
 
+        }
+        public JsonResult GetOrder(string orderguid)
+        {
+            string id = orderguid.Trim();
+            var list = new List<OrderViewModel>();
+            list=_orderProvider.GetOrderByOrderId(id);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult EditOrder(OrderViewModel order)
+        {
+            _orderProvider.EditOrder(order);
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteOrder(string orderguid)
+        {
+            _orderProvider.DeleteOrder(orderguid);
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
         public async Task<ActionResult> PrintingInkStockManagement()

@@ -15,7 +15,10 @@ namespace Printery.Provider.Provider
         /// </summary>
         /// <returns>订单列表</returns>
         Task<List<OrderViewModel>> GetAllOrder();
+        List<OrderViewModel> GetOrderByOrderId(string orderid);
         void CreateOrder(OrderViewModel order);
+        void EditOrder(OrderViewModel order);
+        void DeleteOrder(string orderid);
     }
     public class OrderProvider:IOrderProvider
     {
@@ -30,9 +33,23 @@ namespace Printery.Provider.Provider
             list = await _orderRespository.GetAllOrder();
             return (list != null) ? list : new List<OrderViewModel>();
         }
+        public List<OrderViewModel> GetOrderByOrderId(string orderid)
+        {
+            var list = new List<OrderViewModel>();
+            list = _orderRespository.GetOrderByOrderId(orderid);
+            return list;
+        }
         public void CreateOrder(OrderViewModel order)
         {
             _orderRespository.CreateOrder(order);
+        }
+        public void EditOrder(OrderViewModel order)
+        {
+            _orderRespository.EditOrder(order);
+        }
+        public void DeleteOrder(string orderid)
+        {
+            _orderRespository.DeleteOrder(orderid);
         }
     }
 }
