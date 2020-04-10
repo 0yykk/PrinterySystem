@@ -45,7 +45,7 @@ namespace PrinterySystem.Controllers
                         cookie.Expires = DateTime.Now.AddDays(7);
                         Response.Cookies.Add(cookie);
                     }
-                    Session["LoginId"] = model.EmpId;
+                    Session["LoginId"] = model.EmpId; 
                     Session["Password"] = model.Password;
                     Session["LoginUserName"] = model.Username;
                     Session["Power"] = model.UserGroup;

@@ -137,6 +137,7 @@ namespace PrinterySystem.Controllers
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region 获取商品单价
         public JsonResult GetPriceList(string pri)
         {
@@ -145,6 +146,7 @@ namespace PrinterySystem.Controllers
             return Json(proList, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region 订单处理Api
         public JsonResult AddOrder(OrderViewModel order)
         {
@@ -247,10 +249,13 @@ namespace PrinterySystem.Controllers
             inklist = await _inkProvider.GetAllInkPurchasing();
             paperlist = await _paperProvider.GetAllPaperPurchasing();
             int pageindex = 1;
+            int pageindex1 = 1;
             var recordCount = inklist.Count();
             var recordCount1 = paperlist.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            if (Request.QueryString["page1"] != null)
+                pageindex1 = Convert.ToInt32(Request.QueryString["page1"]);
             const int PAGE_SZ = 15;
             ViewBag.InkPurchase = inklist.OrderByDescending(art => art.CreateDate)
                 .Skip((pageindex - 1) * PAGE_SZ)
@@ -266,7 +271,7 @@ namespace PrinterySystem.Controllers
             };
             ViewBag.Pager1 = new PagerHelper()
             {
-                PageIndex = pageindex,
+                PageIndex = pageindex1,
                 PageSize = PAGE_SZ,
                 RecordCount = recordCount1,
             };

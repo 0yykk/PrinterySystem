@@ -1,12 +1,12 @@
 ﻿@using Printery.Core.Utility
 @{
     Layout = null;
-    var _action = ViewContext.RouteData.Values["action"].ToString();
+    var _action1 = ViewContext.RouteData.Values["action"].ToString();
     PagerHelper _pager1 = ViewBag.Pager1 as PagerHelper;
-    var routeValues = ViewContext.RouteData.Values;
+    var routeValues1 = ViewContext.RouteData.Values;
     foreach (string key in Request.QueryString.Keys)
     {
-        routeValues[key] = Request.QueryString[key];
+        routeValues1[key] = Request.QueryString[key];
     }
 }
 @*<nav aria-label="Page navigation example">
@@ -28,10 +28,10 @@
         }
         else
         {
-            routeValues["page"] = _pager1.PageIndex - 1;
+            routeValues1["page1"] = _pager1.PageIndex - 1;
 
             <li class="page-item">
-                @Html.ActionLink("«", _action, routeValues, new { @class = "page-link" })
+                @Html.ActionLink("«", _action1, routeValues1, new { @class = "page-link" })
             </li>
         }
         @foreach (int p in _pager1.Pages)
@@ -48,8 +48,8 @@
             }
             else
             {
-                routeValues["page"] = p;
-                <li>@Html.ActionLink(p.ToString(), _action, routeValues, new { @class = "page-link" })</li>
+                routeValues1["page1"] = p;
+                <li>@Html.ActionLink(p.ToString(), _action1, routeValues1, new { @class = "page-link" })</li>
             }
         }
         @if (_pager1.PageIndex == _pager1.PageCount)
@@ -58,9 +58,9 @@
         }
         else
         {
-            routeValues["page"] = _pager1.PageIndex + 1;
+            routeValues1["page1"] = _pager1.PageIndex + 1;
             <li class="page-item">
-                @Html.ActionLink("»", _action, routeValues, new { @class = "page-link" })
+                @Html.ActionLink("»", _action1, routeValues1, new { @class = "page-link" })
             </li>
         }
     </ul>

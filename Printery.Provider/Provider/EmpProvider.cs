@@ -11,6 +11,7 @@ namespace Printery.Provider.Provider
     public interface IEmpProvider
     {
         Task<EmployeeViewModel> GetEmployeeByUsernameAsync(string username);
+        Task<EmployeeViewModel> GetEmployeeByUserIdAsync(string userid);
     }
     public class EmpProvider:IEmpProvider
     {
@@ -24,6 +25,12 @@ namespace Printery.Provider.Provider
             var user = new EmployeeViewModel();
             user = await _empRespository.GetEmployeeByUsernameAsync(username);
             return user == null ? new EmployeeViewModel() : user;
+        }
+        public async Task<EmployeeViewModel> GetEmployeeByUserIdAsync(string userid)
+        {
+            var emp = new EmployeeViewModel();
+            emp = await _empRespository.GetEmployeeByUserIdAsync(userid);
+            return emp;
         }
     }
 }

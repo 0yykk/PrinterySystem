@@ -70,64 +70,70 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-8 order-md-1">
-                <h4 class="mb-3">个人中心</h4>
-                <form class="needs-validation" novalidate="">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName">姓名:</label>
-                            <label>李先生</label>
+            @{
+                var emp = ViewBag.Employee as Printery.Domain.ViewModel.EmployeeViewModel;
+                if (emp!=null)
+                {               
+                <div class="col-md-8 order-md-1">
+                    <h4 class="mb-3">个人中心</h4>
+                    <form class="needs-validation" novalidate="">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName">姓名:</label>
+                                <label>@emp.Ename</label>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName">性别:</label>
+                                <label>@emp.Sex</label>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastName">性别:</label>
-                            <label>男</label>
+
+                        <div class="mb-3">
+                            <label for="username">民族:</label>
+                            <label>@emp.Nation</label>
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="username">民族:</label>
-                        <label>汉族</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email">QQ :</label>
-                        <label>123412321</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="address">部门:</label>
-                        <label>采购部</label>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address">电话:</label>
-                        <label>123456342123</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="address2">用户组: </label>
-                        <label>普通雇员</label>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-5 mb-3">
-                            <label for="country">国家:</label>
-                            <label>中国</label>
+                        <div class="mb-3">
+                            <label for="email">QQ :</label>
+                            <label>@emp.QQ</label>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="state">省市:</label>
-                            <label>北京</label>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="zip">邮政编码:</label>
-                            <label>12421313</label>
-                        </div>
-                    </div>
-                    <hr class="mb-4">
 
-                    <hr class="mb-4">
-                    <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("MyInfoEdit", "Person4Manager")">编辑个人信息</a>
-                </form>
-            </div>
+                        <div class="mb-3">
+                            <label for="address">部门:</label>
+                            <label>@emp.Department</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address">电话:</label>
+                            <label>@emp.Phone</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address2">用户组: </label>
+                            <label>@emp.UserGroup</label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="country">国家:</label>
+                                <label>中国</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state">省市:</label>
+                                <label>北京</label>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip">邮政编码:</label>
+                                <label>12421313</label>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+
+                        <hr class="mb-4">
+                        <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("MyInfoEdit", "Person4Manager")">编辑个人信息</a>
+                    </form>
+                </div>
+                }
+            }
         </div>
     </div>
 
