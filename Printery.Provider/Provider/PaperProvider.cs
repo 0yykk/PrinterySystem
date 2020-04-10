@@ -12,6 +12,9 @@ namespace Printery.Provider.Provider
     {
         Task<List<PaperCViewModel>> GetAllPaper();
         Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing();
+        List<PurchasingPaperViewModel> GetPurchasingById(string id);
+        void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId);
+        void DeletePaperPurchase(string purchaseid);
         void CreatePurchaseOrder4Paper(PurchasingPaperViewModel Paper);
         void UpdatePaper(PaperCViewModel paper);
     }
@@ -33,6 +36,20 @@ namespace Printery.Provider.Provider
             var list = new List<PurchasingPaperViewModel>();
             list = await _paperRespository.GetAllPaperPurchasing();
             return (list != null) ? list : new List<PurchasingPaperViewModel>();
+        }
+        public List<PurchasingPaperViewModel> GetPurchasingById(string id)
+        {
+            var list = new List<PurchasingPaperViewModel>();
+            list = _paperRespository.GetPurchasingById(id);
+            return list;
+        }
+        public void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId)
+        {
+            _paperRespository.PushStockInPaper(Price,PurchaseId,paperid,PaperCount,ProcessPersonId);
+        }
+        public void DeletePaperPurchase(string purchaseid)
+        {
+            _paperRespository.DeletePaperPurchase(purchaseid);
         }
         public void UpdatePaper(PaperCViewModel paper)
         {

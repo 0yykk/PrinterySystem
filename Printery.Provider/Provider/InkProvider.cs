@@ -12,6 +12,9 @@ namespace Printery.Provider.Provider
     {
         Task<List<InkCViewModel>> GetAllInk();
         Task<List<PurchasingInkViewModel>> GetAllInkPurchasing();
+        List<PurchasingInkViewModel> GetPurchasingById(string id);
+        void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId);
+        void DeleteInkPurchase(string purchaseid);
         void UpdateInk(InkCViewModel ink);
         void CreatePurchaseOrder4Ink(PurchasingInkViewModel ink);
     }
@@ -34,6 +37,20 @@ namespace Printery.Provider.Provider
             var list = new List<PurchasingInkViewModel>();
             list = await _inkRespository.GetAllInkPurchasing();
             return (list != null) ? list : new List<PurchasingInkViewModel>();
+        }
+        public List<PurchasingInkViewModel> GetPurchasingById(string id)
+        {
+            var list = new List<PurchasingInkViewModel>();
+            list = _inkRespository.GetPurchasingById(id);
+            return list;
+        }
+        public void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId)
+        {
+            _inkRespository.PushInStockInk(PurchaseId, Price, InkId, InkCout, ProcessPersonId);
+        }
+        public void DeleteInkPurchase(string purchaseid)
+        {
+            _inkRespository.DeleteInkPurchase(purchaseid);
         }
         public void UpdateInk(InkCViewModel ink)
         {

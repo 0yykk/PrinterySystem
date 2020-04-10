@@ -7,12 +7,201 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>生产处理</title>
+    <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 </head>
 <body>
-    <div>
-        生产处理
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">生产处理</h1>
+        <p class="lead"></p>
     </div>
+    <div class="container-fluid mt-3 main">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="工单ID" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                @*<form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                        <span>~</span>
+                        <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                    </form>*@
+            </div>
+            <div class="col-md-4 text-right my-2 my-lg-0">
+            </div>
+        </div>
+
+        <table class="table table-responsive-md table-hover">
+
+            <thead>
+                <tr>
+                    <th>工单号</th>
+                    <th>产品编号</th>
+                    <th>产品名称</th>
+                    <th>数量</th>
+                    <th>状态</th>
+                    <th>单价</th>
+                    <th class="text-center">创建时间</th>
+                    <th class="text-center">处理时间</th>
+                    <th class="text-center">创建人</th>
+                    <th class="text-center">操作</th>
+                </tr>
+            </thead>
+            @{
+                var list = ViewBag.PurchaseList as List<Printery.Domain.ViewModel.ProductGoodViewModel>;
+                if (list != null && list.Count > 0)
+                {
+                    <tbody>
+                        @{
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td class="td1 guid">
+                                        @Html.DisplayFor(modelitem => item.PurchasingID)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.ProductId)
+                                    </td>
+                                    <td class="td1">
+                                        <a href="#">@Html.DisplayFor(modelitem => item.ProductName)</a>
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.Count)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.Status)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.eachPrice)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.CreateDate)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.ProcessDate)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                            <button type="button" class="btn btn-outline-secondary editbtn">处理</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                }
+            }
+        </table>
+        @{
+
+            if (list != null && list.Count > 0)
+            {
+                @Html.Partial("Pager")
+
+            }
+        }
+
+    </div>
+    <div class="modal fade" id="PurViewModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">生产单号：</h5><h5 class="modal-title" id="propurid">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>产品编号:</label>
+                            <label id="cuproId"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>产品名称:</label>
+                            <label id="cuproName"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>单价:</label>
+                            <label id="cueachPrice"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>创建人ID:</label>
+                            <label id="cuCreate"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>处理人ID:</label>
+                            <label id="cuProcess"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>数量:</label>
+                            <label id="cuCount"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>状态:</label>
+                            <label id="cuStatus"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/Dashboradasset/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(".td1").click(function () {
+            debugger;
+            var id = $(this).parent("tr");
+            var a = id.find(".guid");
+            var b = a.text();
+            $.ajax({
+                type: "POST",
+                url: "../Manager/GetProductPurchase",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { purchaseid: b }
+                ),
+                success: function (result) {
+                    if (result != null)
+                        $("#propurid").text(b);
+                    $.each(result, function (i, data) {
+                        $("#cuproId").text(data.ProductId);
+                        $("#cuproName").text(data.ProductName);
+                        $("#cueachPrice").text(data.eachPrice);
+                        $("#cuCreate").text(data.CreatePersonId);
+                        $("#cuProcess").text(data.ProcessPersonId);
+                        $("#cuCount").text(data.Count);
+                        $("#cuStatus").text(data.Status);
+                    });
+                    $('#PurViewModal').modal('show');
+                }
+            })
+        })
+    </script>
 </body>
 </html>

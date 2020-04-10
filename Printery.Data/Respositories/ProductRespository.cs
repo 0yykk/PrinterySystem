@@ -13,9 +13,12 @@ namespace Printery.Data.Respositories
 {
     public interface IProductRespository
     {
-        Task<List<ProductsViewModel>> GetAllProduct();
-        List<ProductsViewModel> GetProductByProductName(string ProductName);
-        void UpdateProduct(ProductsViewModel product);
+        Task<List<ProductGoodViewModel>> GetAllProductPurchase();
+        Task<List<ProductGoodsViewModel>> GetAllProduct();
+        List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
+        List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase);
+        void UpdateProduct(ProductGoodsViewModel product);
     }
     public class ProductRespository:IProductRespository
     {
@@ -26,15 +29,36 @@ namespace Printery.Data.Respositories
             _db = db;
             _dbContext = _db.GetDbContext();
         }
-
-        public async Task<List<ProductsViewModel>> GetAllProduct()
+        public async Task<List<ProductGoodViewModel>> GetAllProductPurchase()
         {
-            var productList = new List<ProductsViewModel>();
+            var purchaseList = new List<ProductGoodViewModel>();
+            var purchaselist = new List<ProductGoods>();
+            purchaselist = await _db.ProductGoods.ToListAsync();
+            foreach(var item in purchaselist)
+            {
+                ProductGoodViewModel pro = new ProductGoodViewModel();
+                pro.PurchasingID = item.PurchasingID;
+                pro.ProductId = item.ProductId;
+                pro.ProductName = item.ProductName;
+                pro.Count = item.Count;
+                pro.Status = item.Status;
+                pro.eachPrice = item.eachPrice;
+                pro.CreateDate = item.CreateDate;
+                pro.ProcessDate = item.ProcessDate;
+                pro.ProcessPersonId = item.ProcessPersonId;
+                purchaseList.Add(pro);
+
+            }
+            return purchaseList;
+        }
+        public async Task<List<ProductGoodsViewModel>> GetAllProduct()
+        {
+            var productList = new List<ProductGoodsViewModel>();
             var productlist = new List<Product>();
             productlist = await _db.Product.ToListAsync();
             foreach (var item in productlist)
             {
-                ProductsViewModel product = new ProductsViewModel();
+                ProductGoodsViewModel product = new ProductGoodsViewModel();
                 product.ProductID = item.ProductID;
                 product.ProductName = item.ProductName;
                 product.eachPrice = item.eachPrice;
@@ -43,15 +67,35 @@ namespace Printery.Data.Respositories
             }
             return productList;
         }
-        public List<ProductsViewModel> GetProductByProductName(string ProductName)
+        public List<ProductGoodViewModel> GetPurchaseById(string purchaseid)
         {
-            var proList = new List<ProductsViewModel>();
+            var PurchaseList = new List<ProductGoodViewModel>();
+            var purchaselist = from u in _db.ProductGoods
+                               where u.PurchasingID == purchaseid
+                               select u;
+            foreach(var item in purchaselist)
+            {
+                ProductGoodViewModel pro = new ProductGoodViewModel();
+                pro.ProductId = item.ProductId;
+                pro.ProductName = item.ProductName;
+                pro.eachPrice = item.eachPrice;
+                pro.CreatePersonId = item.CreatePersonId;
+                pro.ProcessPersonId = item.ProcessPersonId;
+                pro.Count = item.Count;
+                pro.Status = item.Status;
+                PurchaseList.Add(pro);
+            }
+            return PurchaseList;
+        }
+        public List<ProductGoodsViewModel> GetProductByProductName(string ProductName)
+        {
+            var proList = new List<ProductGoodsViewModel>();
             var prolist = from u in _db.Product
                           where u.ProductName == ProductName
                           select u;
             foreach(var item in prolist)
             {
-                ProductsViewModel product = new ProductsViewModel();
+                ProductGoodsViewModel product = new ProductGoodsViewModel();
                 product.ProductID = item.ProductID;
                 product.ProductName = item.ProductName;
                 product.eachPrice = item.eachPrice;
@@ -60,13 +104,30 @@ namespace Printery.Data.Respositories
             }
             return proList;
         }
-        public void UpdateProduct(ProductsViewModel product)
+        public void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase)
+        {
+            var storeProcedureName = "[dbo].[Create_Product_PurchaseOrder]";
+            var Result = _dbContext.Database.SqlQuery<PurchasingInkViewModel>(
+                    $"{storeProcedureName} @PurchasingID,@ProductName,@Count,@Price,@eachPrice,@CreatePersonId,@ProcessPersonId,@Status,@CreateDate,@ProcessDate",
+                    new SqlParameter("@PurchasingID", ModelItemIsNow(propurchase.PurchasingID)),
+                    new SqlParameter("@ProductName", ModelItemIsNow(propurchase.ProductName)),
+                    new SqlParameter("@Count", ModelItemIsNow(propurchase.Count)),
+                    new SqlParameter("@Price", ModelItemIsNow(propurchase.Price)),
+                    new SqlParameter("@eachPrice",ModelItemIsNow(propurchase.eachPrice)),
+                    new SqlParameter("@CreatePersonId", ModelItemIsNow(propurchase.CreatePersonId)),
+                    new SqlParameter("@ProcessPersonId", ModelItemIsNow(propurchase.ProcessPersonId)),
+                    new SqlParameter("@Status", ModelItemIsNow(propurchase.Status)),
+                    new SqlParameter("@CreateDate", ModelItemIsNow(propurchase.CreateDate)),
+                    new SqlParameter("@ProcessDate", ModelItemIsNow(propurchase.ProcessDate))
+                ).SingleOrDefault();
+        }
+        public void UpdateProduct(ProductGoodsViewModel product)
         {
             var exitPaper = _db.Product.FirstOrDefault(s => s.ProductName == product.ProductName);
             if (exitPaper == null)
             {
                 var storeProcedureName = "[dbo].[Add_Product]";
-                var Result = _dbContext.Database.SqlQuery<ProductsViewModel>(
+                var Result = _dbContext.Database.SqlQuery<ProductGoodsViewModel>(
                     $"{storeProcedureName} @ProductID,@ProductName,@eachPrice,@Ccount",
                     new SqlParameter("@ProductID", product.ProductID),
                     new SqlParameter("@ProductName", product.ProductName),
@@ -77,7 +138,7 @@ namespace Printery.Data.Respositories
             else
             {
                 var storeProcedureName = "[dbo].[Update_Product]";
-                var Result = _dbContext.Database.SqlQuery<ProductsViewModel>(
+                var Result = _dbContext.Database.SqlQuery<ProductGoodsViewModel>(
                     $"{storeProcedureName} @ProductID,@ProductName,@eachPrice,@Ccount",
                     new SqlParameter("@ProductID", product.ProductID),
                     new SqlParameter("@ProductName", product.ProductName),
@@ -86,5 +147,18 @@ namespace Printery.Data.Respositories
                     ).SingleOrDefault();
             }
         }
+        #region 传Null工具
+        public object ModelItemIsNow(object str)
+        {
+            if (str == null || str.ToString().Trim().Length <= 0)
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return str;
+            }
+        }
+        #endregion
     }
 }

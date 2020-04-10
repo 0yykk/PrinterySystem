@@ -7,12 +7,111 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>订单处理</title>
+    <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 </head>
 <body>
-    <div>
-        订单处理
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">订单处理</h1>
+        <p class="lead"></p>
+    </div>
+    <div class="container-fluid mt-3 main">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="订单ID" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                @*<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                    <span>~</span>
+                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                </form>*@
+            </div>
+            <div class="col-md-4 text-right my-2 my-lg-0">
+            </div>
+        </div>
+
+        <table class="table table-responsive-md table-hover">
+
+            <thead>
+                <tr>
+                    <th>订单号</th>
+                    <th>截止日期</th>
+                    <th>客户姓名</th>
+                    <th>状态</th>
+                    <th>电话</th>
+                    <th class="text-center" width="120">总价</th>
+                    <th class="text-center" width="120">创建时间</th>
+                    <th class="text-center" width="120">处理时间</th>
+                    <th class="text-center" width="150">创建人</th>
+                </tr>
+            </thead>
+            @{
+                var list = ViewBag.OrderList as List<Printery.Domain.ViewModel.OrderViewModel>;
+                if (list != null && list.Count > 0)
+                {
+                    <tbody>
+                        @{
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td class="td1 guid">
+                                        @Html.DisplayFor(modelitem => item.OrderId)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.Deadline)
+                                    </td>
+                                    <td class="td1">
+                                        <a href="#">@Html.DisplayFor(modelitem => item.CustomerName)</a>
+                                        <span class="badge badge-pill badge-danger">熟客</span>
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.Status)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.Phone)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.Price)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.OrderCreate)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.OrderProcess)
+                                    </td>
+                                    <td class="text-center td1">
+                                        @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                            <button type="button" class="btn btn-outline-secondary editbtn">編輯</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                }
+            }
+        </table>
+        @{
+
+            if (list != null && list.Count > 0)
+            {
+                @Html.Partial("Pager")
+
+            }
+        }
+
     </div>
 </body>
 </html>

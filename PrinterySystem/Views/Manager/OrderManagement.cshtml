@@ -150,7 +150,7 @@
                             <select class="custom-select d-block w-100" id="Product" required="">
                                 <option value="">选择产品</option>
                                 @{
-                                    var ProductList = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductsViewModel>;
+                                    var ProductList = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductGoodsViewModel>;
                                     if (ProductList != null && ProductList.Count > 0)
                                     {
                                         foreach (var item in ProductList)

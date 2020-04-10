@@ -249,15 +249,16 @@
         function CreatePurchasePaperOrder() {
             debugger;
             var pname = document.getElementById('PPaperName').value
-            var pcount=document.getElementById('PCcount').value
+            var pcount = document.getElementById('PCcount').value
+            var Createpersonid = document.getElementById('personid').innerText;
             var result = {
                 "PurchasingID":"",
                 "PaperId": "",
                 "PaperName": pname,
                 "Count": pcount,
                 "Price": 0,
-                "CreatePersonId": "123456",
-                "ProcessPersonId": "7654321",
+                "CreatePersonId": Createpersonid,
+                "ProcessPersonId": Createpersonid,
                 "Status": "待处理",
                 "CreateDate": "",
                 "ProcessDate":""

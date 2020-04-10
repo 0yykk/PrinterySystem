@@ -13,9 +13,12 @@ namespace Printery.Provider.Provider
     /// </summary>
     public interface IProductProvider
     {
-        Task<List<ProductsViewModel>> GetAllProduct();
-        List<ProductsViewModel> GetProductByProductName(string ProductName);
-        void UpdateProduct(ProductsViewModel product);
+        Task<List<ProductGoodViewModel>> GetAllProductPurchase();
+        Task<List<ProductGoodsViewModel>> GetAllProduct();
+        List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
+        List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase);
+        void UpdateProduct(ProductGoodsViewModel product);
     }
     public class ProductProvider:IProductProvider
     {
@@ -24,19 +27,35 @@ namespace Printery.Provider.Provider
         {
             _productRespository = productRespository;
         }
-        public async Task<List<ProductsViewModel>> GetAllProduct()
+        public async Task<List<ProductGoodViewModel>> GetAllProductPurchase()
         {
-            var list = new List<ProductsViewModel>();
-            list = await _productRespository.GetAllProduct();
-            return (list != null) ? list : new List<ProductsViewModel>();
+            var list = new List<ProductGoodViewModel>();
+            list = await _productRespository.GetAllProductPurchase();
+            return list;
         }
-        public List<ProductsViewModel> GetProductByProductName(string ProductName)
+        public async Task<List<ProductGoodsViewModel>> GetAllProduct()
         {
-            var list = new List<ProductsViewModel>();
+            var list = new List<ProductGoodsViewModel>();
+            list = await _productRespository.GetAllProduct();
+            return (list != null) ? list : new List<ProductGoodsViewModel>();
+        }
+        public List<ProductGoodViewModel> GetPurchaseById(string purchaseid)
+        {
+            var list = new List<ProductGoodViewModel>();
+            list = _productRespository.GetPurchaseById(purchaseid);
+            return list;
+        }
+        public List<ProductGoodsViewModel> GetProductByProductName(string ProductName)
+        {
+            var list = new List<ProductGoodsViewModel>();
             list = _productRespository.GetProductByProductName(ProductName);
             return list;
         }
-        public void UpdateProduct(ProductsViewModel product)
+        public void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase)
+        {
+            _productRespository.CreatePurchaseOrder4Produt(propurchase);
+        }
+        public void UpdateProduct(ProductGoodsViewModel product)
         {
             _productRespository.UpdateProduct(product);
         }

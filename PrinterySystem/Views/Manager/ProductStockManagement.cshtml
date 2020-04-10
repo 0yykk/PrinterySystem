@@ -2,7 +2,7 @@
     ViewBag.Title = "样品管理";
     Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
-@model Printery.Domain.ViewModel.ProductsViewModel
+@model Printery.Domain.ViewModel.ProductGoodsViewModel
 <!DOCTYPE html>
 
 <html>
@@ -30,7 +30,7 @@
                 </button>
             </div>
             <div class="col-md-2 text-right my-2 my-lg-0">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-title="产品生产工单">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#ProductModal" data-title="产品生产工单">
                     <fa class="fa fa-shopping-cart"></fa>
                     生产产品
                 </button>
@@ -49,7 +49,7 @@
                 </tr>
             </thead>
             @{
-                var list = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductsViewModel>;
+                var list = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductGoodsViewModel>;
                 if (list != null && list.Count > 0)
                 {
                     <tbody>
@@ -112,7 +112,7 @@
         XX印刷厂管理系统
     </footer>
 
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ProductModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -123,15 +123,27 @@
                 </div>
                 <div class="modal-body">
                     <label>产品名称</label>
-                    <select id="PInkName" data-toggle="select" class="form-control select select-default" name="PInkName">
+                    <select id="ProName" data-toggle="select" class="form-control select select-default" name="PInkName">
                         <option value="default" selected="selected">--请选择要生产的产品--</option>
+                        @{ 
+                            var ProductList = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductGoodsViewModel>;
+                            if (ProductList != null && ProductList.Count > 0)
+                            {
+                                foreach(var item in ProductList)
+                                {
+                                    <option value="@item.ProductName">
+                                        @item.ProductName
+                                    </option>
+                                }
+                            }
+                        }
                     </select>
                     <label>生产数量</label>
-                    <input type="number" name="PCcount" id="PCcount" class='form-control input-sm' min='1' value='1' />
+                    <input type="number" name="PrCcount" id="ProCcount" class='form-control input-sm' min='1' value='1' />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-outline-danger">提交</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="CreateProductPurchase()">提交</button>
                 </div>
             </div>
         </div>
@@ -171,7 +183,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label>产品名称</label>
+                    <label>生产数量:</label>
+                    <label>123</label>
+                    <label>产品名称:</label>
                     <select id="PInkName" data-toggle="select" class="form-control select select-default" name="PInkName">
                         <option value="default" selected="selected">--请选择要生产的产品--</option>
                     </select>
@@ -248,7 +262,42 @@
             }
 
         })
-    }
+        }
+        function CreateProductPurchase() {
+            var pname = document.getElementById('ProName').value
+            var pcount = document.getElementById('ProCcount').value
+            var Createpersonid = document.getElementById('personid').innerText;
+            var result = {
+                "PurchasingID":"",
+                "ProductId": "",
+                "ProductName": pname,
+                "Count": pcount,
+                "Price": 0,
+                "CreatePersonId": Createpersonid,
+                "ProcessPersonId": Createpersonid,
+                "Status": "待处理",
+                "CreateDate": "",
+                "ProcessDate":""
+            }
+            $('#ProductModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+        $.ajax({
+            type: "POST",
+            url: "../Manager/PurchasingProduct",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(result),
+
+            success: function (e) {
+                debugger;
+                if (e != null)
+                    alert("添加成功！")
+                    location.reload()  
+            }
+
+        })
+        }
     </script>
 </body>
 </html>

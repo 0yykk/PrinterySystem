@@ -15,6 +15,9 @@ namespace Printery.Data.Respositories
     {
         Task<List<PaperCViewModel>> GetAllPaper();
         Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing();
+        List<PurchasingPaperViewModel> GetPurchasingById(string id);
+        void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId);
+        void DeletePaperPurchase(string purchaseid);
         void CreatePurchaseOrder4Paper(PurchasingPaperViewModel Paper);
         void UpdatePaper(PaperCViewModel paper);
     }
@@ -64,6 +67,47 @@ namespace Printery.Data.Respositories
                 PaperList.Add(par);
             }
             return PaperList;
+        }
+        public List<PurchasingPaperViewModel> GetPurchasingById(string id)
+        {
+            var par = from u in _db.PaperPurchasing
+                      where u.PurchasingID == id
+                      select u;
+            var parc = new PurchasingPaperViewModel();
+            var parList = new List<PurchasingPaperViewModel>();
+            foreach(var i in par)
+            {
+                parc.PurchasingID = i.PurchasingID;
+                parc.PaperId = i.PaperId;
+                parc.PaperName = i.PaperName;
+                parc.Price = i.Price;
+                parc.ProcessDate = i.ProcessDate;
+                parc.ProcessPersonId = i.ProcessPersonId;
+                parc.Count = i.Count;
+                parc.CreateDate = i.CreateDate;
+                parc.CreatePersonId = i.CreatePersonId;
+                parc.Status = i.Status;
+                parList.Add(parc);
+            }
+            return parList;
+        }
+        public void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId)
+        {
+            var storeProcedureName = "[dbo].[Update_PaperPurchase]";
+            var Result = _dbContext.Database.SqlQuery<PurchasingInkViewModel>(
+                $"{storeProcedureName} @PurChaseId,@PaperId,@Ccount,@Price,@ProcessPersonId",
+                new SqlParameter("@PurchaseId",PurchaseId),
+                new SqlParameter("@PaperId",paperid),
+                new SqlParameter("@Ccount", PaperCount),
+                new SqlParameter("@Price",Price),
+                new SqlParameter("@ProcessPersonId",ProcessPersonId)
+                ).SingleOrDefault();
+        }
+        public void DeletePaperPurchase(string purchaseid)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.PaperPurchasing.Remove(pr.PaperPurchasing.Where(p => p.PurchasingID == purchaseid).FirstOrDefault());
+            pr.SaveChanges();
         }
         public void UpdatePaper(PaperCViewModel paper)
         {
