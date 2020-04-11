@@ -37,7 +37,7 @@ namespace PrinterySystem.Controllers
             var recordCount = Orderlist.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
-            const int PAGE_SZ = 15;
+            const int PAGE_SZ = 5;
             ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderId)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
@@ -171,6 +171,14 @@ namespace PrinterySystem.Controllers
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult PushProcessIn(string PurchasingID,string Processpersonid)
+        {
+            string i = PurchasingID.Trim();
+            string a = Processpersonid.Trim();
+            _productProvider.ProcessProductGood(i, a);
+            string b = "Sucessful";
+            return Json(b, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult DeletePaperPurchase(string purchaseguid)
         {
             _paperProvider.DeletePaperPurchase(purchaseguid);
@@ -228,6 +236,14 @@ namespace PrinterySystem.Controllers
         public JsonResult EditOrder(OrderViewModel order)
         {
             _orderProvider.EditOrder(order);
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult ProcessOrder(string orderid,string processpersonid)
+        {
+            string id = orderid.Trim();
+            string pid = processpersonid.Trim();
+            _orderProvider.ProcessOrder(id, pid);
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
         }
@@ -354,7 +370,7 @@ namespace PrinterySystem.Controllers
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
             ViewBag.PaperPurchase = paperlist.OrderByDescending(art => art.CreateDate)
-                .Skip((pageindex - 1) * PAGE_SZ)
+                .Skip((pageindex1 - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
             ViewBag.Pager = new PagerHelper()
             {

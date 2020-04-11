@@ -29,10 +29,10 @@
             </div>
             <div class="col-md-4">
                 @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
-                    <span>~</span>
-                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
-                </form>*@
+                        <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                        <span>~</span>
+                        <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                    </form>*@
             </div>
             <div class="col-md-4 text-right my-2 my-lg-0">
             </div>
@@ -92,7 +92,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="action">
-                                            <button type="button" class="btn btn-outline-secondary editbtn">編輯</button>
+                                            <button type="button" class="btn btn-outline-secondary ProOrderbtn">处理</button>
                                             <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
                                         </div>
                                     </td>
@@ -113,5 +113,194 @@
         }
 
     </div>
+    <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModalModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="viewmodeltitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>客户名称:</label>
+                            <label id="cuName"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>地址:</label>
+                            <label id="cuAddress"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Email:</label>
+                            <label id="cuEmail"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>联系人:</label>
+                            <label id="cuContact"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>商品名称:</label>
+                            <label id="cuProduct"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label></label>
+                            <label></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ProcessModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">订单号：</h5><h5 class="modal-title" id="processorder">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    是否将订单出库？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="ProcessOrder()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="removeorder">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    确认删除该订单？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deletOrder()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/Dashboradasset/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function deletOrder() {
+            debugger;
+            var orderid = document.getElementById('removeorder').innerText
+            $('#removeModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/DeleteOrder",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { orderguid: orderid }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert("删除成功！")
+                    location.reload()
+                }
+            })
+        }
+        function ProcessOrder() {
+            var processpersonid = document.getElementById('personid').innerText;
+            var orderid = document.getElementById('processorder').innerText;
+            var re = {
+                OrderId: orderid,
+                ProcessPersonId: processpersonid
+            }
+            $('#ProcessModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/ProcessOrder",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(re),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("请求提交成功，请稍后查看订单状态！")
+                    location.reload()
+                }
+
+            })
+        }
+        $(".td1").click(function () {
+            debugger;
+            var id = $(this).parent("tr");
+            var a = id.find(".guid");
+            var b = a.text();
+            $("#ctbody1").find('tr').empty();
+            $.ajax({
+                type: "POST",
+                url: "../Manager/GetOrder",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { orderguid: b }
+                ),
+
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        $("#viewmodeltitle").text("订单号：" + b);
+                    $.each(result, function (i, data) {
+                        $("#cuName").text(data.CustomerName);
+                        $("#cuAddress").text(data.Addressed);
+                        $("#cuEmail").text(data.Email);
+                        $("#cuContact").text(data.Contact);
+                        $("#cuProduct").text(data.ProductName);
+                    });
+                    $('#ViewModal').modal('show');
+                }
+            })
+        });
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeorder").text(b);
+            $('#removeModal').modal('show');
+        })
+        $(".ProOrderbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#processorder").text(b);
+            $('#ProcessModal').modal('show');
+        })
+    </script>
 </body>
 </html>

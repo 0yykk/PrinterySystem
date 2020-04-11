@@ -16,6 +16,7 @@ namespace Printery.Data.Respositories
     {
         Task<List<OrderViewModel>> GetAllOrder();
         List<OrderViewModel> GetOrderByOrderId(string orderid);
+        void ProcessOrder(string orderid, string processpersonid);
         void CreateOrder(OrderViewModel order);
         void EditOrder(OrderViewModel order);
         void DeleteOrder(string orderid);
@@ -94,6 +95,15 @@ namespace Printery.Data.Respositories
                 ordlist.Add(ord);
             }
             return ordlist;
+        }
+        public void ProcessOrder(string orderid, string processpersonid)
+        {
+            var storeProcedureName = "[dbo].[Process_Order]";
+            var result = _dbContext.Database.SqlQuery<OrderViewModel>(
+                $"{storeProcedureName} @Orderid,@ProcessPersonId",
+                new SqlParameter("@Orderid", orderid),
+                new SqlParameter("ProcessPersonId", processpersonid)
+                ).SingleOrDefault();
         }
         public void EditOrder(OrderViewModel order)
         {

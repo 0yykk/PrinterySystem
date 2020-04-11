@@ -17,6 +17,7 @@ namespace Printery.Data.Respositories
         Task<List<ProductGoodsViewModel>> GetAllProduct();
         List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
         List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        void ProcessProductGood(string purchaseid, string processpersonid);
         void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase);
         void UpdateProduct(ProductGoodsViewModel product);
     }
@@ -103,6 +104,15 @@ namespace Printery.Data.Respositories
                 proList.Add(product);
             }
             return proList;
+        }
+        public void ProcessProductGood(string purchaseid, string processpersonid)
+        {
+            var storeProcedureName = "[dbo].[Process_Product_PurchaseOrder]";
+            var Result = _dbContext.Database.SqlQuery<ProductGoodViewModel>(
+                $"{storeProcedureName} @PurchasingID,@ProcessPersonId",
+                new SqlParameter("@PurchasingID",purchaseid),
+                new SqlParameter("@ProcessPersonId",processpersonid)
+                ).SingleOrDefault();
         }
         public void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase)
         {

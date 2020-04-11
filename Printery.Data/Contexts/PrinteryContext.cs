@@ -24,6 +24,7 @@ namespace Printery.Data.Contexts
         DbSet<PowerList> PowerList { get; set; }
         DbSet<PowerControlList> PowerControlList { get; set; }
         DbSet<SuperUserList> SuperUserList { get; set; }
+        DbSet<ProductionExpense> ProductionExpense { get; set; }
         Database GetDb();
         DbContext GetDbContext();
     }
@@ -48,6 +49,7 @@ namespace Printery.Data.Contexts
         public virtual DbSet<PowerList> PowerList { get; set; }
         public virtual DbSet<PowerControlList> PowerControlList { get; set; }
         public virtual DbSet<SuperUserList> SuperUserList { get; set; }
+        public virtual DbSet<ProductionExpense> ProductionExpense { get; set; }
         public Database GetDb()
         {
             return Database;

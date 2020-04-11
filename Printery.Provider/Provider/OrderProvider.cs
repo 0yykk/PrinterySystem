@@ -16,6 +16,7 @@ namespace Printery.Provider.Provider
         /// <returns>订单列表</returns>
         Task<List<OrderViewModel>> GetAllOrder();
         List<OrderViewModel> GetOrderByOrderId(string orderid);
+        void ProcessOrder(string orderid, string processpersonid);
         void CreateOrder(OrderViewModel order);
         void EditOrder(OrderViewModel order);
         void DeleteOrder(string orderid);
@@ -38,6 +39,10 @@ namespace Printery.Provider.Provider
             var list = new List<OrderViewModel>();
             list = _orderRespository.GetOrderByOrderId(orderid);
             return list;
+        }
+        public void ProcessOrder(string orderid, string processpersonid)
+        {
+            _orderRespository.ProcessOrder(orderid, processpersonid);
         }
         public void CreateOrder(OrderViewModel order)
         {
