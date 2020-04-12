@@ -2,7 +2,6 @@
     ViewBag.Title = "订单管理";
     Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
-@model Printery.Domain.ViewModel.OrderViewModel
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
@@ -55,6 +54,7 @@
             </thead>
             @{
                 var list = ViewBag.OrderList as List<Printery.Domain.ViewModel.OrderViewModel>;
+                //var list=Model;
                 if (list != null && list.Count > 0)
                 {
                     <tbody>
@@ -111,6 +111,9 @@
 
             }
         }
+
+
+
 
     </div>
 

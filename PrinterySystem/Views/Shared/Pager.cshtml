@@ -15,14 +15,14 @@
         @if (_pager.PageIndex == 0)
         {
 
-            <li class="page-item"><a href="###" class="page-link">&laquo;</a></li>
+            <li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
         }
         else
         {
             routeValues["page"] = _pager.PageIndex - 1;
 
-            <li class="page-item">
-                @Html.ActionLink("«", _action, routeValues,new { @class="page-link"})
+            <li class="page-item page-link">
+                @Html.ActionLink("«", _action, routeValues)
             </li>
         }
         @foreach (int p in _pager.Pages)
@@ -40,18 +40,18 @@
             else
             {
                 routeValues["page"] = p;
-                <li>@Html.ActionLink(p.ToString(), _action, routeValues,new { @class="page-link"})</li>
+                <li class="page-item page-link">@Html.ActionLink(p.ToString(), _action, routeValues)</li>
             }
         }
         @if (_pager.PageIndex == _pager.PageCount)
         {
-            <li class="page-item"><a href="###" class="page-link">&raquo;</a></li>
+            <li class="page-item"><a href="#" class="page-link">&raquo;</a></li>
         }
         else
         {
             routeValues["page"] = _pager.PageIndex + 1;
-            <li class="page-item">
-                @Html.ActionLink("»", _action, routeValues,new { @class="page-link"})
+            <li class="page-item page-link">
+                    @Html.ActionLink("»", _action, routeValues)
             </li>
         }
     </ul>

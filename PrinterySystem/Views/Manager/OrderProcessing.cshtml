@@ -2,7 +2,6 @@
     ViewBag.Title = "订单处理";
     Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
-
 <!DOCTYPE html>
 
 <html>
@@ -29,10 +28,10 @@
             </div>
             <div class="col-md-4">
                 @*<form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
-                        <span>~</span>
-                        <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
-                    </form>*@
+                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                    <span>~</span>
+                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                </form>*@
             </div>
             <div class="col-md-4 text-right my-2 my-lg-0">
             </div>
@@ -55,6 +54,7 @@
             </thead>
             @{
                 var list = ViewBag.OrderList as List<Printery.Domain.ViewModel.OrderViewModel>;
+                //var list = Model;
                 if (list != null && list.Count > 0)
                 {
                     <tbody>

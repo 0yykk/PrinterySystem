@@ -3,6 +3,7 @@ using Printery.Domain.ViewModel;
 using Printery.Provider.Provider;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,12 +28,13 @@ namespace PrinterySystem.Controllers
             _paperProvider = paperProvider;
             _inkProvider = inkProvider;
         }
-        public async Task<ActionResult> OrderManagement()
+        public async Task<ActionResult> OrderManagement(int? page)
         {
             var productlist = new List<ProductGoodsViewModel>();
             productlist = await _productProvider.GetAllProduct();
             var Orderlist = new List<OrderViewModel>();
             Orderlist = await _orderProvider.GetAllOrder();
+            ViewBag.ProductList = productlist;
             int pageindex = 1;
             var recordCount = Orderlist.Count();
             if (Request.QueryString["page"] != null)
@@ -41,7 +43,7 @@ namespace PrinterySystem.Controllers
             ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderId)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
-            ViewBag.ProductList = productlist;
+
             ViewBag.Pager = new PagerHelper()
             {
                 PageIndex = pageindex,
@@ -62,7 +64,7 @@ namespace PrinterySystem.Controllers
             var recordCount = PaperList.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
-            const int PAGE_SZ = 15;
+            const int PAGE_SZ = 5;
             ViewBag.PaperList = PaperList.OrderByDescending(art => art.PaperId)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
@@ -262,7 +264,7 @@ namespace PrinterySystem.Controllers
             var recordCount = InkList.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
-            const int PAGE_SZ = 15;
+            const int PAGE_SZ = 5;
             ViewBag.InkList = InkList.OrderByDescending(art => art.InkId)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
@@ -283,7 +285,7 @@ namespace PrinterySystem.Controllers
             var recordCount = productlist.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
-            const int PAGE_SZ = 15;
+            const int PAGE_SZ = 5;
             ViewBag.ProductList = productlist.OrderByDescending(art => art.ProductID)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
@@ -308,21 +310,27 @@ namespace PrinterySystem.Controllers
         {
             return View();
         }
-        public async Task<ActionResult> OrderProcessing()
+        public async Task<ActionResult> OrderProcessing(int? page)
         {
             var productlist = new List<ProductGoodsViewModel>();
             productlist = await _productProvider.GetAllProduct();
             var Orderlist = new List<OrderViewModel>();
             Orderlist = await _orderProvider.GetAllOrder();
+            //int pageNumber = page ?? 1;
+            ////每页显示多少条
+            //int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
+            //Orderlist = Orderlist.OrderBy(x => x.OrderId).ToList();
+            ////通过ToPagedList扩展方法进行分页
+            //IPagedList<OrderViewModel> pagedList = Orderlist.ToPagedList(pageNumber, pageSize);
+            ViewBag.ProductList = productlist;
             int pageindex = 1;
             var recordCount = Orderlist.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
-            const int PAGE_SZ = 15;
-            ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderId)
-                .Skip((pageindex - 1) * PAGE_SZ)
-                .Take(PAGE_SZ).ToList();
-            ViewBag.ProductList = productlist;
+            const int PAGE_SZ = 5;
+            ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderCreate)
+            .Skip((pageindex - 1) * PAGE_SZ)
+            .Take(PAGE_SZ).ToList();
             ViewBag.Pager = new PagerHelper()
             {
                 PageIndex = pageindex,
@@ -339,7 +347,7 @@ namespace PrinterySystem.Controllers
             var recordCount = purchaselist.Count();
             if (Request.QueryString["page"] != null)
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
-            const int PAGE_SZ = 15;
+            const int PAGE_SZ = 5;
             ViewBag.PurchaseList = purchaselist.OrderByDescending(art => art.CreateDate)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
@@ -365,7 +373,7 @@ namespace PrinterySystem.Controllers
                 pageindex = Convert.ToInt32(Request.QueryString["page"]);
             if (Request.QueryString["page1"] != null)
                 pageindex1 = Convert.ToInt32(Request.QueryString["page1"]);
-            const int PAGE_SZ = 15;
+            const int PAGE_SZ = 5;
             ViewBag.InkPurchase = inklist.OrderByDescending(art => art.CreateDate)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();

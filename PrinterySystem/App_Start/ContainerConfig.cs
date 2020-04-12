@@ -28,6 +28,7 @@ namespace PrinterySystem.App_Start
             builder.RegisterType<PaperRespository>().As<IPaperRespository>().InstancePerRequest();
             builder.RegisterType<InkRespository>().As<IInkRespository>().InstancePerRequest();
             builder.RegisterType<EmpRepository>().As<IEmpRepository>().InstancePerRequest();
+            builder.RegisterType<CustomerRepository>().As<ICustomerRepository>().InstancePerRequest();
 
             //Provider
             builder.RegisterType<OrderProvider>().As<IOrderProvider>().InstancePerRequest();
@@ -35,6 +36,8 @@ namespace PrinterySystem.App_Start
             builder.RegisterType<PaperProvider>().As<IPaperProvider>().InstancePerRequest();
             builder.RegisterType<InkProvider>().As<IInkProvider>().InstancePerRequest();
             builder.RegisterType<EmpProvider>().As<IEmpProvider>().InstancePerRequest();
+            builder.RegisterType<CustomerProvider>().As<ICustomerProvider>().InstancePerRequest();
+
 
             //other
             builder.RegisterControllers(Assembly.GetExecutingAssembly());

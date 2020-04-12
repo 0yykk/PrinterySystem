@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider\CustomerProvider.cs" />
     <Compile Include="Provider\EmpProvider.cs" />
     <Compile Include="Provider\InkProvider.cs" />
     <Compile Include="Provider\OrderProvider.cs" />
