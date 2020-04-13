@@ -45,10 +45,13 @@
     <Compile Include="ViewModel\CartListViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DashboradViewModel.cs" />
+    <Compile Include="ViewModel\EmpGroupViewModel.cs" />
     <Compile Include="ViewModel\EmployeeViewModel.cs" />
     <Compile Include="ViewModel\InkCViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\PaperCViewModel.cs" />
+    <Compile Include="ViewModel\PowerControlListViewModel.cs" />
+    <Compile Include="ViewModel\PowerListViewModel.cs" />
     <Compile Include="ViewModel\ProductGoodViewModel.cs" />
     <Compile Include="ViewModel\ProductsViewModel.cs" />
     <Compile Include="ViewModel\PurchasingInkViewModel.cs" />

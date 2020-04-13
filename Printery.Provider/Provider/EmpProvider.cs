@@ -12,6 +12,9 @@ namespace Printery.Provider.Provider
     {
         Task<EmployeeViewModel> GetEmployeeByUsernameAsync(string username);
         Task<EmployeeViewModel> GetEmployeeByUserIdAsync(string userid);
+        Task<List<EmpGroupViewModel>> GetAllEmpGroup();
+        Task<List<PowerListViewModel>> GetAllPowerList();
+        void UpdatePowerList(List<PowerControlListViewModel> powerlist);
     }
     public class EmpProvider:IEmpProvider
     {
@@ -31,6 +34,22 @@ namespace Printery.Provider.Provider
             var emp = new EmployeeViewModel();
             emp = await _empRespository.GetEmployeeByUserIdAsync(userid);
             return emp;
+        }
+        public async Task<List<EmpGroupViewModel>> GetAllEmpGroup()
+        {
+            var empg = new List<EmpGroupViewModel>();
+            empg = await _empRespository.GetAllEmpGroup();
+            return empg;
+        }
+        public async Task<List<PowerListViewModel>> GetAllPowerList()
+        {
+            var powlist = new List<PowerListViewModel>();
+            powlist = await _empRespository.GetAllPowerList();
+            return powlist;
+        }
+        public void UpdatePowerList(List<PowerControlListViewModel> powerlist)
+        {
+            _empRespository.UpdatePowerList(powerlist);
         }
     }
 }

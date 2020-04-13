@@ -172,7 +172,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\Person4ManagerController.cs" />
-    <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\SystemOpController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -348,12 +347,8 @@
     <Content Include="Views\SystemOp\Dashborad4Manager.cshtml" />
     <Content Include="Views\Shared\_LayoutSysManager.cshtml" />
     <Content Include="Views\Manager\StockManagement.cshtml" />
-    <Content Include="Views\Manager\CustomerManagement.cshtml" />
-    <Content Include="Views\Manager\EmployeeManagement.cshtml" />
     <Content Include="Views\Person4Manager\CustomerInfo.cshtml" />
     <Content Include="Views\Person4Manager\EmployeeInfo.cshtml" />
-    <Content Include="Views\Person\CustomerInfo.cshtml" />
-    <Content Include="Views\Person\EmployeeInfo.cshtml" />
     <Content Include="Views\Person4Manager\MyInfo.cshtml" />
     <Content Include="Views\Manager\PaperStockManagement.cshtml" />
     <Content Include="Views\Manager\ProductStockManagement.cshtml" />
@@ -364,6 +359,10 @@
     <Content Include="Views\Manager\OrderProcessing.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
     <Content Include="Views\Person4Manager\MyInfoEdit.cshtml" />
+    <Content Include="Views\Account\RecoverPassword.cshtml" />
+    <Content Include="Views\Account\UserGroupManager.cshtml" />
+    <Content Include="Views\SystemOp\ProductSet.cshtml" />
+    <Content Include="Views\SystemOp\SystemManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

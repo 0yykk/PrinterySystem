@@ -1,7 +1,10 @@
-﻿using Printery.Provider.Provider;
+﻿using Printery.Core.Utility;
+using Printery.Domain.ViewModel;
+using Printery.Provider.Provider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -67,6 +70,43 @@ namespace PrinterySystem.Controllers
             {
                 ViewBag.Error = "用户编号错误";
             }
+            return View();
+        }
+        public async Task<ActionResult> UserGroupManager()
+        {
+            var empg = new List<EmpGroupViewModel>();
+            var powlist = new List<PowerListViewModel>();
+            powlist = await _empProvider.GetAllPowerList();
+            empg = await _empProvider.GetAllEmpGroup();
+            int pageindex = 1;
+            var recordCount = empg.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.EmpGroupList = empg.OrderByDescending(art => art.GroupId)
+            .Skip((pageindex - 1) * PAGE_SZ)
+            .Take(PAGE_SZ).ToList();
+            ViewBag.PowerList = powlist;
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
+        # region 用户组处理api
+        public JsonResult PowerListUpdate(List<PowerControlListViewModel> powerlist)
+        {
+            List<PowerControlListViewModel> i = new List<PowerControlListViewModel>();
+            i = powerlist;
+            //decimal totalPrice = 0;
+            _empProvider.UpdatePowerList(i);
+            return Json("Sucessful", JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        public ActionResult RecoverPassword()
+        {
             return View();
         }
     }

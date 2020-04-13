@@ -43,6 +43,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("WorkflowManagement", "Manager")">工单处理</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        系统维护
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@Url.Action("UserGroupManager", "Account")">用户组管理</a>
+                        <a class="dropdown-item" href="@Url.Action("ProductSet", "SystemOp")">产品管理</a>
+                        <a class="dropdown-item" href="@Url.Action("SystemManager", "SystemOp")">系统管理</a>
+                    </div>
+                </li>
             </ul>
             <div class="text-hide" id="personid">@LoginUserGuid</div>
             <div class="btn-group">
