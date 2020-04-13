@@ -61,7 +61,7 @@
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="action">
                                             <button type="button" class="btn btn-outline-secondary editbtn">编辑权限</button>
-                                            <button type="button" class="btn btn-outline-secondary">删除用户组</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除用户组</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -145,18 +145,37 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="editModalLabel">添加用户组</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <label>用户组名称</label>
-                    <input type="text" name="InkName" id="InkName" class="form-control" required="" autofocus="">
+                    <input type="text" name="InkName" id="grpName" class="form-control" required="" autofocus="">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="addUserGroup()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="removeGroup" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">移除用户组：</h5><h5 class="modal-title" id="removeGroupLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    确定移除该用户组？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="DelUserGroup()">确定</button>
                 </div>
             </div>
         </div>
@@ -176,9 +195,38 @@
             var c = a.find(".guid")
             var b = c.text();
             $("#editModalLabel").text(b);
-            var checkBoxAll = $("input[name='powerid']");
-            var id=document.getElementById('editModalLabel').innerText
-            $('#editModal').modal('show');
+            $("input[name='powerid']").attr("checked", false);;
+            var id = document.getElementById('editModalLabel').innerText
+            var res = {
+                GroupId: id
+            }
+            $.ajax({
+                type: "POST",
+                url: "../Account/DisplayPowerList",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(res),
+
+                success: function (result) {
+                    if (result != null)
+                        $.each(result, function (i, data) {
+                            $("input[name='powerid'][value=" + data.PowerId + "]").attr("checked", "checked");
+                        });
+                    $('#editModal').modal('show');
+                }
+
+            })
+        })
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeGroupLabel").text(b);
+            $('#removeGroup').modal('show');
         })
         function updatePowerlist() {
             debugger;
@@ -190,28 +238,66 @@
                 if (checkBoxAll[i].checked) {
                     //console.log(checkBoxAll[i].value);
                     re.push({
-                        "ControlId":"",
+                        "ControlId": "",
                         "PowerId": checkBoxAll[i].value,
                         "GroupId": id,
                     })
                 }
             }
             $.ajax({
-            type: "POST",
-            url: "../Account/PowerListUpdate",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(re),
+                type: "POST",
+                url: "../Account/PowerListUpdate",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(re),
 
-            success: function (e) {
-                debugger;
-                if (e != null)
-                    alert("权限更新成功");
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("权限更新成功");
                     location.reload();
-            }
+                }
 
-        })
+            })
+        }
+        function addUserGroup() {
+            debugger;
+            var grpName = document.getElementById('grpName').value
+            $.ajax({
+                type: "POST",
+                url: "../Account/AddGroup",
+                data: JSON.stringify({
+                    GroupName: grpName
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (result) {
+                    if (result != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
+
+            });
+        }
+        function DelUserGroup() {
+            debugger;
+            var Groupid = document.getElementById('removeGroupLabel').innerText
+            $.ajax({
+                type: "POST",
+                url: "../Account/DeleteGroup",
+                data: JSON.stringify({
+                    GroupId: Groupid
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (result) {
+                    if (result != null)
+                        alert("成功！")
+                    location.reload()
+                }
+
+            });
         }
     </script>
 </body>

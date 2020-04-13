@@ -54,9 +54,21 @@ namespace PrinterySystem.Controllers
             ViewBag.Employee = emp;
             return View();
         }
-        public ActionResult MyInfoEdit()
+
+        public async Task<ActionResult> MyInfoEdit(string id,string type)
         {
-            return View();
+            var employee = new EmployeeViewModel();
+            employee = await _empProvider.GetEmployeeById(id);
+            employee.EmpId = id.Trim();
+            return View(employee);
+            
+        }
+        [HttpPost]
+        public ActionResult MyInfoEdit(EmployeeViewModel emp)
+        {
+            _empProvider.UpdateEmployeeInfo(emp);
+            return Content("<script>alert('更新成功!');history.go(-2);</script> ");
+
         }
     }
 }

@@ -14,7 +14,12 @@ namespace Printery.Provider.Provider
         Task<EmployeeViewModel> GetEmployeeByUserIdAsync(string userid);
         Task<List<EmpGroupViewModel>> GetAllEmpGroup();
         Task<List<PowerListViewModel>> GetAllPowerList();
+        Task<EmployeeViewModel> GetEmployeeById(string id);
+        List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
         void UpdatePowerList(List<PowerControlListViewModel> powerlist);
+        void AddUserGroupByGroupName(string GroupName);
+        void UpdateEmployeeInfo(EmployeeViewModel emp);
+        void DeleteUserGroup(string GroupId);
     }
     public class EmpProvider:IEmpProvider
     {
@@ -47,9 +52,33 @@ namespace Printery.Provider.Provider
             powlist = await _empRespository.GetAllPowerList();
             return powlist;
         }
+        public async Task<EmployeeViewModel> GetEmployeeById(string id)
+        {
+            var emp = new EmployeeViewModel();
+            emp = await _empRespository.GetEmployeeById(id);
+            return emp;
+        }
+        public List<PowerControlListViewModel> GetPowerContrlListById(string GroupId)
+        {
+            var list = new List<PowerControlListViewModel>();
+            list = _empRespository.GetPowerContrlListById(GroupId);
+            return list;
+        }
         public void UpdatePowerList(List<PowerControlListViewModel> powerlist)
         {
             _empRespository.UpdatePowerList(powerlist);
+        }
+        public void AddUserGroupByGroupName(string GroupName)
+        {
+            _empRespository.AddUserGroupByGroupName(GroupName);
+        }
+        public void UpdateEmployeeInfo(EmployeeViewModel emp)
+        {
+            _empRespository.UpdateEmployeeInfo(emp);
+        }
+        public void DeleteUserGroup(string GroupId)
+        {
+            _empRespository.DeleteUserGroup(GroupId);
         }
     }
 }

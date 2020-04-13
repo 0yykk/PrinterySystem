@@ -114,22 +114,16 @@
 
                         <div class="row">
                             <div class="col-md-5 mb-3">
-                                <label for="country">国家:</label>
-                                <label>中国</label>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="state">省市:</label>
-                                <label>北京</label>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="zip">邮政编码:</label>
-                                <label>12421313</label>
                             </div>
                         </div>
                         <hr class="mb-4">
 
                         <hr class="mb-4">
-                        <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("MyInfoEdit", "Person4Manager")">编辑个人信息</a>
+                        <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("MyInfoEdit", "Person4Manager",new { id = emp.EmpId, type = "Edit" })">编辑个人信息</a>
                     </form>
                 </div>
                 }

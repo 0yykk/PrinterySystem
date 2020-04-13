@@ -17,7 +17,12 @@ namespace Printery.Data.Respositories
         Task<EmployeeViewModel> GetEmployeeByUserIdAsync(string userid);
         Task<List<EmpGroupViewModel>> GetAllEmpGroup();
         Task<List<PowerListViewModel>> GetAllPowerList();
+        Task<EmployeeViewModel> GetEmployeeById(string id);
+        List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
+        void AddUserGroupByGroupName(string GroupName);
         void UpdatePowerList(List<PowerControlListViewModel> powerlist);
+        void UpdateEmployeeInfo(EmployeeViewModel emp);
+        void DeleteUserGroup(string GroupId);
 
     }
     public class EmpRepository:IEmpRepository
@@ -99,6 +104,43 @@ namespace Printery.Data.Respositories
             }
             return powlist;
         }
+        public async Task<EmployeeViewModel> GetEmployeeById(string id)
+        {
+            var emp = new EmployeeViewModel();
+            var db = new PrinteryContext();
+            var exitemp = await _db.Employee.FirstOrDefaultAsync(s => s.EmpId == id);
+            if (exitemp != null)
+            {
+                emp.EmpId = exitemp.EmpId;
+                emp.Ename = exitemp.Ename;
+                emp.Department = exitemp.Department;
+                emp.IDCardNum = exitemp.IDCardNum;
+                emp.Nation = exitemp.Nation;
+                emp.Phone = exitemp.Phone;
+                emp.QQ = exitemp.QQ;
+                emp.Sex = exitemp.Sex;
+                emp.UserGroup = exitemp.UserGroup;
+                emp.Username = exitemp.Username;
+            }
+            return emp;
+        }
+        public List<PowerControlListViewModel> GetPowerContrlListById(string GroupId)
+        {
+            var powerlist = from u in _db.PowerControlList
+                            where u.GroupId == GroupId
+                            select u;
+            var powerList = new List<PowerControlListViewModel>();
+            foreach(var i in powerlist)
+            {
+                var power = new PowerControlListViewModel();
+                power.PowerId = i.PowerId;
+                power.GroupId = i.GroupId;
+                power.ControlId = i.ControlId;
+                powerList.Add(power);
+
+            }
+            return powerList;
+        }
         public void UpdatePowerList(List<PowerControlListViewModel> powerlist)
         {
             PrinteryContext db = new PrinteryContext();
@@ -114,6 +156,44 @@ namespace Printery.Data.Respositories
                 db.PowerControlList.Add(newItem);
                 db.SaveChanges();
             }
+        }
+        public void AddUserGroupByGroupName(string GroupName)
+        {
+            PrinteryContext db = new PrinteryContext();
+            var newGroup = new EmpGroup()
+            {
+                GroupId = Guid.NewGuid().ToString(),
+                GroupName = GroupName,
+                Tip = ""
+            };
+            db.EmpGroup.Add(newGroup);
+            db.SaveChanges();
+
+        }
+        public void UpdateEmployeeInfo(EmployeeViewModel emp)
+        {
+            var db = new PrinteryContext();
+            var exitEmp = db.Employee.FirstOrDefault(s => s.EmpId == emp.EmpId);
+            if (exitEmp != null)
+            {
+                db.Set<Employee>().Attach(exitEmp);
+                db.Entry(exitEmp).State= EntityState.Modified;
+                exitEmp.Ename = emp.Ename;
+                exitEmp.Department = emp.Department;
+                exitEmp.Nation = emp.Nation;
+                exitEmp.Sex = emp.Sex;
+                exitEmp.QQ = emp.QQ;
+                exitEmp.Phone = emp.Phone;
+                db.SaveChanges();
+            }
+           
+        }
+        public void DeleteUserGroup(string GroupId)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.Database.ExecuteSqlCommand("DELETE FROM PowerControlList WHERE GroupId={0}", GroupId);
+            pr.EmpGroup.Remove(pr.EmpGroup.Where(p => p.GroupId == GroupId).FirstOrDefault());
+            pr.SaveChanges();
         }
     }
 }

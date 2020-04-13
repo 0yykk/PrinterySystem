@@ -104,6 +104,26 @@ namespace PrinterySystem.Controllers
             _empProvider.UpdatePowerList(i);
             return Json("Sucessful", JsonRequestBehavior.AllowGet);
         }
+        public JsonResult DisplayPowerList(string GroupId)
+        {
+            string i = GroupId.Trim();
+            List<PowerControlListViewModel> list = new List<PowerControlListViewModel>();
+            list = _empProvider.GetPowerContrlListById(i);
+            //var a= new List<String>;
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AddGroup(string GroupName)
+        {
+            string GroupN = GroupName.Trim();
+            _empProvider.AddUserGroupByGroupName(GroupN);
+            return Json("123", JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteGroup(string GroupId)
+        {
+            string Groupid = GroupId.Trim();
+            _empProvider.DeleteUserGroup(Groupid);
+            return Json("123", JsonRequestBehavior.AllowGet);
+        }
         #endregion
         public ActionResult RecoverPassword()
         {
