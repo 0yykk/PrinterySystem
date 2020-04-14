@@ -58,7 +58,7 @@ namespace PrinterySystem.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Dashborad4employee", "SysntemOp");
+                        return RedirectToAction("Dashborad4employee", "SystemOp");
                     }
                 }
                 else

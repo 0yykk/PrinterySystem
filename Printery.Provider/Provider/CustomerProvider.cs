@@ -11,6 +11,9 @@ namespace Printery.Provider.Provider
     public interface ICustomerProvider
     {
         Task<List<CustomerViewModel>> GetAllCustomer();
+        void EditCustomer(CustomerViewModel cms);
+        void AddCustomer(CustomerViewModel cms);
+        void DeleteCustomer(string cmsid);
     }
     public class CustomerProvider:ICustomerProvider
     {
@@ -25,6 +28,18 @@ namespace Printery.Provider.Provider
             var list = new List<CustomerViewModel>();
             list = await _customerRepository.GetAllCustomer();
             return list;
+        }
+        public void EditCustomer(CustomerViewModel cms)
+        {
+            _customerRepository.EditCustomer(cms);
+        }
+        public void AddCustomer(CustomerViewModel cms)
+        {
+            _customerRepository.AddCustomer(cms);
+        }
+        public void DeleteCustomer(string cmsid)
+        {
+            _customerRepository.DeleteCustomer(cmsid);
         }
     }
 }

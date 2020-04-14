@@ -16,6 +16,8 @@ namespace Printery.Data.Respositories
         Task<List<InkCViewModel>> GetAllInk();
         Task<List<PurchasingInkViewModel>> GetAllInkPurchasing();
         List<PurchasingInkViewModel> GetPurchasingById(string id);
+        void EditInk(string inkid, string inkname);
+        void DeleteInk(string inkid);
         void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId);
         void DeleteInkPurchase(string purchaseid);
         void UpdateInk(InkCViewModel ink);
@@ -90,6 +92,24 @@ namespace Printery.Data.Respositories
                 purList.Add(purc);
             }
             return purList;
+        }
+        public void EditInk(string inkid, string inkname)
+        {
+            var db = new PrinteryContext();
+            var exitInk = db.InkStock.FirstOrDefault(s => s.InkId == inkid);
+            if (exitInk != null)
+            {
+                db.Set<InkStock>().Attach(exitInk);
+                db.Entry(exitInk).State = EntityState.Modified;
+                exitInk.InkName = inkname;
+                db.SaveChanges();
+            }
+        }
+        public void DeleteInk(string inkid)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.InkStock.Remove(pr.InkStock.Where(p => p.InkId == inkid).FirstOrDefault());
+            pr.SaveChanges();
         }
         public void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId)
         {

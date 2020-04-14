@@ -89,8 +89,13 @@
     <Compile Include="Migrations\202004101512209_addProductExpense.designer.cs">
       <DependentUpon>202004101512209_addProductExpense.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004131556347_addDepartment.cs" />
+    <Compile Include="Migrations\202004131556347_addDepartment.designer.cs">
+      <DependentUpon>202004131556347_addDepartment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\Department.cs" />
     <Compile Include="Model\EmpGroup.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\InkStock.cs" />
@@ -140,6 +145,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004101512209_addProductExpense.resx">
       <DependentUpon>202004101512209_addProductExpense.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004131556347_addDepartment.resx">
+      <DependentUpon>202004131556347_addDepartment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

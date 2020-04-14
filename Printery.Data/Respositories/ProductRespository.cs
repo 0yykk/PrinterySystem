@@ -17,6 +17,8 @@ namespace Printery.Data.Respositories
         Task<List<ProductGoodsViewModel>> GetAllProduct();
         List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
         List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        void EditProduct(ProductGoodsViewModel product);
+        void DeleteProduct(string id);
         void ProcessProductGood(string purchaseid, string processpersonid);
         void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase);
         void UpdateProduct(ProductGoodsViewModel product);
@@ -104,6 +106,25 @@ namespace Printery.Data.Respositories
                 proList.Add(product);
             }
             return proList;
+        }
+        public void EditProduct(ProductGoodsViewModel product)
+        {
+            var db = new PrinteryContext();
+            var exitProduct = db.Product.FirstOrDefault(s => s.ProductID == product.ProductID);
+            if (exitProduct != null)
+            {
+                db.Set<Product>().Attach(exitProduct);
+                db.Entry(exitProduct).State = EntityState.Modified;
+                exitProduct.ProductName = product.ProductName;
+                exitProduct.eachPrice = product.eachPrice;
+                db.SaveChanges();
+            }
+        }
+        public void DeleteProduct(string id)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.Product.Remove(pr.Product.Where(p => p.ProductID==id).FirstOrDefault());
+            pr.SaveChanges();
         }
         public void ProcessProductGood(string purchaseid, string processpersonid)
         {

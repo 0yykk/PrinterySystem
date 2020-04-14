@@ -13,6 +13,8 @@ namespace Printery.Provider.Provider
         Task<List<InkCViewModel>> GetAllInk();
         Task<List<PurchasingInkViewModel>> GetAllInkPurchasing();
         List<PurchasingInkViewModel> GetPurchasingById(string id);
+        void EditInk(string inkid, string inkname);
+        void DeleteInk(string inkid);
         void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId);
         void DeleteInkPurchase(string purchaseid);
         void UpdateInk(InkCViewModel ink);
@@ -43,6 +45,14 @@ namespace Printery.Provider.Provider
             var list = new List<PurchasingInkViewModel>();
             list = _inkRespository.GetPurchasingById(id);
             return list;
+        }
+        public void EditInk(string inkid, string inkname)
+        {
+            _inkRespository.EditInk(inkid, inkname);
+        }
+        public void DeleteInk(string inkid)
+        {
+            _inkRespository.DeleteInk(inkid);
         }
         public void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId)
         {

@@ -30,7 +30,7 @@
                 </button>
             </div>
             <div class="col-md-2 text-right my-2 my-lg-0">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-title="纸品采购工单">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addPurchaseModal" data-title="纸品采购工单">
                     <fa class="fa fa-shopping-cart"></fa>
                     采购纸品
                 </button>
@@ -56,34 +56,23 @@
                             foreach (var item in list)
                             {
                                 <tr>
-                                    <td>
+                                    <td class="td1 guid">
                                         @Html.DisplayFor(modelitem => item.PaperId)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.PaperName)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.Ccount)
                                         张
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         正常
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="action">
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="編輯 超纖細肥皂 1盒" data-backdrop="static">編輯</button>
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="订单编号：12321421321" data-backdrop="static">查看</button>
-                                            <div class="btn-group" role="group">
-                                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    ...
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Other action</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#removeModal" data-title="超纖細肥皂 1盒">刪除</a>
-                                                </div>
-                                            </div>
+                                            <button type="button" class="btn btn-outline-secondary editbtn">编辑</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -108,7 +97,7 @@
         XX印刷厂管理系统
     </footer>
 
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addPurchaseModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -154,10 +143,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <label>纸品名称</label>
-                        <input type="text" name="PaperName" id="PaperName" class="form-control" required="" autofocus="">
-                        <label>库存数</label>
-                        <input type="number" name="Ccount" id="Ccount" class='form-control input-sm' min='1' value='1' />
+                    <label>纸品名称</label>
+                    <input type="text" name="PaperName" id="PaperName" class="form-control" required="" autofocus="">
+                    <label>库存数</label>
+                    <input type="number" name="Ccount" id="Ccount" class='form-control input-sm' min='1' value='1' />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -176,11 +165,37 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    确定删除该纸品？
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-danger">Save changes</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="delPaper()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editpaperModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸品名称:</label>
+                            <input class="form-control" id="parname" type="text" placeholder="纸品名称" aria-label="Search">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="editPaper()">保存</button>
                 </div>
             </div>
         </div>
@@ -193,7 +208,7 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('#editModal').on('show.bs.modal', function (event) {
+            $('#addPurchaseModal').on('show.bs.modal', function (event) {
                 var btn = $(event.relatedTarget);
                 var title = btn.data('title');
 
@@ -209,19 +224,38 @@
                 modal.find('.modal-title').text(title);
             });
 
-            $('#removeModal').on('show.bs.modal', function (event) {
-                var btn = $(event.relatedTarget);
-                var title = btn.data('title');
+            //$('#removeModal').on('show.bs.modal', function (event) {
+            //    var btn = $(event.relatedTarget);
+            //    var title = btn.data('title');
 
-                var modal = $(this);
-                modal.find('.modal-title').text('确认删除 ' + title);
-            });
+            //    var modal = $(this);
+            //    modal.find('.modal-title').text('确认删除 ' + title);
+            //});
         });
-
+        $(".editbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#editpaperModalLabel").text(b);
+            $('#editModal').modal('show');
+        })
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeModalLabel").text(b);
+            $('#removeModal').modal('show');
+         })
         function addPaper() {
             debugger;
             var pname = document.getElementById('PaperName').value
-            var pcount=document.getElementById('Ccount').value
+            var pcount = document.getElementById('Ccount').value
             var result = {
                 "PaperId": "",
                 "PaperName": pname,
@@ -229,22 +263,22 @@
             }
             $('#addModal').modal('hide')
             $(".modal-backdrop.fade").hide()
-        $.ajax({
-            type: "POST",
-            url: "../Manager/AddPaper",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(result),
+            $.ajax({
+                type: "POST",
+                url: "../Manager/AddPaper",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
 
-            success: function (e) {
-                debugger;
-                if (e != null)
-                    alert("添加成功！")
-                    location.reload()  
-            }
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
 
-        })
+            })
         }
         function CreatePurchasePaperOrder() {
             debugger;
@@ -252,7 +286,7 @@
             var pcount = document.getElementById('PCcount').value
             var Createpersonid = document.getElementById('personid').innerText;
             var result = {
-                "PurchasingID":"",
+                "PurchasingID": "",
                 "PaperId": "",
                 "PaperName": pname,
                 "Count": pcount,
@@ -261,26 +295,72 @@
                 "ProcessPersonId": Createpersonid,
                 "Status": "待处理",
                 "CreateDate": "",
-                "ProcessDate":""
+                "ProcessDate": ""
             }
+            $('#addPurchaseModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/PurchasingPaper",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
+
+            })
+        }
+        function editPaper() {
+            var id = document.getElementById('editpaperModalLabel').innerText
+            var name = document.getElementById('parname').value
             $('#editModal').modal('hide')
             $(".modal-backdrop.fade").hide()
-        $.ajax({
+            $.ajax({
             type: "POST",
-            url: "../Manager/PurchasingPaper",
+            url: "../Manager/editPaper",
             contentType: "application/json;charset=UTF-8",
             dataType: "json",
             contentType: "application/json",
-            data: JSON.stringify(result),
-
-            success: function (e) {
+            data: JSON.stringify(
+                {
+                    paperguid: id,
+                    papername: name
+                }
+            ),
+            success: function (result) {
                 debugger;
-                if (e != null)
-                    alert("添加成功！")
-                    location.reload()  
+                if (result != null)
+                     alert("修改成功！")
+                    location.reload()
             }
-
         })
+        }
+        function delPaper() {
+            var id = document.getElementById('removeModalLabel').innerText
+            $('#removeModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/deletePaper",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { paperid: id }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert("删除成功！")
+                    location.reload()
+                }
+            })
         }
     </script>
 </body>

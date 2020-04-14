@@ -16,6 +16,8 @@ namespace Printery.Data.Respositories
         Task<List<PaperCViewModel>> GetAllPaper();
         Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing();
         List<PurchasingPaperViewModel> GetPurchasingById(string id);
+        void EditPaper(string paperid, string papername);
+        void DeletePaper(string paperid);
         void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId);
         void DeletePaperPurchase(string purchaseid);
         void CreatePurchaseOrder4Paper(PurchasingPaperViewModel Paper);
@@ -90,6 +92,24 @@ namespace Printery.Data.Respositories
                 parList.Add(parc);
             }
             return parList;
+        }
+        public void DeletePaper(string paperid)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.Paper.Remove(pr.Paper.Where(p => p.PaperId==paperid).FirstOrDefault());
+            pr.SaveChanges();
+        }
+        public void EditPaper(string paperid, string papername)
+        {
+            var db = new PrinteryContext();
+            var exitPaper = db.Paper.FirstOrDefault(s => s.PaperId == paperid);
+            if (exitPaper != null)
+            {
+                db.Set<Paper>().Attach(exitPaper);
+                db.Entry(exitPaper).State = EntityState.Modified;
+                exitPaper.PaperName = papername;
+                db.SaveChanges();
+            }
         }
         public void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId)
         {

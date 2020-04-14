@@ -76,7 +76,7 @@ namespace PrinterySystem.Controllers
             };
             return View();
         }
-        #region 添加库存api（新品种纸张、油墨、产品）
+        #region 添加修改库存api（新品种纸张、油墨、产品）
         public JsonResult AddPaper(PaperCViewModel Paper)
         {
             PaperCViewModel i = new PaperCViewModel();
@@ -87,6 +87,18 @@ namespace PrinterySystem.Controllers
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
 
+        }
+        public JsonResult editPaper(string paperguid,string papername)
+        {
+            _paperProvider.EditPaper(paperguid.Trim(), papername.Trim());
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult deletePaper(string paperid)
+        {
+            _paperProvider.DeletePaper(paperid.Trim());
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult AddInk(InkCViewModel ink)
         {
@@ -99,6 +111,18 @@ namespace PrinterySystem.Controllers
             return Json(a, JsonRequestBehavior.AllowGet);
 
         }
+        public JsonResult editInk(string inkguid,string inkname)
+        {
+            _inkProvider.EditInk(inkguid.Trim(), inkname.Trim());
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult deleteInk(string inkid)
+        {
+            _inkProvider.DeleteInk(inkid.Trim());
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult AddProduct(ProductGoodsViewModel product)
         {
             ProductGoodsViewModel pro = new ProductGoodsViewModel();
@@ -109,6 +133,18 @@ namespace PrinterySystem.Controllers
             string a = "Sucessful";
             return Json(a, JsonRequestBehavior.AllowGet);
 
+        }
+        public JsonResult editProduct(ProductGoodsViewModel product)
+        {
+            _productProvider.EditProduct(product);
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult deleteProduct(string productid)
+        {
+            _productProvider.DeleteProduct(productid.Trim());
+            string a = "Sucessful";
+            return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
 

@@ -45,6 +45,7 @@
     <Compile Include="ViewModel\CartListViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DashboradViewModel.cs" />
+    <Compile Include="ViewModel\DepartmentViewModel.cs" />
     <Compile Include="ViewModel\EmpGroupViewModel.cs" />
     <Compile Include="ViewModel\EmployeeViewModel.cs" />
     <Compile Include="ViewModel\InkCViewModel.cs" />

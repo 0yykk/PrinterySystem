@@ -24,8 +24,8 @@
                 </form>
             </div>
             <div class="col-md-8 text-right my-2 my-lg-0">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-title="快速下單">
-                    <fa class="fa fa-shopping-cart"></fa>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-title="添加客户">
+                    <fa class="fa fa-users"></fa>
                     添加客户
                 </button>
             </div>
@@ -73,7 +73,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="action">
-                                            <button type="button" class="btn btn-outline-secondary ProOrderbtn">处理</button>
+                                            <button type="button" class="btn btn-outline-secondary editbtn">编辑</button>
                                             <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
                                         </div>
                                     </td>
@@ -111,11 +111,38 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">名称:</label>
+                            <input class="form-control" id="Cuname" type="text" placeholder="客户名称" aria-label="Search">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">联系人:</label>
+                            <input class="form-control" id="Cucontact" type="text" placeholder="联系人名称" aria-label="Search">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">电话:</label>
+                            <input class="form-control" id="Cuphone" type="text" placeholder="电话" aria-label="Search">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">手机:</label>
+                            <input class="form-control" id="Cumobile" type="text" placeholder="手机" aria-label="Search">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">地址:</label>
+                            <input class="form-control" id="Caddress" type="text" placeholder="地址" aria-label="Search">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="editCustomer()">保存</button>
                 </div>
             </div>
         </div>
@@ -131,11 +158,57 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    确认删除该客户？
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-danger">Save changes</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="delCustomer()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">添加客户</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">客户名称:</label>
+                            <input class="form-control" id="Cuaname" type="text" placeholder="客户姓名" aria-label="Search">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">联系人:</label>
+                            <input class="form-control" id="Cuacontact" type="text" placeholder="联系人姓名" aria-label="Search">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>电话</label>
+                            <input class="form-control" id="Cuaphone" type="text" placeholder="电话" aria-label="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>联系人手机</label>
+                            <input class="form-control" id="Cuamobile" type="text" placeholder="手机" aria-label="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>地址</label>
+                            <input class="form-control" id="Cuaaddress" type="text" placeholder="地址" aria-label="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="addCustomer()">提交</button>
                 </div>
             </div>
         </div>
@@ -148,22 +221,115 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('#editModal').on('show.bs.modal', function (event) {
-                var btn = $(event.relatedTarget);
-                var title = btn.data('title');
-
-                var modal = $(this);
-                modal.find('.modal-title').text(title);
-            });
-
-            $('#removeModal').on('show.bs.modal', function (event) {
-                var btn = $(event.relatedTarget);
-                var title = btn.data('title');
-
-                var modal = $(this);
-                modal.find('.modal-title').text('確認刪除 ' + title);
-            });
         });
+        function addCustomer() {
+            var name = document.getElementById('Cuaname').value
+            var contact = document.getElementById('Cuacontact').value
+            var phone = document.getElementById('Cuaphone').value
+            var mobile = document.getElementById('Cuamobile').value
+            var address = document.getElementById('Cuaaddress').value
+            var res = {
+                "CustomerId": "",
+                "CustomerName": name,
+                "Contact": contact,
+                "Phone": phone,
+                "MobilePhone": mobile,
+                "CAddress": address
+            }
+            $('#addModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Person4Manager/AddCustomer",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(res),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
+
+            })
+        }
+        function editCustomer() {
+            var name = document.getElementById('Cuname').value
+            var contact = document.getElementById('Cucontact').value
+            var phone = document.getElementById('Cuphone').value
+            var mobile = document.getElementById('Cumobile').value
+            var address = document.getElementById('Caddress').value
+            var id = document.getElementById('editModalLabel').innerText
+            var res = {
+                "CustomerId": id,
+                "CustomerName": name,
+                "Contact": contact,
+                "Phone": phone,
+                "MobilePhone": mobile,
+                "CAddress": address
+            }
+            $('#editModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Person4Manager/EditCustomer",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(res),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("修改成功！")
+                    location.reload()
+                }
+
+            })
+        }
+        function delCustomer() {
+            var id = document.getElementById('removeModalLabel').innerText
+            $('#removeModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Person4Manager/DeleteCustomer",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { Cusguid: id }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert("删除成功！")
+                    location.reload()
+                }
+            })
+        }
+        $(".editbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#editModalLabel").text(b);
+            $('#editModal').modal('show');
+        })
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeModalLabel").text(b);
+            $('#removeModal').modal('show');
+        })
     </script>
 </body>
 </html>

@@ -15,11 +15,16 @@ namespace Printery.Provider.Provider
         Task<List<EmpGroupViewModel>> GetAllEmpGroup();
         Task<List<PowerListViewModel>> GetAllPowerList();
         Task<EmployeeViewModel> GetEmployeeById(string id);
+        Task<List<EmployeeViewModel>> GetAllEmployee();
+        Task<List<DepartmentViewModel>> GetDepartment();
         List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
         void UpdatePowerList(List<PowerControlListViewModel> powerlist);
         void AddUserGroupByGroupName(string GroupName);
+        void AddEmployee(EmployeeViewModel emp);
         void UpdateEmployeeInfo(EmployeeViewModel emp);
+        void EditEmployee(EmployeeViewModel emp);
         void DeleteUserGroup(string GroupId);
+        void DeleteEnployee(string empid);
     }
     public class EmpProvider:IEmpProvider
     {
@@ -58,6 +63,18 @@ namespace Printery.Provider.Provider
             emp = await _empRespository.GetEmployeeById(id);
             return emp;
         }
+        public async Task<List<EmployeeViewModel>> GetAllEmployee()
+        {
+            var emp = new List<EmployeeViewModel>();
+            emp = await _empRespository.GetAllEmployee();
+            return emp;
+        }
+        public async Task<List<DepartmentViewModel>> GetDepartment()
+        {
+            var dep = new List<DepartmentViewModel>();
+            dep = await _empRespository.GetDepartment();
+            return dep;
+        }
         public List<PowerControlListViewModel> GetPowerContrlListById(string GroupId)
         {
             var list = new List<PowerControlListViewModel>();
@@ -72,13 +89,25 @@ namespace Printery.Provider.Provider
         {
             _empRespository.AddUserGroupByGroupName(GroupName);
         }
+        public void AddEmployee(EmployeeViewModel emp)
+        {
+            _empRespository.AddEmployee(emp);
+        }
         public void UpdateEmployeeInfo(EmployeeViewModel emp)
         {
             _empRespository.UpdateEmployeeInfo(emp);
         }
+        public void EditEmployee(EmployeeViewModel emp)
+        {
+            _empRespository.EditEmployee(emp);
+        }
         public void DeleteUserGroup(string GroupId)
         {
             _empRespository.DeleteUserGroup(GroupId);
+        }
+        public void DeleteEnployee(string empid)
+        {
+            _empRespository.DeleteEnployee(empid);
         }
     }
 }

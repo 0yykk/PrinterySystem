@@ -57,36 +57,25 @@
                             foreach (var item in list)
                             {
                                 <tr>
-                                    <td>
+                                    <td class="td1 guid">
                                         @Html.DisplayFor(modelitem => item.ProductID)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.ProductName)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.eachPrice)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         @Html.DisplayFor(modelitem => item.CCOunt)
                                     </td>
-                                    <td>
+                                    <td class="td1">
                                         正常
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="action">
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="編輯 超纖細肥皂 1盒" data-backdrop="static">編輯</button>
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editModal" data-title="订单编号：12321421321" data-backdrop="static">查看</button>
-                                            <div class="btn-group" role="group">
-                                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    ...
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Other action</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#removeModal" data-title="超纖細肥皂 1盒">刪除</a>
-                                                </div>
-                                            </div>
+                                            <button type="button" class="btn btn-outline-secondary editbtn">编辑</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -125,11 +114,11 @@
                     <label>产品名称</label>
                     <select id="ProName" data-toggle="select" class="form-control select select-default" name="PInkName">
                         <option value="default" selected="selected">--请选择要生产的产品--</option>
-                        @{ 
+                        @{
                             var ProductList = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductGoodsViewModel>;
                             if (ProductList != null && ProductList.Count > 0)
                             {
-                                foreach(var item in ProductList)
+                                foreach (var item in ProductList)
                                 {
                                     <option value="@item.ProductName">
                                         @item.ProductName
@@ -161,7 +150,7 @@
                     <label>产品名称</label>
                     <input type="text" name="ProductName" id="ProductName" class="form-control" required="" autofocus="">
                     <label>单价</label>
-                    <input type="number" name="eachPrice" id="eachPrice" class='form-control input-sm' min='1' value='1'/>
+                    <input type="number" name="eachPrice" id="eachPrice" class='form-control input-sm' min='1' value='1' />
                     <label>库存数</label>
                     <input type="number" name="CCount" id="CCount" class='form-control input-sm' min='1' value='1' />
                 </div>
@@ -172,7 +161,34 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editproductModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>产品名称:</label>
+                            <input class="form-control" id="eproname" type="text" placeholder="产品名称" aria-label="Search">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>单价:</label>
+                            <input type="number" id="eproeach" class='form-control input-sm' min='1' value='1' />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="editProduct()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -182,19 +198,12 @@
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <label>生产数量:</label>
-                    <label>123</label>
-                    <label>产品名称:</label>
-                    <select id="PInkName" data-toggle="select" class="form-control select select-default" name="PInkName">
-                        <option value="default" selected="selected">--请选择要生产的产品--</option>
-                    </select>
-                    <label>生产数量</label>
-                    <input type="number" name="PCcount" id="PCcount" class='form-control input-sm' min='1' value='1' />
+                <div class="modal-body">   
+                    确定删除这个产品？
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-outline-danger">提交</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="delProduct()">确定</button>
                 </div>
             </div>
         </div>
@@ -207,7 +216,7 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('#editModal').on('show.bs.modal', function (event) {
+            $('#ProductModal').on('show.bs.modal', function (event) {
                 var btn = $(event.relatedTarget);
                 var title = btn.data('title');
 
@@ -223,21 +232,91 @@
                 modal.find('.modal-title').text(title);
             });
 
-            $('#removeModal').on('show.bs.modal', function (event) {
-                var btn = $(event.relatedTarget);
-                var title = btn.data('title');
+            //$('#removeModal').on('show.bs.modal', function (event) {
+            //    var btn = $(event.relatedTarget);
+            //    var title = btn.data('title');
 
-                var modal = $(this);
-                modal.find('.modal-title').text('确认删除 ' + title);
-            });
+            //    var modal = $(this);
+            //    modal.find('.modal-title').text('确认删除 ' + title);
+            //});
         });
+        $(".editbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#editproductModalLabel").text(b);
+            $('#editModal').modal('show');
+        })
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeModalLabel").text(b);
+            $('#removeModal').modal('show');
+        })
+        function editProduct() {
+            var id = document.getElementById('editproductModalLabel').innerText
+            var name = document.getElementById('eproname').value
+            var each = document.getElementById('eproeach').value
+            var result = {
+                "ProductID": id,
+                "ProductName": name,
+                "eachPrice": each,
+                "CCount": 0
+            }
+            $('#editModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/editProduct",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
 
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
+
+            })
+
+        }
+        function delProduct() {
+            var id = document.getElementById('removeModalLabel').innerText
+            $('#removeModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/deleteProduct",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { productid: id }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert("删除成功！")
+                    location.reload()
+                }
+            })
+        }
         function addProduct() {
             debugger;
-            
+
             var pname = document.getElementById('ProductName').value
             var pprice = document.getElementById('eachPrice').value
-            var pcount=document.getElementById('CCount').value
+            var pcount = document.getElementById('CCount').value
             var result = {
                 "ProductID": "",
                 "ProductName": pname,
@@ -246,29 +325,29 @@
             }
             $('#addModal').modal('hide')
             $(".modal-backdrop.fade").hide()
-        $.ajax({
-            type: "POST",
-            url: "../Manager/AddProduct",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(result),
+            $.ajax({
+                type: "POST",
+                url: "../Manager/AddProduct",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
 
-            success: function (e) {
-                debugger;
-                if (e != null)
-                    alert("添加成功！")
-                    location.reload()  
-            }
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
 
-        })
+            })
         }
         function CreateProductPurchase() {
             var pname = document.getElementById('ProName').value
             var pcount = document.getElementById('ProCcount').value
             var Createpersonid = document.getElementById('personid').innerText;
             var result = {
-                "PurchasingID":"",
+                "PurchasingID": "",
                 "ProductId": "",
                 "ProductName": pname,
                 "Count": pcount,
@@ -277,26 +356,26 @@
                 "ProcessPersonId": Createpersonid,
                 "Status": "待处理",
                 "CreateDate": "",
-                "ProcessDate":""
+                "ProcessDate": ""
             }
             $('#ProductModal').modal('hide')
             $(".modal-backdrop.fade").hide()
-        $.ajax({
-            type: "POST",
-            url: "../Manager/PurchasingProduct",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(result),
+            $.ajax({
+                type: "POST",
+                url: "../Manager/PurchasingProduct",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
 
-            success: function (e) {
-                debugger;
-                if (e != null)
-                    alert("添加成功！")
-                    location.reload()  
-            }
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("添加成功！")
+                    location.reload()
+                }
 
-        })
+            })
         }
     </script>
 </body>

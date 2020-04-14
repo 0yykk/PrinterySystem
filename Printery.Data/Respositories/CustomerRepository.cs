@@ -13,6 +13,9 @@ namespace Printery.Data.Respositories
     public interface ICustomerRepository
     {
         Task<List<CustomerViewModel>> GetAllCustomer();
+        void AddCustomer(CustomerViewModel cms);
+        void EditCustomer(CustomerViewModel cms);
+        void DeleteCustomer(string cmsid);
     }
     public class CustomerRepository:ICustomerRepository
     {
@@ -40,6 +43,43 @@ namespace Printery.Data.Respositories
                 CusList.Add(Cust);
             }
             return CusList;
+        }
+        public void AddCustomer(CustomerViewModel cms)
+        {
+            var db = new PrinteryContext();
+            var neWCus = new Customer()
+            {
+                CustomerId = Guid.NewGuid().ToString(),
+                CustomerName = cms.CustomerName,
+                Contact = cms.Contact,
+                Phone = cms.Phone,
+                MobilePhone = cms.MobilePhone,
+                CAddress = cms.CAddress
+            };
+            db.Customer.Add(neWCus);
+            db.SaveChanges();
+        }
+        public void EditCustomer(CustomerViewModel cms)
+        {
+            var db = new PrinteryContext();
+            var exitCms = db.Customer.FirstOrDefault(s => s.CustomerId == cms.CustomerId);
+            if (exitCms != null)
+            {
+                db.Set<Customer>().Attach(exitCms);
+                db.Entry(exitCms).State = EntityState.Modified;
+                exitCms.CustomerName = cms.CustomerName;
+                exitCms.Contact = cms.Contact;
+                exitCms.Phone = cms.Phone;
+                exitCms.MobilePhone = cms.MobilePhone;
+                exitCms.CAddress = cms.CAddress;
+                db.SaveChanges();
+            }
+        }
+        public void DeleteCustomer(string cmsid)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.Customer.Remove(pr.Customer.Where(p => p.CustomerId == cmsid).FirstOrDefault());
+            pr.SaveChanges();
         }
 
     }
