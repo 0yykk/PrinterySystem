@@ -57,6 +57,7 @@
     <Compile Include="Provider\InkProvider.cs" />
     <Compile Include="Provider\OrderProvider.cs" />
     <Compile Include="Provider\PaperProvider.cs" />
+    <Compile Include="Provider\PowerCheckProvider.cs" />
     <Compile Include="Provider\ProductProvider.cs" />
   </ItemGroup>
   <ItemGroup>

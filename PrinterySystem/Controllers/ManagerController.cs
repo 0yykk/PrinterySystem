@@ -18,22 +18,45 @@ namespace PrinterySystem.Controllers
         private readonly IProductProvider _productProvider;
         private readonly IPaperProvider _paperProvider;
         private readonly IInkProvider _inkProvider;
+        private readonly IPowerCheckProvider _powerCheckProvider;
 
         public ManagerController(IOrderProvider orderProvider,IProductProvider productProvider,IPaperProvider paperProvider,
-            IInkProvider inkProvider
+            IInkProvider inkProvider, IPowerCheckProvider powerCheckProvider
             )
         {
             _orderProvider = orderProvider;
             _productProvider = productProvider;
             _paperProvider = paperProvider;
             _inkProvider = inkProvider;
+            _powerCheckProvider = powerCheckProvider;
         }
         public async Task<ActionResult> OrderManagement(int? page)
         {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             var productlist = new List<ProductGoodsViewModel>();
-            productlist = await _productProvider.GetAllProduct();
             var Orderlist = new List<OrderViewModel>();
-            Orderlist = await _orderProvider.GetAllOrder();
+            if (sa.EmpId != null)
+            {
+                productlist = await _productProvider.GetAllProduct();
+                Orderlist = await _orderProvider.GetAllOrder();
+            }
+            else
+            {
+                if (userpower.Contains("101"))
+                {
+                    productlist = await _productProvider.GetAllProduct();
+                    Orderlist = await _orderProvider.GetAllOrder();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
             ViewBag.ProductList = productlist;
             int pageindex = 1;
             var recordCount = Orderlist.Count();
@@ -54,6 +77,27 @@ namespace PrinterySystem.Controllers
         }
         public ActionResult StockManagement()
         {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                return View();
+            }
+            else
+            {
+                if (userpower.Contains("201"))
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
             return View();
         }
         public async Task<ActionResult> PaperStockManagement()
@@ -79,71 +123,270 @@ namespace PrinterySystem.Controllers
         #region 添加修改库存api（新品种纸张、油墨、产品）
         public JsonResult AddPaper(PaperCViewModel Paper)
         {
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             PaperCViewModel i = new PaperCViewModel();
             string Id = alLIDInit.PaperIDInit();
             Paper.PaperId = Id;
             i = Paper;
-            _paperProvider.UpdatePaper(i);
-            string a = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _paperProvider.UpdatePaper(i);
+                a = "添加成功";
+            }
+            else
+            {
+                if (userpower.Contains("202"))
+                {
+                    _paperProvider.UpdatePaper(i);
+                    a = "添加成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
 
         }
         public JsonResult editPaper(string paperguid,string papername)
         {
-            _paperProvider.EditPaper(paperguid.Trim(), papername.Trim());
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _paperProvider.EditPaper(paperguid.Trim(), papername.Trim());
+                a = "修改成功";
+            }
+            else
+            {
+                if (userpower.Contains("203"))
+                {
+                    _paperProvider.EditPaper(paperguid.Trim(), papername.Trim());
+                    a = "修改成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult deletePaper(string paperid)
         {
-            _paperProvider.DeletePaper(paperid.Trim());
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _paperProvider.DeletePaper(paperid.Trim());
+                a = "删除成功";
+            }
+            else
+            {
+                if (userpower.Contains("204"))
+                {
+                    _paperProvider.DeletePaper(paperid.Trim());
+                    a = "删除成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult AddInk(InkCViewModel ink)
         {
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             InkCViewModel i = new InkCViewModel();
             string Id = alLIDInit.InkIDInit();
             ink.InkId = Id;
             i = ink;
-            _inkProvider.UpdateInk(ink);
-            string a = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _inkProvider.UpdateInk(ink);
+                a = "添加成功";
+            }
+            else
+            {
+                if (userpower.Contains("202"))
+                {
+                    _inkProvider.UpdateInk(ink);
+                    a = "添加成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
+            
             return Json(a, JsonRequestBehavior.AllowGet);
 
         }
         public JsonResult editInk(string inkguid,string inkname)
         {
-            _inkProvider.EditInk(inkguid.Trim(), inkname.Trim());
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _inkProvider.EditInk(inkguid.Trim(), inkname.Trim());
+                a = "修改成功";
+            }
+            else
+            {
+                if (userpower.Contains("203"))
+                {
+                    _inkProvider.EditInk(inkguid.Trim(), inkname.Trim());
+                    a = "修改成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult deleteInk(string inkid)
         {
-            _inkProvider.DeleteInk(inkid.Trim());
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _inkProvider.DeleteInk(inkid.Trim());
+                a = "删除成功";
+            }
+            else
+            {
+                if (userpower.Contains("204"))
+                {
+                    _inkProvider.DeleteInk(inkid.Trim());
+                    a = "删除成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult AddProduct(ProductGoodsViewModel product)
         {
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             ProductGoodsViewModel pro = new ProductGoodsViewModel();
             string Id = alLIDInit.ProductIDInit();
             product.ProductID = Id;
             pro = product;
-            _productProvider.UpdateProduct(pro);
-            string a = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _productProvider.UpdateProduct(pro);
+                a = "添加成功";
+            }
+            else
+            {
+                if (userpower.Contains("202"))
+                {
+                    _productProvider.UpdateProduct(pro);
+                    a = "添加成功";
+                }
+                else
+                {
+                    a = "权限不足"; 
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
 
         }
         public JsonResult editProduct(ProductGoodsViewModel product)
         {
-            _productProvider.EditProduct(product);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _productProvider.EditProduct(product);
+                a = "修改成功";
+            }
+            else
+            {
+                if (userpower.Contains("203"))
+                {
+                    _productProvider.EditProduct(product);
+                    a = "修改成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult deleteProduct(string productid)
         {
-            _productProvider.DeleteProduct(productid.Trim());
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId!=null)
+            {
+                _productProvider.DeleteProduct(productid.Trim());
+                a = "删除成功";
+            }
+            else
+            {
+                if (userpower.Contains("204"))
+                {
+                    _productProvider.DeleteProduct(productid.Trim());
+                    a = "删除成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
@@ -152,32 +395,98 @@ namespace PrinterySystem.Controllers
         public JsonResult PurchasingPaper(PurchasingPaperViewModel paper)
         {
             //PurchasingPaperViewModel par = new PurchasingPaperViewModel();
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             paper.PurchasingID = Guid.NewGuid().ToString();
             paper.CreateDate = DateTime.Now;
             paper.ProcessDate = DateTime.Now;
-            _paperProvider.CreatePurchaseOrder4Paper(paper);
-            string a = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _paperProvider.CreatePurchaseOrder4Paper(paper);
+                a = "提交成功";
+            }
+            else
+            {
+                if (userpower.Contains("202"))
+                {
+                    _paperProvider.CreatePurchaseOrder4Paper(paper);
+                    a = "提交成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult PurchasingInk(PurchasingInkViewModel ink)
         {
             //PurchasingInkViewModel pur = new PurchasingInkViewModel();
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             ink.PurchasingID = Guid.NewGuid().ToString();
             ink.CreateDate = DateTime.Now;
             ink.ProcessDate = DateTime.Now;
-            _inkProvider.CreatePurchaseOrder4Ink(ink);
-            string a = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _inkProvider.CreatePurchaseOrder4Ink(ink);
+               a = "提交成功";
+            }
+            else
+            {
+                if (userpower.Contains("202"))
+                {
+                    _inkProvider.CreatePurchaseOrder4Ink(ink);
+                    a = "提交成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult PurchasingProduct(ProductGoodViewModel product)
         {
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             product.PurchasingID = Guid.NewGuid().ToString();
             product.CreateDate = DateTime.Now;
             product.ProcessDate = DateTime.Now;
             product.Price = 0;
             product.eachPrice = 10;
-            _productProvider.CreatePurchaseOrder4Produt(product);
-            string a = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _productProvider.CreatePurchaseOrder4Produt(product);
+                a = "提交成功";
+            }
+            else
+            {
+                if (userpower.Contains("202"))
+                {
+                    _productProvider.CreatePurchaseOrder4Produt(product);
+                    a = "提交成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
@@ -199,34 +508,144 @@ namespace PrinterySystem.Controllers
         }
         public JsonResult PushStockIn(decimal Price,string PurchaseId, string paperid, int PaperCount,string ProcessPersonId)
         {
-            _paperProvider.PushStockInPaper(Price, PurchaseId, paperid, PaperCount, ProcessPersonId);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if(sa.EmpId != null){
+                _paperProvider.PushStockInPaper(Price, PurchaseId, paperid, PaperCount, ProcessPersonId);
+                a = "入库处理成功提交";
+            }
+            else
+            {
+                if (userpower.Contains("205"))
+                {
+                    _paperProvider.PushStockInPaper(Price, PurchaseId, paperid, PaperCount, ProcessPersonId);
+                    a = "入库处理成功提交";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult PushStockInInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId)
         {
-            _inkProvider.PushInStockInk(PurchaseId, Price, InkId, InkCout, ProcessPersonId);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _inkProvider.PushInStockInk(PurchaseId, Price, InkId, InkCout, ProcessPersonId);
+                a = "入库请求提交成功";
+            }
+            else
+            {
+                if (userpower.Contains("205"))
+                {
+                    _inkProvider.PushInStockInk(PurchaseId, Price, InkId, InkCout, ProcessPersonId);
+                    a = "入库请求提交成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
+            
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult PushProcessIn(string PurchasingID,string Processpersonid)
         {
+            string b = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             string i = PurchasingID.Trim();
             string a = Processpersonid.Trim();
-            _productProvider.ProcessProductGood(i, a);
-            string b = "Sucessful";
+            if (sa.EmpId != null)
+            {
+                _productProvider.ProcessProductGood(i, a);
+                b = "请求处理成功提交";
+            }
+            else
+            {
+                if (userpower.Contains("205"))
+                {
+                    _productProvider.ProcessProductGood(i, a);
+                    b = "请求处理成功提交";
+                }
+                else
+                {
+                    b = "权限不足";
+                }
+            }
             return Json(b, JsonRequestBehavior.AllowGet);
         }
         public JsonResult DeletePaperPurchase(string purchaseguid)
         {
-            _paperProvider.DeletePaperPurchase(purchaseguid);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null) 
+            {
+                _paperProvider.DeletePaperPurchase(purchaseguid);
+                a = "删除成功";
+            }
+            else
+            {
+                if (userpower.Contains("206"))
+                {
+                    _paperProvider.DeletePaperPurchase(purchaseguid);
+                    a = "删除成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult DeleteInkPurchase(string purchaseguid)
         {
-            _inkProvider.DeleteInkPurchase(purchaseguid);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _inkProvider.DeleteInkPurchase(purchaseguid);
+                a = "删除成功";
+            }
+            else
+            {
+                if (userpower.Contains("206"))
+                {
+                    _inkProvider.DeleteInkPurchase(purchaseguid);
+                    a = "删除成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
@@ -259,8 +678,30 @@ namespace PrinterySystem.Controllers
             order.OrderCreate = DateTime.Now;
             order.OrderProcess = DateTime.Now;
             order.Status = "待处理";
-            _orderProvider.CreateOrder(order);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId!= null)
+            {
+                _orderProvider.CreateOrder(order);
+                a = "提交成功";
+            }
+            else
+            {
+                if (userpower.Contains("102"))
+                {
+                    _orderProvider.CreateOrder(order);
+                    a = "提交成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
 
         }
@@ -273,22 +714,89 @@ namespace PrinterySystem.Controllers
         }
         public JsonResult EditOrder(OrderViewModel order)
         {
-            _orderProvider.EditOrder(order);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _orderProvider.EditOrder(order);
+                a = "成功修改";
+            }
+            else
+            {
+                if (userpower.Contains("104"))
+                {
+                    _orderProvider.EditOrder(order);
+                    a = "成功修改";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
+            
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult ProcessOrder(string orderid,string processpersonid)
         {
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             string id = orderid.Trim();
             string pid = processpersonid.Trim();
-            _orderProvider.ProcessOrder(id, pid);
-            string a = "Sucessful";
+            if (sa.EmpId!=null)
+            {
+                _orderProvider.ProcessOrder(id, pid);
+                a = "处理成功";
+            }
+            else
+            {
+                if (userpower.Contains("103"))
+                {
+                    _orderProvider.ProcessOrder(id, pid);
+                    a = "处理成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         public JsonResult DeleteOrder(string orderguid)
         {
-            _orderProvider.DeleteOrder(orderguid);
-            string a = "Sucessful";
+            string a = "";
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                _orderProvider.DeleteOrder(orderguid);
+                a = "删除成功";
+            }
+            else
+            {
+                if (userpower.Contains("105"))
+                {
+                    _orderProvider.DeleteOrder(orderguid);
+                    a = "删除成功";
+                }
+                else
+                {
+                    a = "权限不足";
+                }
+            }
             return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
@@ -340,16 +848,31 @@ namespace PrinterySystem.Controllers
         
         public async Task<ActionResult> OrderProcessing(int? page)
         {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             var productlist = new List<ProductGoodsViewModel>();
-            productlist = await _productProvider.GetAllProduct();
             var Orderlist = new List<OrderViewModel>();
-            Orderlist = await _orderProvider.GetAllOrder();
-            //int pageNumber = page ?? 1;
-            ////每页显示多少条
-            //int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
-            //Orderlist = Orderlist.OrderBy(x => x.OrderId).ToList();
-            ////通过ToPagedList扩展方法进行分页
-            //IPagedList<OrderViewModel> pagedList = Orderlist.ToPagedList(pageNumber, pageSize);
+            if (sa.EmpId != null)
+            {
+                productlist = await _productProvider.GetAllProduct();
+                Orderlist = await _orderProvider.GetAllOrder();
+            }
+            else
+            {
+                if (userpower.Contains("101"))
+                {
+                    productlist = await _productProvider.GetAllProduct();
+                    Orderlist = await _orderProvider.GetAllOrder();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
             ViewBag.ProductList = productlist;
             int pageindex = 1;
             var recordCount = Orderlist.Count();
@@ -369,8 +892,28 @@ namespace PrinterySystem.Controllers
         }
         public async Task<ActionResult> ProduceManagement()
         {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             var purchaselist = new List<ProductGoodViewModel>();
-            purchaselist = await _productProvider.GetAllProductPurchase();
+            if (sa.EmpId != null)
+            {
+                purchaselist = await _productProvider.GetAllProductPurchase(); 
+            }
+            else
+            {
+                if (userpower.Contains("201"))
+                {
+                    purchaselist = await _productProvider.GetAllProductPurchase();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
             int pageindex = 1;
             var recordCount = purchaselist.Count();
             if (Request.QueryString["page"] != null)
@@ -389,10 +932,31 @@ namespace PrinterySystem.Controllers
         }
         public async Task<ActionResult> PurchasingManagement()
         {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
             var inklist = new List<PurchasingInkViewModel>();
             var paperlist = new List<PurchasingPaperViewModel>();
-            inklist = await _inkProvider.GetAllInkPurchasing();
-            paperlist = await _paperProvider.GetAllPaperPurchasing();
+            if (sa.EmpId != null)
+            {
+                inklist = await _inkProvider.GetAllInkPurchasing();
+                paperlist = await _paperProvider.GetAllPaperPurchasing();
+            }
+            else
+            {
+                if (userpower.Contains("201"))
+                {
+                    inklist = await _inkProvider.GetAllInkPurchasing();
+                    paperlist = await _paperProvider.GetAllPaperPurchasing();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
             int pageindex = 1;
             int pageindex1 = 1;
             var recordCount = inklist.Count();

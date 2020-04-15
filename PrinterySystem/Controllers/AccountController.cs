@@ -14,9 +14,11 @@ namespace PrinterySystem.Controllers
     public class AccountController:Controller
     {
         private readonly IEmpProvider _empProvider;
-        public AccountController(IEmpProvider empProvider)
+        private readonly IPowerCheckProvider _powerCheckProvider;
+        public AccountController(IEmpProvider empProvider, IPowerCheckProvider powerCheckProvider)
         {
             _empProvider = empProvider;
+            _powerCheckProvider = powerCheckProvider;
         }
         public ActionResult Login()
         {
@@ -54,6 +56,7 @@ namespace PrinterySystem.Controllers
                     Session["Power"] = model.UserGroup;
                     if (model.UserGroup == "SA")
                     {
+                        Session["IsSA"] = "Yes";
                         return RedirectToAction("Dashborad4Manager", "SystemOp");
                     }
                     else
@@ -74,10 +77,33 @@ namespace PrinterySystem.Controllers
         }
         public async Task<ActionResult> UserGroupManager()
         {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
             var empg = new List<EmpGroupViewModel>();
             var powlist = new List<PowerListViewModel>();
-            powlist = await _empProvider.GetAllPowerList();
-            empg = await _empProvider.GetAllEmpGroup();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa=_powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                
+                powlist = await _empProvider.GetAllPowerList();
+                empg = await _empProvider.GetAllEmpGroup();
+                
+            }
+            else
+            {
+                if (userpower.Contains("1"))
+                {
+                    powlist = await _empProvider.GetAllPowerList();
+                    empg = await _empProvider.GetAllEmpGroup();
+                }       
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
             int pageindex = 1;
             var recordCount = empg.Count();
             if (Request.QueryString["page"] != null)
@@ -126,6 +152,10 @@ namespace PrinterySystem.Controllers
         }
         #endregion
         public ActionResult RecoverPassword()
+        {
+            return View();
+        }
+        public ActionResult PowerError()
         {
             return View();
         }

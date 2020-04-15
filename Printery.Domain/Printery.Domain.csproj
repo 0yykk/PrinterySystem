@@ -57,6 +57,7 @@
     <Compile Include="ViewModel\ProductsViewModel.cs" />
     <Compile Include="ViewModel\PurchasingInkViewModel.cs" />
     <Compile Include="ViewModel\PurchasingPaperViewModel.cs" />
+    <Compile Include="ViewModel\SAViewModel.cs" />
     <Compile Include="ViewModel\TodayFocusViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>

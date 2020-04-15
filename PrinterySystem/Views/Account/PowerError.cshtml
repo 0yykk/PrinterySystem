@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "PowerError";
+}
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Custom Theme">
+    <meta http-equiv="refresh" content="3;url=@Url.Action("Dashborad4Manager","SystemOp")" />
+
+
+</head>
+
+<body>
+    <div class="container" style="max-width:730px;">
+
+        @*<div class="row" style="margin-top:80px;text-align:center">
+            <img src="~/images/complete.png">
+        </div>*@
+        <div class="row">
+            <h2 style="text-align:center;margin-top:50px;">Error</h2>
+        </div>
+        <div class="row" style="margin-top:50px;text-align:center;">
+            <p class="lead">
+                <span>你没有这个权限</span>
+                <a href="@Url.Action("Dashborad4Manager","SystemOp")"></a>
+                <span>跳转回主页</span>
+                <span class="second alert-danger">3</span>
+                <span>秒后</span>
+            </p>
+
+        </div>
+
+
+    </div>
+</body>
+
+</html>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var wait = $(".second").html();
+        timeOut();
+
+        function timeOut() {
+            if (wait != 0) {
+                setTimeout(function () {
+                    $('.second').text(--wait);
+                    timeOut();
+                }, 1000);
+            }
+        }
+    });
+</script>
+
+
+

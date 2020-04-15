@@ -363,6 +363,7 @@
     <Content Include="Views\Account\UserGroupManager.cshtml" />
     <Content Include="Views\SystemOp\ProductSet.cshtml" />
     <Content Include="Views\SystemOp\SystemManager.cshtml" />
+    <Content Include="Views\Account\PowerError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

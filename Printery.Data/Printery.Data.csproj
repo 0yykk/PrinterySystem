@@ -116,6 +116,7 @@
     <Compile Include="Respositories\InkRespository.cs" />
     <Compile Include="Respositories\OrderRespository.cs" />
     <Compile Include="Respositories\PaperRespository.cs" />
+    <Compile Include="Respositories\PowerCheckRepository.cs" />
     <Compile Include="Respositories\ProductRespository.cs" />
   </ItemGroup>
   <ItemGroup>
