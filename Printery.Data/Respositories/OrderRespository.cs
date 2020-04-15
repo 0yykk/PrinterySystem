@@ -15,7 +15,11 @@ namespace Printery.Data.Respositories
     public interface IOrderRespository
     {
         Task<List<OrderViewModel>> GetAllOrder();
+        Task<List<OrderViewModel>> GetOrderByDate(string empid);
+        Task<TodayFocusViewModel> GetAllOrderDisplayByempid(string empid);
+        Task<DashboradViewModel> GetDashboradDisplay(string empid);
         List<OrderViewModel> GetOrderByOrderId(string orderid);
+
         void ProcessOrder(string orderid, string processpersonid);
         void CreateOrder(OrderViewModel order);
         void EditOrder(OrderViewModel order);
@@ -55,6 +59,59 @@ namespace Printery.Data.Respositories
                 orderList.Add(order);
             }
             return orderList;
+        }
+        public async Task<List<OrderViewModel>> GetOrderByDate(string empid)
+        {
+            var storeProcedureName = "[dbo].[Get_Dashborad_Order]";
+            var result = await _dbContext.Database.SqlQuery<OrderViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid", empid)
+                ).ToListAsync();
+            var list = new List<OrderViewModel>();
+            foreach(var i in result)
+            {
+                var ord = new OrderViewModel();
+                ord.OrderId = i.OrderId;
+                ord.CustomerName = i.CustomerName;
+                ord.ProductName = i.ProductName;
+                ord.Price = i.Price;
+                list.Add(ord);
+            }
+            return list;
+        }
+        public async Task<TodayFocusViewModel> GetAllOrderDisplayByempid(string empid)
+        {
+            var storeProcedureName = "[dbo].[Get_TodayFocus]";
+            var result = await _dbContext.Database.SqlQuery<TodayFocusViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid",empid)
+                ).FirstOrDefaultAsync();
+            var foc = new TodayFocusViewModel();
+            if (result != null)
+            {
+                foc.TodayAddOrder = result.TodayAddOrder;
+                foc.TodayHaveDone = result.TodayHaveDone;
+                foc.TodayOrderWait = result.TodayOrderWait;
+                foc.YouHaveDone = result.YouHaveDone;
+            }
+            return foc;
+        }
+        public async Task<DashboradViewModel> GetDashboradDisplay(string empid)
+        {
+            var storeProcedureName = "[dbo].[Get_Dashborad_nav]";
+            var result = await _dbContext.Database.SqlQuery<DashboradViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid", empid)
+                ).SingleOrDefaultAsync();
+            var dash = new DashboradViewModel();
+            if (result != null)
+            {
+                dash.OrderCount = result.OrderCount;
+                dash.OrderWaitCount = result.OrderWaitCount;
+                dash.TodayPrice = result.TodayPrice;
+                dash.CustomerCount = result.CustomerCount;
+            }
+            return dash;
         }
         public void CreateOrder(OrderViewModel order)
         {

@@ -18,52 +18,57 @@
 </head>
 <body>
     <div class="container mt-4 main">
-        <div class="row mb-4">
-            <div class="col-6 col-lg-3">
-                <div class="card rounded-0 h-100">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="fa fa-money fa-3x text-secondary mr-2 d-none d-sm-block"></div>
-                        <div class="text-center w-100">
-                            <div class="h5">今日营收</div>
-                            <div class="h3">192,000</div>
+        @{
+            var dashnav=ViewBag.DashNav as Printery.Domain.ViewModel.DashboradViewModel;
+            if (dashnav != null) {
+                <div class="row mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-money fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">今日营收</div>
+                                    <div class="h3">@dashnav.TodayPrice ￥</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="card rounded-0 h-100">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="fa fa-users fa-3x text-secondary mr-2 d-none d-sm-block"></div>
-                        <div class="text-center w-100">
-                            <div class="h5">会员增加</div>
-                            <div class="display-4">172</div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-users fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">客户数量</div>
+                                    <div class="display-4">@dashnav.CustomerCount</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="card rounded-0 h-100">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="fa fa-file fa-3x text-secondary mr-2 d-none d-sm-block"></div>
-                        <div class="text-center w-100">
-                            <div class="h5">订单数</div>
-                            <div class="display-4">320</div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-file fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">今日订单数</div>
+                                    <div class="display-4">@dashnav.OrderCount</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="card rounded-0 h-100">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="fa fa-truck fa-3x text-secondary mr-2 d-none d-sm-block"></div>
-                        <div class="text-center w-100">
-                            <div class="h5">待出货数</div>
-                            <div class="display-4">172</div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-truck fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">待出货数</div>
+                                    <div class="display-4">@dashnav.OrderWaitCount</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div>}
+            
+        }
         <div class="row mb-4">
             <div class="col-lg-4 text-center">
                 <div class="border d-flex flex-column justify-content-center p-4 h-100">
@@ -78,7 +83,7 @@
             <div class="col-lg-8">
                 <div class="card h-100">
                     <div class="card-header">
-                        新进订单
+                        今日订单
                     </div>
                     <div class="card-body">
                         <div class="text-right mb-3">
@@ -86,53 +91,58 @@
                         </div>
                         <table class="table">
                             <thead>
-                            <th scope="col">
-                                订单号
-                            </th>
-                            <th scope="col">
-                                姓名
-                            </th>
-                            <th scope="col">
-                                产品
-                            </th>
-                            <th scope="col" width="100">
-                                价格
-                            </th>
+                                <tr>
+                                    <th scope="col">
+                                        订单号
+                                    </th>
+                                    <th scope="col">
+                                        姓名
+                                    </th>
+                                    <th scope="col">
+                                        产品
+                                    </th>
+                                    <th scope="col" width="100">
+                                        价格
+                                    </th>
+                                </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1231321</th>
-                                    <td>ABC</td>
-                                    <td>鸿运礼盒</td>
-                                    <td class="text-right">3,000</td>
-                                </tr>
-                                <tr>
-                                    <td>1231321</th>
-                                    <td>ABC</td>
-                                    <td>鸿运礼盒</td>
-                                    <td class="text-right">3,000</td>
-                                </tr>
-                                <tr>
-                                    <td>1231321</th>
-                                    <td>ABC</td>
-                                    <td>鸿运礼盒</td>
-                                    <td class="text-right">3,000</td>
-                                </tr>
-                                <tr>
-                                    <td>1231321</th>
-                                    <td>ABC</td>
-                                    <td>鸿运礼盒</td>
-                                    <td class="text-right">3,000</td>
-                                </tr>
+                            @{
+                                var orderlist = ViewBag.OrderList as List<Printery.Domain.ViewModel.OrderViewModel>;
+                                if (orderlist != null&&orderlist.Count>0)
+                                {
+                                    <tbody>
+                                        @{ 
+                                            foreach(var item in orderlist) 
+                                            { 
+                                                <tr>
+                                                    <td>
+                                                    @Html.DisplayFor(modelitem=>item.OrderId)
+                                                    </td>
+                                                    <td>
+                                                    @Html.DisplayFor(modelitem=>item.CustomerName)
+                                                    </td>
+                                                    <td>
+                                                    @Html.DisplayFor(modelitem=>item.ProductName)
+                                                    </td>
+                                                    <td class="text-right">
+                                                    @Html.DisplayFor(modelitem=>item.Price)
+                                                    </td>
+                                                </tr>
+                                            }
+                                            
+                                        }                                        
+                                    </tbody>
+                                }
+
+                            }
                             <tfoot>
                                 <tr>
                                     <td colspan="3" class="text-right">
-                                        总营收
+                                        今日总营收
                                     </td>
-                                    <td class="text-right">10,500</td>
+                                    <td class="text-right">@dashnav.TodayPrice</td>
                                 </tr>
                             </tfoot>
-                            </tbody>
                         </table>
                     </div>
                 </div>

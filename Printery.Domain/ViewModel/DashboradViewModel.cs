@@ -11,5 +11,9 @@ namespace Printery.Domain.ViewModel
     /// </summary>
     public class DashboradViewModel
     {
+        public decimal TodayPrice { get; set; }
+        public int CustomerCount { get; set; }
+        public int OrderCount { get; set; }
+        public int OrderWaitCount { get; set; }
     }
 }

@@ -15,11 +15,13 @@ namespace PrinterySystem.Controllers
         private readonly IEmpProvider _empProvider;
         private readonly ICustomerProvider _customerProvider;
         private readonly IPowerCheckProvider _powerCheckProvider;
-        public Person4ManagerController(IEmpProvider empProvider,ICustomerProvider customerProvider, IPowerCheckProvider powerCheckProvider)
+        private readonly IOrderProvider _orderProvider;
+        public Person4ManagerController(IEmpProvider empProvider,ICustomerProvider customerProvider, IPowerCheckProvider powerCheckProvider, IOrderProvider orderProvider)
         {
             _empProvider = empProvider;
             _customerProvider = customerProvider;
             _powerCheckProvider = powerCheckProvider;
+            _orderProvider = orderProvider;
         }
         // GET: Person4Manager
         public async Task<ActionResult> CustomerInfo()
@@ -113,10 +115,13 @@ namespace PrinterySystem.Controllers
         }
         public async Task<ActionResult> MyInfo()
         {
+            var foc = new TodayFocusViewModel();
             var emp = new EmployeeViewModel();
             string id = Session["LoginId"].ToString();
             emp = await _empProvider.GetEmployeeByUserIdAsync(id);
+            foc = await _orderProvider.GetAllOrderDisplayByempid(id);
             emp.EmpId = id;
+            ViewBag.TodayFocus = foc;
             ViewBag.Employee = emp;
             return View();
         }
