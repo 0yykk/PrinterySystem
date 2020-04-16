@@ -181,7 +181,7 @@
             </div>
             <div class="card-body">
                 <div class="d-flex">
-                    <form action="" class="forn-inline">
+                    @*<form action="" class="forn-inline">
                         <div class="form-group">
                             <label for="month" class="sr-only">月份</label>
                             <select name="" id="" class="form-control form-control-sm">
@@ -189,7 +189,7 @@
                                 <option value="10">10 月</option>
                             </select>
                         </div>
-                    </form>
+                    </form>*@
                     <div class="ml-auto">
                         <a href="#" class="btn btn-outline-secondary btn-sm">下载报表</a>
                         <a href="#" class="btn btn-outline-secondary btn-sm">表单管理</a>
@@ -198,85 +198,77 @@
                 <table class="table table-responsive-sm mb-0">
                     <thead>
                         <tr>
-                            <th width="50">日期</th>
+                            <th width="50">月份</th>
                             <th>订单数</th>
-                            <th>退费数</th>
+                            <th>未完成数</th>
                             <th>出货数</th>
-                            <th>退货订单</th>
+                            <th>缺货数</th>
                             <th width="150">营业额</th>
                             <th width="150">净利润</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @{
+                        var coutlist = ViewBag.OrderCount as List<Printery.Domain.ViewModel.DashboradBottomViewModel>;
+                        if (coutlist != null && coutlist.Count > 0)
+                        {
+                            <tbody>
+                                @{ 
+                                    foreach(var io in coutlist)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelitem=>io.Month)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.OrderCount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.OrderWait)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.OrderDone)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.BackOrder)
+                                            </td>
+                                            <td class="text-right">
+                                                @Html.DisplayFor(modelitem => io.Business) ￥
+                                            </td>
+                                            <td class="text-right">
+                                                @(io.Business-io.Profit) ￥
+                                            </td>
+                                        </tr>
+                                    }
+                                    
+                                }
+                                
+                            </tbody>
+                        }
+
+                    }
+                <tfoot>
+                    @{
+                        decimal a = 0, b = 0;
+                        foreach(var i in coutlist)
+                        {
+                            a = a + i.Business;
+                            b = b + i.Profit;
+                        }
                         <tr>
-                            <td>9/1</td>
-                            <td>300</td>
-                            <td>1</td>
-                            <td>250</td>
-                            <td>3</td>
-                            <td class="text-right">256,000</td>
-                            <td class="text-right">168,000</td>
-                        </tr>
-                        <tr>
-                            <td>9/2</td>
-                            <td>300</td>
-                            <td>1</td>
-                            <td>250</td>
-                            <td>3</td>
-                            <td class="text-right">256,000</td>
-                            <td class="text-right">168,000</td>
-                        </tr>
-                        <tr>
-                            <td>9/3</td>
-                            <td>300</td>
-                            <td>1</td>
-                            <td>250</td>
-                            <td>3</td>
-                            <td class="text-right">256,000</td>
-                            <td class="text-right">168,000</td>
-                        </tr>
-                        <tr>
-                            <td>9/4</td>
-                            <td>300</td>
-                            <td>1</td>
-                            <td>250</td>
-                            <td>3</td>
-                            <td class="text-right">256,000</td>
-                            <td class="text-right">168,000</td>
-                        </tr>
-                        <tr>
-                            <td>9/5</td>
-                            <td>300</td>
-                            <td>1</td>
-                            <td>250</td>
-                            <td>3</td>
-                            <td class="text-right">256,000</td>
-                            <td class="text-right">168,000</td>
-                        </tr>
-                        <tr>
-                            <td>9/6</td>
-                            <td>300</td>
-                            <td>1</td>
-                            <td>250</td>
-                            <td>3</td>
-                            <td class="text-right">256,000</td>
-                            <td class="text-right">168,000</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="6" class="text-right">月总营收</td>
+                            <td colspan="6" class="text-right">总营收</td>
                             <td class="text-right">
-                                3,750,500
+                                @a
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-right">月总净利润</td>
+                            <td colspan="6" class="text-right">总净利润</td>
                             <td class="text-right">
-                                2,140,500
+                                @(a-b)
                             </td>
                         </tr>
-                    </tfoot>
+                    }
+
+                </tfoot>
                 </table>
             </div>
         </div>
@@ -359,16 +351,21 @@
 
 
         // bar
-        var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月","8月","9月","10月","11月","12月"];
         var colors = Chart.helpers.color;
         var barChartData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月","8月","9月","10月","11月","12月"],
             datasets: [{
                 label: '总销售额',
                 backgroundColor: colors(window.chartColors.red).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.red,
                 borderWidth: 1,
                 data: [
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
                     randomScalingFactor(),
                     randomScalingFactor(),
                     randomScalingFactor(),
@@ -383,6 +380,11 @@
                 borderColor: window.chartColors.blue,
                 borderWidth: 1,
                 data: [
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
                     randomScalingFactor(),
                     randomScalingFactor(),
                     randomScalingFactor(),

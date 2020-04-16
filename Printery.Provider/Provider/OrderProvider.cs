@@ -18,6 +18,7 @@ namespace Printery.Provider.Provider
         Task<List<OrderViewModel>> GetOrderByDate(string empid);
         Task<TodayFocusViewModel> GetAllOrderDisplayByempid(string empid);
         Task<DashboradViewModel> GetDashboradDisplay(string empid);
+        Task<List<DashboradBottomViewModel>> GetDashboradBottomDisplay(string empid);
         List<OrderViewModel> GetOrderByOrderId(string orderid);
         void ProcessOrder(string orderid, string processpersonid);
         void CreateOrder(OrderViewModel order);
@@ -54,6 +55,12 @@ namespace Printery.Provider.Provider
             var dash = new DashboradViewModel();
             dash = await _orderRespository.GetDashboradDisplay(empid);
             return dash;
+        }
+        public async Task<List<DashboradBottomViewModel>> GetDashboradBottomDisplay(string empid)
+        {
+            var list=new List<DashboradBottomViewModel>();
+            list = await _orderRespository.GetDashboradBottomDisplay(empid);
+            return list;
         }
         public List<OrderViewModel> GetOrderByOrderId(string orderid)
         {

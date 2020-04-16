@@ -18,6 +18,7 @@ namespace Printery.Data.Respositories
         Task<List<OrderViewModel>> GetOrderByDate(string empid);
         Task<TodayFocusViewModel> GetAllOrderDisplayByempid(string empid);
         Task<DashboradViewModel> GetDashboradDisplay(string empid);
+        Task<List<DashboradBottomViewModel>> GetDashboradBottomDisplay(string empid);
         List<OrderViewModel> GetOrderByOrderId(string orderid);
 
         void ProcessOrder(string orderid, string processpersonid);
@@ -112,6 +113,28 @@ namespace Printery.Data.Respositories
                 dash.CustomerCount = result.CustomerCount;
             }
             return dash;
+        }
+        public async Task <List<DashboradBottomViewModel>> GetDashboradBottomDisplay(string empid)
+        {
+            var storeProcedureName = "[dbo].[Get_Dashborad_Bottom]";
+            var result = await _dbContext.Database.SqlQuery<DashboradBottomViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid", empid)
+                ).ToListAsync();
+            var list = new List<DashboradBottomViewModel>();
+            foreach (var i in result)
+            {
+                var ord = new DashboradBottomViewModel();
+                ord.Month = i.Month;
+                ord.OrderCount = i.OrderCount;
+                ord.OrderWait = i.OrderWait;
+                ord.OrderDone = i.OrderDone;
+                ord.Business = i.Business;
+                ord.Profit = i.Profit;
+                ord.BackOrder = i.BackOrder;
+                list.Add(ord);
+            }
+            return list;
         }
         public void CreateOrder(OrderViewModel order)
         {

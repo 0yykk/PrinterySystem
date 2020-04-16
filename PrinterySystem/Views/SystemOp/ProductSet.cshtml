@@ -1,17 +1,225 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "产品管理";
+    Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 </head>
 <body>
-    <div>
-    
+    <div class="container-fluid mt-3 main">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="产品名称" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col-md-6 text-right my-2 my-lg-0">
+
+            </div>
+            <div class="col-md-2 text-right my-2 my-lg-0">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-title="创建新配料表">
+                    <fa class="fa paper-plane"></fa>
+                    加入新配方
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-responsive-md table-hover">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>产品编号</th>
+                    <th>产品名称</th>
+                    <th>油墨1名称</th>
+                    <th>油墨2名称</th>
+                    <th>纸张1名称</th>
+                    <th>纸张2名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            @{
+                var list = ViewBag.ProExi as List<Printery.Domain.ViewModel.ProExViewModel>;
+                if (list != null && list.Count > 0)
+                {
+                    <tbody>
+                        @{
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td class="td1 guid">
+                                        @Html.DisplayFor(modelitem => item.ProExId)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.ProductId)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.ProductName)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.InkName1)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.InkName2)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.PaperName1)
+                                    </td>
+                                    <td class="td1">
+                                        @Html.DisplayFor(modelitem => item.PaperName2)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                            <button type="button" class="btn btn-outline-secondary editbtn">编辑</button>
+                                            <button type="button" class="btn btn-outline-secondary delbtn">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                }
+            }
+        </table>
+
+        @{
+
+            if (list != null && list.Count > 0)
+            {
+                @Html.Partial("Pager")
+
+            }
+        }
     </div>
+
+    <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModalModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="viewmodeltitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>编号:</label>
+                            <label id="cuvId"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>产品编号:</label>
+                            <label id="cuvProductId"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>产品名称</label>
+                            <label id="cuvProductName"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨1名称:</label>
+                            <label id="cuvInk1"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨1数量：</label>
+                            <label id="cuvInk1Count"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨2名称:</label>
+                            <label id="cuvInk2"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨2数量：</label>
+                            <label id="cuvInk2Count"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸张1名称:</label>
+                            <label id="cuvPaper1"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸张1数量</label>
+                            <label id="cuvPaper1Count"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸张2名称</label>
+                            <label id="cuvPaper2"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸张2数量</label>
+                            <label id="cuvPaper2Count"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="mt-5 py-3 bg-light text-secondary text-center">
+        XX印刷厂管理系统
+    </footer>
+    <script src="~/Content/Dashboradasset/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(".td1").click(function () {
+            debugger;
+            var id = $(this).parent("tr");
+            var a = id.find(".guid");
+            var b = a.text();
+            $("#ctbody1").find('tr').empty();
+            $.ajax({
+                type: "POST",
+                url: "../SystemOp/GetProExiById",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { proexiId: b }
+                ),
+
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        $("#viewmodeltitle").text("编号：" + b);
+                    
+                        $("#cuvId").text(result.ProExId);
+                        $("#cuvProductId").text(result.ProductId);
+                        $("#cuvProductName").text(result.ProductName);
+                        $("#cuvInk1").text(result.InkName1);
+                        $("#cuvInk1Count").text(result.InkId1Count);
+                        $("#cuvInk2").text(result.InkName2);
+                        $("#cuvInk2Count").text(result.InkId2Count);
+                        $("#cuvPaper1").text(result.PaperName1);
+                        $("#cuvPaper1Count").text(result.PaperId1Count);
+                        $("#cuvPaper2").text(result.PaperName2);
+                        $("#cuvPaper2Count").text(result.PaperId2Count);
+
+                  
+                    $('#ViewModal').modal('show');
+                }
+            })
+        });
+    </script>
 </body>
 </html>

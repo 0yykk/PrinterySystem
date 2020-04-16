@@ -15,8 +15,10 @@ namespace Printery.Provider.Provider
     {
         Task<List<ProductGoodViewModel>> GetAllProductPurchase();
         Task<List<ProductGoodsViewModel>> GetAllProduct();
+        Task<List<ProExViewModel>> GetAllProExi(string empid);
         List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
         List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        ProExViewModel GetProExiByProId(string proexid);
         void EditProduct(ProductGoodsViewModel product);
         void DeleteProduct(string id);
         void ProcessProductGood(string purchaseid, string processpersonid);
@@ -42,6 +44,12 @@ namespace Printery.Provider.Provider
             list = await _productRespository.GetAllProduct();
             return (list != null) ? list : new List<ProductGoodsViewModel>();
         }
+        public async Task<List<ProExViewModel>> GetAllProExi(string empid)
+        {
+            var list = new List<ProExViewModel>();
+            list = await _productRespository.GetAllProExi(empid);
+            return list;
+        }
         public List<ProductGoodViewModel> GetPurchaseById(string purchaseid)
         {
             var list = new List<ProductGoodViewModel>();
@@ -53,6 +61,12 @@ namespace Printery.Provider.Provider
             var list = new List<ProductGoodsViewModel>();
             list = _productRespository.GetProductByProductName(ProductName);
             return list;
+        }
+        public ProExViewModel GetProExiByProId(string proexid)
+        {
+            var pro = new ProExViewModel();
+            pro = _productRespository.GetProExiByProId(proexid);
+            return pro;
         }
         public void EditProduct(ProductGoodsViewModel product)
         {

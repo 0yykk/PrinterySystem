@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\addProExiViewModel.cs" />
     <Compile Include="ViewModel\CartListViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
+    <Compile Include="ViewModel\DashboradBottomViewModel.cs" />
     <Compile Include="ViewModel\DashboradViewModel.cs" />
     <Compile Include="ViewModel\DepartmentViewModel.cs" />
     <Compile Include="ViewModel\EmpGroupViewModel.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="ViewModel\PowerListViewModel.cs" />
     <Compile Include="ViewModel\ProductGoodViewModel.cs" />
     <Compile Include="ViewModel\ProductsViewModel.cs" />
+    <Compile Include="ViewModel\ProExViewModel.cs" />
     <Compile Include="ViewModel\PurchasingInkViewModel.cs" />
     <Compile Include="ViewModel\PurchasingPaperViewModel.cs" />
     <Compile Include="ViewModel\SAViewModel.cs" />

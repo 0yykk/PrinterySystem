@@ -18,6 +18,7 @@ namespace Printery.Provider.Provider
         Task<List<EmployeeViewModel>> GetAllEmployee();
         Task<List<DepartmentViewModel>> GetDepartment();
         List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
+        void UpdatePassword(string pwd,string empid);
         void UpdatePowerList(List<PowerControlListViewModel> powerlist);
         void AddUserGroupByGroupName(string GroupName);
         void AddEmployee(EmployeeViewModel emp);
@@ -80,6 +81,10 @@ namespace Printery.Provider.Provider
             var list = new List<PowerControlListViewModel>();
             list = _empRespository.GetPowerContrlListById(GroupId);
             return list;
+        }
+        public void UpdatePassword(string pwd, string empid)
+        {
+            _empRespository.UpdatePassword(pwd, empid);
         }
         public void UpdatePowerList(List<PowerControlListViewModel> powerlist)
         {

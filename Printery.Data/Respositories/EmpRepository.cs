@@ -21,6 +21,7 @@ namespace Printery.Data.Respositories
         Task<List<EmployeeViewModel>> GetAllEmployee();
         Task<List<DepartmentViewModel>> GetDepartment();
         List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
+        void UpdatePassword(string pwd, string empid);
         void AddUserGroupByGroupName(string GroupName);
         void AddEmployee(EmployeeViewModel emp);
         void UpdatePowerList(List<PowerControlListViewModel> powerlist);
@@ -179,6 +180,18 @@ namespace Printery.Data.Respositories
 
             }
             return powerList;
+        }
+        public void UpdatePassword(string pwd, string empid)
+        {
+            var db = new PrinteryContext();
+            var exitEmp = db.Employee.FirstOrDefault(s => s.EmpId == empid);
+            if (exitEmp != null)
+            {
+                db.Set<Employee>().Attach(exitEmp);
+                db.Entry(exitEmp).State = EntityState.Modified;
+                exitEmp.Password = pwd;
+                db.SaveChanges();
+            }
         }
         public void UpdatePowerList(List<PowerControlListViewModel> powerlist)
         {

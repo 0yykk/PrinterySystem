@@ -66,14 +66,14 @@ namespace PrinterySystem.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "密码错误";
+                    return Content("<script>alert('密码错误！');history.go(-1);</script> ");
                 }
             }
             else
             {
-                ViewBag.Error = "用户编号错误";
+                return Content("<script>alert('用户名错误！');history.go(-1);</script> ");
             }
-            return View();
+            //return View();
         }
         public async Task<ActionResult> UserGroupManager()
         {
@@ -154,6 +154,31 @@ namespace PrinterySystem.Controllers
         public ActionResult RecoverPassword()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> RecoverPassword(string user)
+        {
+            string empusername = Session["LoginUserName"].ToString();
+            string confirmpwd = Request.Form["confirmpwd"];
+            string newpwd = Request.Form["newpwd"];
+            var emp=await _empProvider.GetEmployeeByUsernameAsync(empusername);
+            if (emp.EmpId != null)
+            {
+                if (emp.Password != confirmpwd)
+                {
+                    return Content("<script>alert('密码错误！');history.go(-1);</script> ");
+                }
+                else
+                {
+                    _empProvider.UpdatePassword(newpwd, emp.EmpId);
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+            else
+            {
+                return RedirectToAction("PowerError", "Account");
+            }
+            
         }
         public ActionResult PowerError()
         {

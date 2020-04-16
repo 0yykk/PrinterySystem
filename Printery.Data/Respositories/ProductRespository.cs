@@ -15,8 +15,10 @@ namespace Printery.Data.Respositories
     {
         Task<List<ProductGoodViewModel>> GetAllProductPurchase();
         Task<List<ProductGoodsViewModel>> GetAllProduct();
+        Task<List<ProExViewModel>> GetAllProExi(string empid);
         List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
         List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        ProExViewModel GetProExiByProId(string proexid);
         void EditProduct(ProductGoodsViewModel product);
         void DeleteProduct(string id);
         void ProcessProductGood(string purchaseid, string processpersonid);
@@ -70,6 +72,32 @@ namespace Printery.Data.Respositories
             }
             return productList;
         }
+        public async Task<List<ProExViewModel>> GetAllProExi(string empid)
+        {
+            var storeProcedureName = "[dbo].[Get_ProExi]";
+            var result = await _dbContext.Database.SqlQuery<ProExViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid", empid)
+                ).ToListAsync();
+            var list = new List<ProExViewModel>();
+            foreach (var i in result)
+            {
+                var ord = new ProExViewModel();
+                ord.ProExId = i.ProExId;
+                ord.ProductName = i.ProductName;
+                ord.ProductId = i.ProductId;
+                ord.PaperName2 = i.PaperName2;
+                ord.PaperName1 = i.PaperName1;
+                ord.PaperId2Count = i.PaperId2Count;
+                ord.PaperId1Count = i.PaperId1Count;
+                ord.InkName2 = i.InkName2;
+                ord.InkName1 = i.InkName1;
+                ord.InkId2Count = i.InkId2Count;
+                ord.InkId1Count = i.InkId1Count;
+                list.Add(ord);
+            }
+            return list;
+        }
         public List<ProductGoodViewModel> GetPurchaseById(string purchaseid)
         {
             var PurchaseList = new List<ProductGoodViewModel>();
@@ -106,6 +134,15 @@ namespace Printery.Data.Respositories
                 proList.Add(product);
             }
             return proList;
+        }
+        public ProExViewModel GetProExiByProId(string proexid)
+        {
+            var storeProcedureName = "[dbo].[Get_ProExiByProId]";
+            var Result = _dbContext.Database.SqlQuery<ProExViewModel>(
+                $"{storeProcedureName} @ProExId",
+                new SqlParameter("@ProExId", proexid)
+                ).SingleOrDefault();
+            return Result;
         }
         public void EditProduct(ProductGoodsViewModel product)
         {
