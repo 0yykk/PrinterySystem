@@ -15,11 +15,17 @@ namespace PrinterySystem.Controllers
         private readonly IOrderProvider _orderProvider;
         private readonly IProductProvider _productProvider;
         private readonly IPowerCheckProvider _powerCheckProvider;
-        public SystemOpController(IOrderProvider orderProvider, IProductProvider productProvider, IPowerCheckProvider powerCheckProvider)
+        private readonly IPaperProvider _paperProvider;
+        private readonly IInkProvider _inkProvider;
+        public SystemOpController(IOrderProvider orderProvider, IProductProvider productProvider, IPowerCheckProvider powerCheckProvider,
+            IInkProvider inkProvider, IPaperProvider paperProvider
+            )
         {
             _orderProvider = orderProvider;
             _productProvider = productProvider;
             _powerCheckProvider = powerCheckProvider;
+            _inkProvider = inkProvider;
+            _paperProvider = paperProvider;
         }
         // GET: SystemOp
         public ActionResult Dashborad4employee()
@@ -29,6 +35,9 @@ namespace PrinterySystem.Controllers
         public async Task<ActionResult> ProductSet()
         {
             var list = new List<ProExViewModel>();
+            var inklist = new List<InkCViewModel>();
+            var paperlist = new List<PaperCViewModel>();
+            var prolist = new List<ProductGoodsViewModel>();
             string power = Session["Power"].ToString();
             string empid = Session["LoginId"].ToString();
             var sa = new SAViewModel();
@@ -38,12 +47,18 @@ namespace PrinterySystem.Controllers
             if (sa.EmpId != null)
             {
                 list = await _productProvider.GetAllProExi(empid);
+                inklist = await _inkProvider.GetAllInk();
+                paperlist = await _paperProvider.GetAllPaper();
+                prolist = await _productProvider.GetAllProduct();
             }
             else
             {
                 if (userpower.Contains("2"))
                 {
                     list = await _productProvider.GetAllProExi(empid);
+                    inklist = await _inkProvider.GetAllInk();
+                    paperlist = await _paperProvider.GetAllPaper();
+                    prolist = await _productProvider.GetAllProduct();
                 }
                 else
                 {
@@ -58,7 +73,9 @@ namespace PrinterySystem.Controllers
             ViewBag.ProExi = list.OrderByDescending(art => art.ProExId)
                 .Skip((pageindex - 1) * PAGE_SZ)
                 .Take(PAGE_SZ).ToList();
-
+            ViewBag.inkList = inklist;
+            ViewBag.paperList = paperlist;
+            ViewBag.ProductList = prolist;
             ViewBag.Pager = new PagerHelper()
             {
                 PageIndex = pageindex,
@@ -80,13 +97,30 @@ namespace PrinterySystem.Controllers
             ViewBag.OrderCount = OrdercountList;
             return View();
         }
-        #region
+        #region 配料表api
         public JsonResult GetProExiById(string proexiId)
         {
             var pro = new ProExViewModel();
             pro = _productProvider.GetProExiByProId(proexiId.Trim());
-            string a = "su";
             return Json(pro, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AddProExi(addProExiViewModel pro)
+        {
+            _productProvider.AddProExis(pro);
+            string a = "提交成功";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult EditProExi(addProExiViewModel pro)
+        {
+            _productProvider.EditProExi(pro);
+            string a = "修改成功";
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteProExi(string ProExiId)
+        {
+            _productProvider.DeleteProExi(ProExiId.Trim());
+            string a = "删除成功";
+            return Json(a, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

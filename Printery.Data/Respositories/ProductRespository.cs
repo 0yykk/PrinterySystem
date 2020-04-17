@@ -24,6 +24,9 @@ namespace Printery.Data.Respositories
         void ProcessProductGood(string purchaseid, string processpersonid);
         void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase);
         void UpdateProduct(ProductGoodsViewModel product);
+        void AddProExis(addProExiViewModel pro);
+        void EditProExi(addProExiViewModel pro);
+        void DeleteProExi(string proid);
     }
     public class ProductRespository:IProductRespository
     {
@@ -214,6 +217,52 @@ namespace Printery.Data.Respositories
                     new SqlParameter("@CCount", product.CCOunt)
                     ).SingleOrDefault();
             }
+        }
+        public void AddProExis(addProExiViewModel pro)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            var ProExi = new ProductionExpense()
+            {
+                ProExId = Guid.NewGuid().ToString(),
+                ProductId=pro.ProductId,
+                ProductName=pro.ProductName,
+                InkId1=pro.InkId1,
+                InkId2=pro.InkId2,
+                InkId1Count=pro.InkId1Count,
+                InkId2Count=pro.InkId2Count,
+                PaperId1=pro.PaperId1,
+                PaperId2=pro.PaperId2,
+                PaperId1Count=pro.PaperId1Count,
+                PaperId2Count=pro.PaperId2Count
+            };
+            pr.ProductionExpense.Add(ProExi);
+            pr.SaveChanges();
+        }
+        public void EditProExi(addProExiViewModel pro)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            var exitPro = pr.ProductionExpense.FirstOrDefault(s => s.ProExId == pro.ProExId);
+            if (exitPro != null)
+            {
+                pr.Set<ProductionExpense>().Attach(exitPro);
+                pr.Entry(exitPro).State = EntityState.Modified;
+                exitPro.ProductId = pro.ProductId;
+                exitPro.ProductName = pro.ProductName;
+                exitPro.InkId1 = pro.InkId1;
+                exitPro.InkId2 = pro.InkId2;
+                exitPro.InkId1Count = pro.InkId1Count;
+                exitPro.InkId2Count = pro.InkId2Count;
+                exitPro.PaperId1 = pro.PaperId1;
+                exitPro.PaperId2 = pro.PaperId2;
+                exitPro.PaperId2Count = pro.PaperId2Count;
+                pr.SaveChanges();
+            }
+        }
+        public void DeleteProExi(string proid)
+        {
+            PrinteryContext pr = new PrinteryContext();
+            pr.ProductionExpense.Remove(pr.ProductionExpense.Where(p => p.ProExId==proid).FirstOrDefault());
+            pr.SaveChanges();
         }
         #region 传Null工具
         public object ModelItemIsNow(object str)

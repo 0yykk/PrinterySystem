@@ -175,6 +175,280 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5>订单号：</h5><h5 class="modal-title" id="editModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @*<div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>编号:</label>
+                                <input id="cueid" class="form-control" readonly="readonly" value="" type="text" required=""/>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                            </div>
+                        </div>*@
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>产品名称</label>
+                            <select class="custom-select d-block w-100" id="cueproname" required="">
+                                <option value="">选择产品</option>
+                                @{
+                                    var ProductList = ViewBag.ProductList as List<Printery.Domain.ViewModel.ProductGoodsViewModel>;
+                                    if (ProductList != null && ProductList.Count > 0)
+                                    {
+                                        foreach (var item in ProductList)
+                                        {
+                                            <option value="@item.ProductID">@item.ProductName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨1名称:</label>
+                            <select class="custom-select d-block w-100" id="cueink1" required="">
+                                <option value="">选择油墨</option>
+                                @{
+                                    var inkList = ViewBag.inkList as List<Printery.Domain.ViewModel.InkCViewModel>;
+                                    if (inkList != null && inkList.Count > 0)
+                                    {
+                                        foreach (var item in inkList)
+                                        {
+                                            <option value="@item.InkId">@item.InkName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨1数量：</label>
+                            <input id="cueink1Count" class="form-control" value="" type="number" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨2名称:</label>
+                            <select class="custom-select d-block w-100" id="cueink2" required="">
+                                <option value="">选择油墨</option>
+                                @{
+                                    if (inkList != null && inkList.Count > 0)
+                                    {
+                                        foreach (var item in inkList)
+                                        {
+                                            <option value="@item.InkId">@item.InkName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨2数量：</label>
+                            <input id="cueink2Count" class="form-control" value="" type="number" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸张1名称:</label>
+                            <select class="custom-select d-block w-100" id="cuePaper1" required="">
+                                <option value="">选择纸张</option>
+                                @{
+                                    var paperList = ViewBag.paperList as List<Printery.Domain.ViewModel.PaperCViewModel>;
+                                    if (paperList != null && paperList.Count > 0)
+                                    {
+                                        foreach (var item in paperList)
+                                        {
+                                            <option value="@item.PaperId">@item.PaperName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸张1数量</label>
+                            <input id="cuePaper1Count" class="form-control" value="" type="text" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸张2名称</label>
+                            <select class="custom-select d-block w-100" id="cuePaper2" required="">
+                                <option value="">选择纸张</option>
+                                @{
+                                    if (paperList != null && paperList.Count > 0)
+                                    {
+                                        foreach (var item in paperList)
+                                        {
+                                            <option value="@item.PaperId">@item.PaperName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸张2数量</label>
+                            <input id="cuePaper2Count" class="form-control" value="" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="editProExi()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5></h5><h5 class="modal-title" id="addModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>产品名称</label>
+                            <select class="custom-select d-block w-100" id="cuaproname" required="">
+                                <option value="">选择产品</option>
+                                @{
+                                    if (ProductList != null && ProductList.Count > 0)
+                                    {
+                                        foreach (var item in ProductList)
+                                        {
+                                            <option value="@item.ProductID">@item.ProductName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨1名称:</label>
+                            <select class="custom-select d-block w-100" id="cuaink1" required="">
+                                <option value="">选择油墨</option>
+                                @{
+                                    if (inkList != null && inkList.Count > 0)
+                                    {
+                                        foreach (var item in inkList)
+                                        {
+                                            <option value="@item.InkId">@item.InkName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨1数量：</label>
+                            <input id="cuaink1Count" class="form-control" value="" type="number" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨2名称:</label>
+                            <select class="custom-select d-block w-100" id="cuaink2" required="">
+                                <option value="">选择油墨</option>
+                                @{
+                                    if (inkList != null && inkList.Count > 0)
+                                    {
+                                        foreach (var item in inkList)
+                                        {
+                                            <option value="@item.InkId">@item.InkName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨2数量：</label>
+                            <input id="cuaink2Count" class="form-control" value="" type="number" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸张1名称:</label>
+                            <select class="custom-select d-block w-100" id="cuaPaper1" required="">
+                                <option value="">选择纸张</option>
+                                @{
+                                    if (paperList != null && paperList.Count > 0)
+                                    {
+                                        foreach (var item in paperList)
+                                        {
+                                            <option value="@item.PaperId">@item.PaperName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸张1数量</label>
+                            <input id="cuaPaper1Count" class="form-control" value="" type="text" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸张2名称</label>
+                            <select class="custom-select d-block w-100" id="cuaPaper2" required="">
+                                <option value="">选择纸张</option>
+                                @{
+                                    if (paperList != null && paperList.Count > 0)
+                                    {
+                                        foreach (var item in paperList)
+                                        {
+                                            <option value="@item.PaperId">@item.PaperName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸张2数量</label>
+                            <input id="cuaPaper2Count" class="form-control" value="" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="addProExi()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="removeorder">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    确认删除该配料表？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deletProExi()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer class="mt-5 py-3 bg-light text-secondary text-center">
         XX印刷厂管理系统
     </footer>
@@ -182,6 +456,19 @@
     <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
     <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#addModal').on('show.bs.modal', function (event) {
+                var btn = $(event.relatedTarget);
+                var title = btn.data('title');
+
+                var modal = $(this);
+                modal.find('.modal-title').text(title);
+            });
+            $('#removeModal').on('show.bs.modal', function (event) {
+
+            });
+        });
         $(".td1").click(function () {
             debugger;
             var id = $(this).parent("tr");
@@ -202,24 +489,162 @@
                     debugger;
                     if (result != null)
                         $("#viewmodeltitle").text("编号：" + b);
-                    
-                        $("#cuvId").text(result.ProExId);
-                        $("#cuvProductId").text(result.ProductId);
-                        $("#cuvProductName").text(result.ProductName);
-                        $("#cuvInk1").text(result.InkName1);
-                        $("#cuvInk1Count").text(result.InkId1Count);
-                        $("#cuvInk2").text(result.InkName2);
-                        $("#cuvInk2Count").text(result.InkId2Count);
-                        $("#cuvPaper1").text(result.PaperName1);
-                        $("#cuvPaper1Count").text(result.PaperId1Count);
-                        $("#cuvPaper2").text(result.PaperName2);
-                        $("#cuvPaper2Count").text(result.PaperId2Count);
 
-                  
+                    $("#cuvId").text(result.ProExId);
+                    $("#cuvProductId").text(result.ProductId);
+                    $("#cuvProductName").text(result.ProductName);
+                    $("#cuvInk1").text(result.InkName1);
+                    $("#cuvInk1Count").text(result.InkId1Count);
+                    $("#cuvInk2").text(result.InkName2);
+                    $("#cuvInk2Count").text(result.InkId2Count);
+                    $("#cuvPaper1").text(result.PaperName1);
+                    $("#cuvPaper1Count").text(result.PaperId1Count);
+                    $("#cuvPaper2").text(result.PaperName2);
+                    $("#cuvPaper2Count").text(result.PaperId2Count);
+
+
                     $('#ViewModal').modal('show');
                 }
             })
         });
+        $(".editbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#editModalLabel").text(b);
+            var id = document.getElementById('editModalLabel').innerText
+            var res = {
+                proexiId: id
+            }
+            $.ajax({
+                type: "POST",
+                url: "../SystemOp/GetProExiById",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(res),
+
+                success: function (result) {
+                    if (result != null)
+                    $("#cuvId").text(result.ProExId);
+                    $("#cueproname").val("" + result.ProductId + "");
+                    $("#cueink1").val("" + result.InkId1 + "");
+                    $("#cueink1Count").val(result.InkId1Count);
+                    $("#cueink2").val("" + result.InkId2 + "");
+                    $("#cueink2Count").val(result.InkId2Count);
+                    $("#cuePaper1").val("" + result.PaperId1 + "");
+                    $("#cuePaper1Count").val(result.PaperId1Count);
+                    $("#cuePaper2").val("" + result.PaperId2 + "");
+                    $("#cuePaper2Count").val(result.PaperId2Count);
+                    $('#editModal').modal('show');
+                }
+
+            })
+        })
+        $(".delbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeorder").text(b);
+            $('#removeModal').modal('show');
+        })
+        function editProExi() {
+            var id=document.getElementById('editModalLabel').innerText
+            debugger;
+            var result = {
+                "ProExId":id,
+                "ProductId": $("#cueproname").val(),
+                "ProductName": $("#cueproname").find("option:selected").text(),
+                "InkId1": $("#cueink1").val(),
+                "InkId1Count": $("#cueink1Count").val(),
+                "InkId2":$("#cueink2").val(),
+                "InkId2Count": $("#cueink2Count").val(),
+                "PaperId1": $("#cuePaper1").val(),
+                "PaperId1Count":$("#cuePaper1Count").val(),
+                "PaperId2":$("#cuePaper2").val(),
+                "PaperId2Count":$("#cuePaper2Count").val()
+            }
+             $('#editModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../SystemOp/EditProExi",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert(e)
+                        location.reload()  
+                }
+
+            })
+        }
+        function addProExi() {
+            debugger;
+            var result = {
+                "ProExId":"",
+                "ProductId": $("#cuaproname").val(),
+                "ProductName": $("#cuaproname").find("option:selected").text(),
+                "InkId1": $("#cuaink1").val(),
+                "InkId1Count": $("#cuaink1Count").val(),
+                "InkId2":$("#cuaink2").val(),
+                "InkId2Count": $("#cuaink2Count").val(),
+                "PaperId1": $("#cuaPaper1").val(),
+                "PaperId1Count":$("#cuaPaper1Count").val(),
+                "PaperId2":$("#cuaPaper2").val(),
+                "PaperId2Count":$("#cuaPaper2Count").val()
+            }
+             $('#addModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../SystemOp/AddProExi",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert(e)
+                        location.reload()  
+                }
+
+            })
+        }
+        function deletProExi() {
+            debugger;
+            var proexid = document.getElementById('removeorder').innerText
+            $('#removeModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+            type: "POST",
+            url: "../SystemOp/DeleteProExi",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(
+                { ProExiId: proexid }
+            ),
+            success: function (result) {
+                debugger;
+                if (result != null)
+                     alert(result)
+                    location.reload()
+            }
+        })
+        }
     </script>
 </body>
 </html>

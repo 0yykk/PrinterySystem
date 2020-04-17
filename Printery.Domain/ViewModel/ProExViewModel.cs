@@ -19,5 +19,9 @@ namespace Printery.Domain.ViewModel
         public int InkId2Count { get; set; }
         public string PaperName2 { get; set; }
         public int PaperId2Count { get; set; }
+        public string  InkId1 { get; set; }
+        public string  InkId2 { get; set; }
+        public string PaperId1 { get; set; }
+        public string PaperId2 { get; set; }
     }
 }

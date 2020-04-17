@@ -24,6 +24,9 @@ namespace Printery.Provider.Provider
         void ProcessProductGood(string purchaseid, string processpersonid);
         void CreatePurchaseOrder4Produt(ProductGoodViewModel propurchase);
         void UpdateProduct(ProductGoodsViewModel product);
+        void AddProExis(addProExiViewModel pro);
+        void EditProExi(addProExiViewModel pro);
+        void DeleteProExi(string proid);
     }
     public class ProductProvider:IProductProvider
     {
@@ -87,6 +90,18 @@ namespace Printery.Provider.Provider
         public void UpdateProduct(ProductGoodsViewModel product)
         {
             _productRespository.UpdateProduct(product);
+        }
+        public void AddProExis(addProExiViewModel pro)
+        {
+            _productRespository.AddProExis(pro);
+        }
+        public void EditProExi(addProExiViewModel pro)
+        {
+            _productRespository.EditProExi(pro);
+        }
+        public void DeleteProExi(string proid)
+        {
+            _productRespository.DeleteProExi(proid);
         }
     }
 }
