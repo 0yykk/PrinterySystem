@@ -20,7 +20,9 @@ namespace Printery.Data.Respositories
         Task<EmployeeViewModel> GetEmployeeById(string id);
         Task<List<EmployeeViewModel>> GetAllEmployee();
         Task<List<DepartmentViewModel>> GetDepartment();
+        List<EmployeeViewModel> GetEmployeeByName(string name);
         List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
+        List<EmpGroupViewModel> GetUserGroupByName(string name);
         void UpdatePassword(string pwd, string empid);
         void AddUserGroupByGroupName(string GroupName);
         void AddEmployee(EmployeeViewModel emp);
@@ -164,6 +166,27 @@ namespace Printery.Data.Respositories
             }
             return dep;
         }
+        public List<EmployeeViewModel> GetEmployeeByName(string name)
+        {
+            var emplist = from u in _db.Employee
+                          where (u.Ename.Contains(name))
+                          select u;
+            var list = new List<EmployeeViewModel>();
+            foreach (var i in emplist)
+            {
+                var a = new EmployeeViewModel();
+                a.EmpId = i.EmpId;
+                a.Ename = i.Ename;
+                a.Department = i.Department;
+                a.Nation = i.Nation;
+                a.Phone = i.Phone;
+                a.QQ = i.QQ;
+                a.Sex = i.Sex;
+                a.UserGroup = i.UserGroup;
+                list.Add(a);
+            }
+            return list;
+        }
         public List<PowerControlListViewModel> GetPowerContrlListById(string GroupId)
         {
             var powerlist = from u in _db.PowerControlList
@@ -180,6 +203,22 @@ namespace Printery.Data.Respositories
 
             }
             return powerList;
+        }
+        public List<EmpGroupViewModel> GetUserGroupByName(string name)
+        {
+            var emglist = from u in _db.EmpGroup
+                          where (u.GroupName.Contains(name))
+                          select u;
+            var list = new List<EmpGroupViewModel>();
+            foreach (var item in emglist)
+            {
+                EmpGroupViewModel EM = new EmpGroupViewModel();
+                EM.GroupId = item.GroupId;
+                EM.GroupName = item.GroupName;
+                EM.Tip = item.Tip;
+                list.Add(EM);
+            }
+            return list;
         }
         public void UpdatePassword(string pwd, string empid)
         {

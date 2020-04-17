@@ -17,7 +17,9 @@ namespace Printery.Provider.Provider
         Task<List<ProductGoodsViewModel>> GetAllProduct();
         Task<List<ProExViewModel>> GetAllProExi(string empid);
         List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
+        List<ProductGoodViewModel> GetPurchaseByName(string ProductName);
         List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        List<ProExViewModel> GetProExiByProductName(string name);
         ProExViewModel GetProExiByProId(string proexid);
         void EditProduct(ProductGoodsViewModel product);
         void DeleteProduct(string id);
@@ -59,10 +61,22 @@ namespace Printery.Provider.Provider
             list = _productRespository.GetPurchaseById(purchaseid);
             return list;
         }
+        public List<ProductGoodViewModel> GetPurchaseByName(string ProductName)
+        {
+            var list = new List<ProductGoodViewModel>();
+            list = _productRespository.GetPurchaseByName(ProductName);
+            return list;
+        }
         public List<ProductGoodsViewModel> GetProductByProductName(string ProductName)
         {
             var list = new List<ProductGoodsViewModel>();
             list = _productRespository.GetProductByProductName(ProductName);
+            return list;
+        }
+        public List<ProExViewModel> GetProExiByProductName(string name)
+        {
+            var list = new List<ProExViewModel>();
+            list = _productRespository.GetProExiByProductName(name);
             return list;
         }
         public ProExViewModel GetProExiByProId(string proexid)

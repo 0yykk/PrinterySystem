@@ -13,9 +13,11 @@ namespace Printery.Data.Respositories
 {
     public interface IPaperRespository
     {
-        Task<List<PaperCViewModel>> GetAllPaper();
+        Task<List<PaperCViewModel>> GetAllPaper();       
         Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing();
         List<PurchasingPaperViewModel> GetPurchasingById(string id);
+        List<PurchasingPaperViewModel> GetPurchasingByName(string name);
+        List<PaperCViewModel> GetPaperByPapername(string name);
         void EditPaper(string paperid, string papername);
         void DeletePaper(string paperid);
         void PushStockInPaper(decimal Price, string PurchaseId, string paperid, int PaperCount, string ProcessPersonId);
@@ -48,6 +50,22 @@ namespace Printery.Data.Respositories
             }
             return paperList;
         }
+        public List<PaperCViewModel> GetPaperByPapername(string name)
+        {
+            var paperlist = from u in _db.Paper
+                            where (u.PaperName.Contains(name))
+                            select u;
+            var list = new List<PaperCViewModel>();
+            foreach(var item in paperlist)
+            {
+                var paper = new PaperCViewModel();
+                paper.PaperId = item.PaperId;
+                paper.PaperName = item.PaperName;
+                paper.Ccount = item.Ccount;
+                list.Add(paper);
+            }
+            return list;
+        }
         public async Task<List<PurchasingPaperViewModel>> GetAllPaperPurchasing()
         {
             var PaperList = new List<PurchasingPaperViewModel>();
@@ -79,6 +97,29 @@ namespace Printery.Data.Respositories
             var parList = new List<PurchasingPaperViewModel>();
             foreach(var i in par)
             {
+                parc.PurchasingID = i.PurchasingID;
+                parc.PaperId = i.PaperId;
+                parc.PaperName = i.PaperName;
+                parc.Price = i.Price;
+                parc.ProcessDate = i.ProcessDate;
+                parc.ProcessPersonId = i.ProcessPersonId;
+                parc.Count = i.Count;
+                parc.CreateDate = i.CreateDate;
+                parc.CreatePersonId = i.CreatePersonId;
+                parc.Status = i.Status;
+                parList.Add(parc);
+            }
+            return parList;
+        }
+        public List<PurchasingPaperViewModel> GetPurchasingByName(string name)
+        {
+            var par = from u in _db.PaperPurchasing
+                      where (u.PaperName.Contains(name))
+                      select u;
+            var parList = new List<PurchasingPaperViewModel>();
+            foreach (var i in par)
+            {
+                var parc = new PurchasingPaperViewModel();
                 parc.PurchasingID = i.PurchasingID;
                 parc.PaperId = i.PaperId;
                 parc.PaperName = i.PaperName;

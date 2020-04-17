@@ -168,8 +168,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\EmployeeController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\Person4ManagerController.cs" />
     <Compile Include="Controllers\SystemOpController.cs" />
@@ -211,6 +209,29 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\DatePicker\calendar.js" />
+    <Content Include="Scripts\DatePicker\config.js" />
+    <Content Include="Scripts\DatePicker\developmentTool\lang\en.js" />
+    <Content Include="Scripts\DatePicker\developmentTool\lang\zh-cn.js" />
+    <Content Include="Scripts\DatePicker\developmentTool\lang\zh-tw.js" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\datePicker.gif" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\default\datepicker.css" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\default\img.gif" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\WdatePicker.css" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\whyGreen\bg.jpg" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\whyGreen\datepicker.css" />
+    <Content Include="Scripts\DatePicker\developmentTool\skin\whyGreen\img.gif" />
+    <Content Include="Scripts\DatePicker\lang\en.js" />
+    <Content Include="Scripts\DatePicker\lang\zh-cn.js" />
+    <Content Include="Scripts\DatePicker\lang\zh-tw.js" />
+    <Content Include="Scripts\DatePicker\skin\datePicker.gif" />
+    <Content Include="Scripts\DatePicker\skin\default\datepicker.css" />
+    <Content Include="Scripts\DatePicker\skin\default\img.gif" />
+    <Content Include="Scripts\DatePicker\skin\WdatePicker.css" />
+    <Content Include="Scripts\DatePicker\skin\whyGreen\bg.jpg" />
+    <Content Include="Scripts\DatePicker\skin\whyGreen\datepicker.css" />
+    <Content Include="Scripts\DatePicker\skin\whyGreen\img.gif" />
+    <Content Include="Scripts\DatePicker\WdatePicker.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -327,9 +348,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -342,7 +360,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\SystemOp\Dashborad4employee.cshtml" />
-    <Content Include="Views\Shared\_LayoutSys.cshtml" />
     <Content Include="Views\Manager\OrderManagement.cshtml" />
     <Content Include="Views\SystemOp\Dashborad4Manager.cshtml" />
     <Content Include="Views\Shared\_LayoutSysManager.cshtml" />
@@ -364,6 +381,7 @@
     <Content Include="Views\SystemOp\ProductSet.cshtml" />
     <Content Include="Views\SystemOp\SystemManager.cshtml" />
     <Content Include="Views\Account\PowerError.cshtml" />
+    <Content Include="Views\Shared\Pager1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,6 +13,7 @@ namespace Printery.Data.Respositories
     public interface ICustomerRepository
     {
         Task<List<CustomerViewModel>> GetAllCustomer();
+        List<CustomerViewModel> GetCustomerByName(string name);
         void AddCustomer(CustomerViewModel cms);
         void EditCustomer(CustomerViewModel cms);
         void DeleteCustomer(string cmsid);
@@ -43,6 +44,25 @@ namespace Printery.Data.Respositories
                 CusList.Add(Cust);
             }
             return CusList;
+        }
+        public List<CustomerViewModel> GetCustomerByName(string name)
+        {
+            var cuslist = from u in _db.Customer
+                          where (u.CustomerName.Contains(name))
+                          select u;
+            var list = new List<CustomerViewModel>();
+            foreach (var item in cuslist)
+            {
+                var Cust = new CustomerViewModel();
+                Cust.CustomerId = item.CustomerId;
+                Cust.CustomerName = item.CustomerName;
+                Cust.Contact = item.Contact;
+                Cust.Phone = item.Phone;
+                Cust.MobilePhone = item.MobilePhone;
+                Cust.CAddress = item.CAddress;
+                list.Add(Cust);
+            }
+            return list;
         }
         public void AddCustomer(CustomerViewModel cms)
         {

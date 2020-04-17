@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 
 </head>
-<body>
+<body onload="drawChartBar();drawChartPie()">
     <div class="container mt-4 main">
         @{
             var dashnav=ViewBag.DashNav as Printery.Domain.ViewModel.DashboradViewModel;
@@ -170,6 +170,7 @@
                     </div>
                     <div class="card-body d-flex align-items-center">
                         <canvas class="chart-item"></canvas>
+                        @*<canvas class="pieCanvas"></canvas>*@
                     </div>
                 </div>
             </section>
@@ -300,8 +301,6 @@
 
             })
         });
-    </script>
-    <script>
         window.chartColors = {
             red: 'rgb(255, 99, 132)',
             orange: 'rgb(255, 159, 64)',
@@ -311,123 +310,96 @@
             purple: 'rgb(153, 102, 255)',
             grey: 'rgb(201, 203, 207)'
         };
-
-        var randomScalingFactor = function () {
-            return Math.round(Math.random() * 100);
-        };
-
-        var config = {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: [
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                    ],
-                    backgroundColor: [
-                        window.chartColors.red,
-                        window.chartColors.orange,
-                        window.chartColors.yellow,
-                        window.chartColors.green,
-                        window.chartColors.blue,
-                    ],
-                    label: 'Dataset 1'
-                }],
-                labels: [
-                    "Red",
-                    "Orange",
-                    "Yellow",
-                    "Green",
-                    "Blue"
-                ]
-            },
-            options: {
-                responsive: true
-            }
-        };
-
-
-        // bar
-        var MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月","8月","9月","10月","11月","12月"];
-        var colors = Chart.helpers.color;
-        var barChartData = {
-            labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月","8月","9月","10月","11月","12月"],
-            datasets: [{
-                label: '总销售额',
-                backgroundColor: colors(window.chartColors.red).alpha(0.5).rgbString(),
-                borderColor: window.chartColors.red,
-                borderWidth: 1,
-                data: [
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor()
-                ]
-            }, {
-                label: '净利润',
-                backgroundColor: colors(window.chartColors.blue).alpha(0.5).rgbString(),
-                borderColor: window.chartColors.blue,
-                borderWidth: 1,
-                data: [
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor()
-                ]
-            }]
-
-        };
-
-        window.onload = function () {
-            // pie
-            document.querySelectorAll('.chart-item').forEach(function (item) {
-                config.data.datasets.forEach(function (dataset) {
-                    dataset.data = dataset.data.map(function () {
-                        return randomScalingFactor();
-                    });
-                });
-                var ctx = item.getContext("2d");
-                window.myPie = new Chart(ctx, config);
-            })
-
-
-            // bar
-            var barCtx = document.getElementById("barCanvas").getContext("2d");
-            window.myBar = new Chart(barCtx, {
-                type: 'bar',
-                data: barChartData,
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: '月营销收入'
-                    }
+        function drawChartBar() {
+            debugger;
+            var jsonData = $.ajax({
+                type: "POST",
+                url: "../SystemOp/DrawChartBar",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+            }).done(function (results) {
+                var labels = [], data1 = [], data2 = [];
+                for (var i in results) {
+                    labels.push(results[i].month);
+                    data1.push(results[i].business);
+                    data2.push(results[i].profit)
                 }
-            });
+                var colors = Chart.helpers.color;
+                var barChartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: '总销售额',
+                        backgroundColor: colors(window.chartColors.red).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.red,
+                        borderWidth: 1,
+                        data: data1
+                    }, {
+                        label: '净利润',
+                        backgroundColor: colors(window.chartColors.blue).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.blue,
+                        borderWidth: 1,
+                        data: data2
+                    }]
 
-        };
-    </script>
+                };
+                var barCtx = document.getElementById("barCanvas").getContext("2d");
+                var mybar = new Chart(barCtx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '月营销收入'
+                        }
+                    }
+                });
+            });
+        }
+        function drawChartPie() {
+            debugger;
+            var jsonData = $.ajax({
+                type: "POST",
+                url: "../SystemOp/DrawCharPie",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+            }).done(function (results) {
+                var labels = [], data = [];
+                for (var i in results) {
+                    labels.push(results[i].ProductName);
+                    data.push(results[i].Count);
+                }
+                var config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                window.chartColors.red,
+                                window.chartColors.yellow,
+                                window.chartColors.blue,
+                                window.chartColors.orange,
+                                window.chartColors.green,
+                            ],
+                            label: 'Dataset 1'
+                        }],
+                        labels:labels
+                    },
+                    options: {
+                        responsive: true
+                    }
+                };
+                var ctx = document.querySelectorAll('.chart-item').forEach(function (item) {
+                            var ctx = item.getContext("2d");
+                            var mypie = new Chart(ctx, config);
+                        })
+            })
+        }
+    </script>  
 </body>
 </html>

@@ -16,6 +16,8 @@ namespace Printery.Data.Respositories
         Task<List<InkCViewModel>> GetAllInk();
         Task<List<PurchasingInkViewModel>> GetAllInkPurchasing();
         List<PurchasingInkViewModel> GetPurchasingById(string id);
+        List<PurchasingInkViewModel> GetPurchasingByName(string name);
+        List<InkCViewModel> GetInkByName(string name);
         void EditInk(string inkid, string inkname);
         void DeleteInk(string inkid);
         void PushInStockInk(string PurchaseId, decimal Price, string InkId, int InkCout, string ProcessPersonId);
@@ -69,6 +71,45 @@ namespace Printery.Data.Respositories
                 InkList.Add(ink);
             }
             return InkList;
+        }
+        public List<InkCViewModel> GetInkByName(string name)
+        {
+            var inklist = from u in _db.InkStock
+                            where (u.InkName.Contains(name))
+                            select u;
+            var list = new List<InkCViewModel>();
+            foreach (var item in inklist)
+            {
+                var ink = new InkCViewModel();
+                ink.InkId = item.InkId;
+                ink.InkName = item.InkName;
+                ink.Ccount = item.Ccount;
+                list.Add(ink);
+            }
+            return list;
+        }
+        public List<PurchasingInkViewModel> GetPurchasingByName(string name)
+        {
+            var inklist = from u in _db.InkPurchasing
+                          where (u.InkName.Contains(name))
+                          select u;
+            var list = new List<PurchasingInkViewModel>();
+            foreach (var i in inklist)
+            {
+                var purc = new PurchasingInkViewModel();
+                purc.PurchasingID = i.PurchasingID;
+                purc.InkId = i.InkId;
+                purc.InkName = i.InkName;
+                purc.Price = i.Price;
+                purc.ProcessDate = i.ProcessDate;
+                purc.ProcessPersonId = i.ProcessPersonId;
+                purc.Count = i.Count;
+                purc.CreateDate = i.CreateDate;
+                purc.CreatePersonId = i.CreatePersonId;
+                purc.Status = i.Status;
+                list.Add(purc);
+            }
+            return list;
         }
         public List<PurchasingInkViewModel> GetPurchasingById(string id)
         {

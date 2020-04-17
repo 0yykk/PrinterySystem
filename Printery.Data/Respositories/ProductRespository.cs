@@ -17,7 +17,9 @@ namespace Printery.Data.Respositories
         Task<List<ProductGoodsViewModel>> GetAllProduct();
         Task<List<ProExViewModel>> GetAllProExi(string empid);
         List<ProductGoodViewModel> GetPurchaseById(string purchaseid);
+        List<ProductGoodViewModel> GetPurchaseByName(string ProductName);
         List<ProductGoodsViewModel> GetProductByProductName(string ProductName);
+        List<ProExViewModel> GetProExiByProductName(string name);
         ProExViewModel GetProExiByProId(string proexid);
         void EditProduct(ProductGoodsViewModel product);
         void DeleteProduct(string id);
@@ -121,6 +123,26 @@ namespace Printery.Data.Respositories
             }
             return PurchaseList;
         }
+        public List<ProductGoodViewModel> GetPurchaseByName(string ProductName)
+        {
+            var productlist = from u in _db.ProductGoods
+                          where (u.ProductName.Contains(ProductName))
+                          select u;
+            var list = new List<ProductGoodViewModel>();
+            foreach (var item in productlist)
+            {
+                var pro = new ProductGoodViewModel();
+                pro.ProductId = item.ProductId;
+                pro.ProductName = item.ProductName;
+                pro.eachPrice = item.eachPrice;
+                pro.CreatePersonId = item.CreatePersonId;
+                pro.ProcessPersonId = item.ProcessPersonId;
+                pro.Count = item.Count;
+                pro.Status = item.Status;
+                list.Add(pro);
+            }
+            return list;
+        }
         public List<ProductGoodsViewModel> GetProductByProductName(string ProductName)
         {
             var proList = new List<ProductGoodsViewModel>();
@@ -137,6 +159,15 @@ namespace Printery.Data.Respositories
                 proList.Add(product);
             }
             return proList;
+        }
+        public List<ProExViewModel> GetProExiByProductName(string name)
+        {
+            var storeProcedureName = "[dbo].[Get_ProExiByProductName]";
+            var Result = _dbContext.Database.SqlQuery<ProExViewModel>(
+                $"{storeProcedureName} @ProductName",
+                new SqlParameter("@ProductName", name)
+                ).ToList();
+            return Result;
         }
         public ProExViewModel GetProExiByProId(string proexid)
         {

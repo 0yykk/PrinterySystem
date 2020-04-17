@@ -1,0 +1,534 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
+}
+@{
+    ViewBag.Title = "控制台(管理)";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>印刷厂管理控制后台</title>
+    <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
+
+</head>
+<body onload="drawChartBar();drawChartPie()">
+    <div class="container mt-4 main">
+        @{
+            var dashnav=ViewBag.DashNav as Printery.Domain.ViewModel.DashboradViewModel;
+            if (dashnav != null) {
+                <div class="row mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-money fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">今日营收</div>
+                                    <div class="h3">@dashnav.TodayPrice ￥</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-users fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">客户数量</div>
+                                    <div class="display-4">@dashnav.CustomerCount</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-file fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">今日订单数</div>
+                                    <div class="display-4">@dashnav.OrderCount</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="fa fa-truck fa-3x text-secondary mr-2 d-none d-sm-block"></div>
+                                <div class="text-center w-100">
+                                    <div class="h5">待出货数</div>
+                                    <div class="display-4">@dashnav.OrderWaitCount</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+            
+        }
+        <div class="row mb-4">
+            <div class="col-lg-4 text-center">
+                <div class="border d-flex flex-column justify-content-center p-4 h-100">
+                    <p>目前在线人数</p>
+                    <p class="display-2">99</p>
+                    <div class="progress mt-3">
+                        <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">PC</div>
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">手机</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card h-100">
+                    <div class="card-header">
+                        今日订单
+                    </div>
+                    <div class="card-body">
+                        <div class="text-right mb-3">
+                            <a href="@Url.Action("OrderManagement", "Manager")" class="btn btn-outline-secondary btn-sm">订单管理</a>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        订单号
+                                    </th>
+                                    <th scope="col">
+                                        姓名
+                                    </th>
+                                    <th scope="col">
+                                        产品
+                                    </th>
+                                    <th scope="col" width="100">
+                                        价格
+                                    </th>
+                                </tr>
+                            </thead>
+                            @{
+                                var orderlist = ViewBag.OrderList as List<Printery.Domain.ViewModel.OrderViewModel>;
+                                if (orderlist != null&&orderlist.Count>0)
+                                {
+                                    <tbody>
+                                        @{ 
+                                            foreach(var item in orderlist) 
+                                            { 
+                                                <tr>
+                                                    <td>
+                                                    @Html.DisplayFor(modelitem=>item.OrderId)
+                                                    </td>
+                                                    <td>
+                                                    @Html.DisplayFor(modelitem=>item.CustomerName)
+                                                    </td>
+                                                    <td>
+                                                    @Html.DisplayFor(modelitem=>item.ProductName)
+                                                    </td>
+                                                    <td class="text-right">
+                                                    @Html.DisplayFor(modelitem=>item.Price)
+                                                    </td>
+                                                </tr>
+                                            }
+                                            
+                                        }                                        
+                                    </tbody>
+                                }
+
+                            }
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-right">
+                                        今日总营收
+                                    </td>
+                                    <td class="text-right">@dashnav.TodayPrice</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <section class="col-lg-8">
+                <div class="card rounded-0">
+                    <div class="card-header">
+                        销售状况
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <canvas id="barCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        产品占比
+                    </div>
+                    <div class="card-body d-flex align-items-center">
+                        <canvas class="chart-item"></canvas>
+                        @*<canvas class="pieCanvas"></canvas>*@
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="card rounded-0">
+            <div class="card-header">
+                月经营状况
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    @*<form action="" class="forn-inline">
+                        <div class="form-group">
+                            <label for="month" class="sr-only">月份</label>
+                            <select name="" id="" class="form-control form-control-sm">
+                                <option value="9">9 月</option>
+                                <option value="10">10 月</option>
+                            </select>
+                        </div>
+                    </form>*@
+                    <div class="ml-auto">
+                        <a href="#" class="btn btn-outline-secondary btn-sm">下载报表</a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">表单管理</a>
+                    </div>
+                </div>
+                <table class="table table-responsive-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th width="50">月份</th>
+                            <th>订单数</th>
+                            <th>未完成数</th>
+                            <th>出货数</th>
+                            <th>缺货数</th>
+                            <th width="150">营业额</th>
+                            <th width="150">净利润</th>
+                        </tr>
+                    </thead>
+                    @{
+                        var coutlist = ViewBag.OrderCount as List<Printery.Domain.ViewModel.DashboradBottomViewModel>;
+                        if (coutlist != null && coutlist.Count > 0)
+                        {
+                            <tbody>
+                                @{ 
+                                    foreach(var io in coutlist)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelitem=>io.Month)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.OrderCount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.OrderWait)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.OrderDone)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitem => io.BackOrder)
+                                            </td>
+                                            <td class="text-right">
+                                                @Html.DisplayFor(modelitem => io.Business) ￥
+                                            </td>
+                                            <td class="text-right">
+                                                @(io.Business-io.Profit) ￥
+                                            </td>
+                                        </tr>
+                                    }
+                                    
+                                }
+                                
+                            </tbody>
+                        }
+
+                    }
+                <tfoot>
+                    @{
+                        decimal a = 0, b = 0;
+                        foreach(var i in coutlist)
+                        {
+                            a = a + i.Business;
+                            b = b + i.Profit;
+                        }
+                        <tr>
+                            <td colspan="6" class="text-right">总营收</td>
+                            <td class="text-right">
+                                @a
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-right">总净利润</td>
+                            <td class="text-right">
+                                @(a-b)
+                            </td>
+                        </tr>
+                    }
+
+                </tfoot>
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <footer class="mt-5 py-3 bg-light text-secondary text-center">
+        XX印刷厂管理系统
+    </footer>
+
+    <script src="~/Content/Dashboradasset/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
+    <!-- Chart.js 图表套件 -->
+    <script src="~/Content/Dashboradasset/js/Chart.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // 编辑的 Modal 事件
+            $('#editModal').on('show.bs.modal', function (event) {
+
+            });
+
+            $('#removeModal').on('show.bs.modal', function (event) {
+
+            })
+        });
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+        function drawChartBar() {
+            debugger;
+            var jsonData = $.ajax({
+                type: "POST",
+                url: "../SystemOp/DrawChartBar",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+            }).done(function (results) {
+                var labels = [], data1 = [], data2 = [];
+                for (var i in results) {
+                    labels.push(results[i].month);
+                    data1.push(results[i].business);
+                    data2.push(results[i].profit)
+                }
+                var colors = Chart.helpers.color;
+                var barChartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: '总销售额',
+                        backgroundColor: colors(window.chartColors.red).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.red,
+                        borderWidth: 1,
+                        data: data1
+                    }, {
+                        label: '净利润',
+                        backgroundColor: colors(window.chartColors.blue).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.blue,
+                        borderWidth: 1,
+                        data: data2
+                    }]
+
+                };
+                var barCtx = document.getElementById("barCanvas").getContext("2d");
+                var mybar = new Chart(barCtx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '月营销收入'
+                        }
+                    }
+                });
+            });
+        }
+        function drawChartPie() {
+            debugger;
+            var jsonData = $.ajax({
+                type: "POST",
+                url: "../SystemOp/DrawCharPie",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+            }).done(function (results) {
+                var labels = [], data = [];
+                for (var i in results) {
+                    labels.push(results[i].ProductName);
+                    data.push(results[i].Count);
+                }
+                var config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                window.chartColors.red,
+                                window.chartColors.yellow,
+                                window.chartColors.blue,
+                                window.chartColors.orange,
+                                window.chartColors.green,
+                            ],
+                            label: 'Dataset 1'
+                        }],
+                        labels:labels
+                    },
+                    options: {
+                        responsive: true
+                    }
+                };
+                var ctx = document.querySelectorAll('.chart-item').forEach(function (item) {
+                            var ctx = item.getContext("2d");
+                            var mypie = new Chart(ctx, config);
+                        })
+            })
+        }
+    </script>
+    @*<script>
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        var randomScalingFactor = function () {
+            return Math.round(Math.random() * 100);
+        };
+
+        var config = {
+            
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                    ],
+                    backgroundColor: [
+                        window.chartColors.red,
+                        window.chartColors.orange,
+                        window.chartColors.yellow,
+                        window.chartColors.green,
+                        window.chartColors.blue,
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    "Red",
+                    "Orange",
+                    "Yellow",
+                    "Green",
+                    "Blue"
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        };
+
+
+        // bar
+        var MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月","8月","9月","10月","11月","12月"];
+        var colors = Chart.helpers.color;
+        var barChartData = {
+            labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月","8月","9月","10月","11月","12月"],
+            datasets: [{
+                label: '总销售额',
+                backgroundColor: colors(window.chartColors.red).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.red,
+                borderWidth: 1,
+                data: [
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor()
+                ]
+            }, {
+                label: '净利润',
+                backgroundColor: colors(window.chartColors.blue).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.blue,
+                borderWidth: 1,
+                data: [
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor()
+                ]
+            }]
+
+        };
+
+        window.onload = function () {
+            // pie
+            document.querySelectorAll('.chart-item').forEach(function (item) {
+                config.data.datasets.forEach(function (dataset) {
+                    dataset.data = dataset.data.map(function () {
+                        return randomScalingFactor();
+                    });
+                });
+                var ctx = item.getContext("2d");
+                window.myPie = new Chart(ctx, config);
+            })
+
+
+            // bar
+            var barCtx = document.getElementById("barCanvas").getContext("2d");
+            window.myBar = new Chart(barCtx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: '月营销收入'
+                    }
+                }
+            });
+
+        };
+    </script>*@
+</body>
+</html>

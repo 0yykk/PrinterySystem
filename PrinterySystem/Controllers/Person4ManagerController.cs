@@ -65,6 +65,63 @@ namespace PrinterySystem.Controllers
             };
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> CustomerInfo(string na)
+        {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            string name = Request.Form["PostCustomerName"];
+            var Culist = new List<CustomerViewModel>();
+            if (sa.EmpId != null)
+            {
+                if (name == null)
+                {
+                    Culist = await _customerProvider.GetAllCustomer();
+                }
+                else
+                {
+                    Culist = _customerProvider.GetCustomerByName(name);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("401"))
+                {
+                    if (name == null)
+                    {
+                        Culist = await _customerProvider.GetAllCustomer();
+                    }
+                    else
+                    {
+                        Culist = _customerProvider.GetCustomerByName(name);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            int pageindex = 1;
+            var recordCount = Culist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.CustomerList = Culist.OrderByDescending(art => art.CustomerName)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
         public async Task<ActionResult> EmployeeInfo()
         {
             string power = Session["Power"].ToString();
@@ -89,6 +146,74 @@ namespace PrinterySystem.Controllers
                     Department = await _empProvider.GetDepartment();
                     Usergroup = await _empProvider.GetAllEmpGroup();
                     Emlist = await _empProvider.GetAllEmployee();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            int pageindex = 1;
+            var recordCount = Emlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.EmployeeList = Emlist.OrderByDescending(art => art.EmpId)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Department = Department;
+            ViewBag.EmpGroup = Usergroup;
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> EmployeeInfo(string na)
+        {
+            string name = Request.Form["PostEmployeeName"];
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            var Emlist = new List<EmployeeViewModel>();
+            var Department = new List<DepartmentViewModel>();
+            var Usergroup = new List<EmpGroupViewModel>();
+            if (sa.EmpId != null)
+            {
+                if (name == null)
+                {
+                    Department = await _empProvider.GetDepartment();
+                    Usergroup = await _empProvider.GetAllEmpGroup();
+                    Emlist = await _empProvider.GetAllEmployee();
+                }
+                else
+                {
+                    Department = await _empProvider.GetDepartment();
+                    Usergroup = await _empProvider.GetAllEmpGroup();
+                    Emlist = _empProvider.GetEmployeeByName(name);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("301"))
+                {
+                    if (name == null)
+                    {
+                        Department = await _empProvider.GetDepartment();
+                        Usergroup = await _empProvider.GetAllEmpGroup();
+                        Emlist = await _empProvider.GetAllEmployee();
+                    }
+                    else
+                    {
+                        Department = await _empProvider.GetDepartment();
+                        Usergroup = await _empProvider.GetAllEmpGroup();
+                        Emlist = _empProvider.GetEmployeeByName(name);
+                    }
                 }
                 else
                 {

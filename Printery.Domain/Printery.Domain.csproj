@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\addProExiViewModel.cs" />
+    <Compile Include="ViewModel\BarChartViewModel.cs" />
     <Compile Include="ViewModel\CartListViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DashboradBottomViewModel.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="ViewModel\InkCViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\PaperCViewModel.cs" />
+    <Compile Include="ViewModel\PieChartViewModel.cs" />
     <Compile Include="ViewModel\PowerControlListViewModel.cs" />
     <Compile Include="ViewModel\PowerListViewModel.cs" />
     <Compile Include="ViewModel\ProductGoodViewModel.cs" />

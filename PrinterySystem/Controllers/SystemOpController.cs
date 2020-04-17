@@ -28,7 +28,7 @@ namespace PrinterySystem.Controllers
             _paperProvider = paperProvider;
         }
         // GET: SystemOp
-        public ActionResult Dashborad4employee()
+        public ActionResult SystemManager()
         {
             return View();
         }
@@ -59,6 +59,80 @@ namespace PrinterySystem.Controllers
                     inklist = await _inkProvider.GetAllInk();
                     paperlist = await _paperProvider.GetAllPaper();
                     prolist = await _productProvider.GetAllProduct();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            int pageindex = 1;
+            var recordCount = list.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.ProExi = list.OrderByDescending(art => art.ProExId)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.inkList = inklist;
+            ViewBag.paperList = paperlist;
+            ViewBag.ProductList = prolist;
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ProductSet(string na)
+        {
+            var list = new List<ProExViewModel>();
+            var inklist = new List<InkCViewModel>();
+            var paperlist = new List<PaperCViewModel>();
+            var prolist = new List<ProductGoodsViewModel>();
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            string name = Request.Form["PostProductName"];
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                if (name == null)
+                {
+                    list = await _productProvider.GetAllProExi(empid);
+                    inklist = await _inkProvider.GetAllInk();
+                    paperlist = await _paperProvider.GetAllPaper();
+                    prolist = await _productProvider.GetAllProduct();
+                }
+                else
+                {
+                    list = _productProvider.GetProExiByProductName(name);
+                    inklist = await _inkProvider.GetAllInk();
+                    paperlist = await _paperProvider.GetAllPaper();
+                    prolist = await _productProvider.GetAllProduct();
+                }
+            }
+            else
+            {
+                if (userpower.Contains("2"))
+                {
+                    if (name == null)
+                    {
+                        list = await _productProvider.GetAllProExi(empid);
+                        inklist = await _inkProvider.GetAllInk();
+                        paperlist = await _paperProvider.GetAllPaper();
+                        prolist = await _productProvider.GetAllProduct();
+                    }
+                    else
+                    {
+                        list = _productProvider.GetProExiByProductName(name);
+                        inklist = await _inkProvider.GetAllInk();
+                        paperlist = await _paperProvider.GetAllPaper();
+                        prolist = await _productProvider.GetAllProduct();
+                    }
                 }
                 else
                 {
@@ -121,6 +195,22 @@ namespace PrinterySystem.Controllers
             _productProvider.DeleteProExi(ProExiId.Trim());
             string a = "删除成功";
             return Json(a, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #region 控制台画图api
+        public JsonResult DrawChartBar()
+        {
+            string empid = Session["LoginId"].ToString();
+            var list = new List<BarChartViewModel>();
+            list = _orderProvider.InitBarChart(empid);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DrawCharPie()
+        {
+            string empid = Session["LoginId"].ToString();
+            var list = new List<PieChartViewModel>();
+            list = _orderProvider.InitPieChart(empid);
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

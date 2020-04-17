@@ -1,17 +1,220 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "系统管理";
+    Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
 </head>
 <body>
-    <div>
-    
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <div class="mb-0">
+                    <div class="row">
+                        <div class="col-9">
+                            <button class="btn btn-outline-dark text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                纸张采购
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <form class="form-inline my-2 my-lg-0" method="post">
+                                <input class="form-control mr-sm-2" type="search" name="PostPaperName" placeholder="纸张名称" aria-label="Search">
+                                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-responsive-md table-hover">
+                        <thead>
+                            <tr>
+                                <th>采购单号</th>
+                                <th>纸张编号</th>
+                                <th>纸张名称</th>
+                                <th>入库数量</th>
+                                <th>总价格</th>
+                                <th>创建人</th>
+                                <th>处理人</th>
+                                <th>当前状态</th>
+                                <th>创建日期</th>
+                                <th>处理日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        @{
+                            var paperList = ViewBag.PaperPurchase as List<Printery.Domain.ViewModel.PurchasingPaperViewModel>;
+                            if (paperList != null)
+                            {
+                                <tbody>
+                                    @{
+                                        foreach (var item in paperList)
+                                        {
+                                            <tr>
+                                                <td class="td1 guid">
+                                                    @Html.DisplayFor(modelitem => item.PurchasingID)
+                                                </td>
+                                                <td class="td1 paperid">
+                                                    @Html.DisplayFor(modelitem => item.PaperId)
+                                                </td>
+                                                <td class="td1 papername">
+                                                    @Html.DisplayFor(modelitem => item.PaperName)
+                                                </td>
+                                                <td class="td1 papercout">
+                                                    @Html.DisplayFor(modelitem => item.Count)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.Price)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.Status)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.CreateDate)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.ProcessDate)
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                                        <button type="button" class="btn btn-outline-secondary psabtn">入库</button>
+                                                        <button type="button" class="btn btn-outline-secondary delpabtn">删除</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            }
+                        }
+
+                    </table>
+                    @{
+
+                        if (paperList != null && paperList.Count > 0)
+                        {
+                            @Html.Partial("Pager1")
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <div class="mb-0">
+                    <div class="row">
+                        <div class="col-9">
+                            <button class="btn btn-outline-danger text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                油墨采购
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <form class="form-inline my-2 my-lg-0" method="post">
+                                <input class="form-control mr-sm-2" type="search" name="PostInkName" placeholder="墨水名称" aria-label="Search">
+                                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-responsive-md table-hover">
+                        <thead>
+                            <tr>
+                                <th>采购单号</th>
+                                <th>油墨编号</th>
+                                <th>油墨名称</th>
+                                <th>入库数量</th>
+                                <th>总价格</th>
+                                <th>创建人</th>
+                                <th>处理人</th>
+                                <th>当前状态</th>
+                                <th>创建日期</th>
+                                <th>处理日期</th>
+                            </tr>
+                        </thead>
+                        @{
+                            var inkList = ViewBag.InkPurchase as List<Printery.Domain.ViewModel.PurchasingInkViewModel>;
+                            if (inkList != null)
+                            {
+                                <tbody>
+                                    @{
+                                        foreach (var item in inkList)
+                                        {
+                                            <tr>
+                                                <td class="td2 guid">
+                                                    @Html.DisplayFor(modelitem => item.PurchasingID)
+                                                </td>
+                                                <td class="td2 cinkid">
+                                                    @Html.DisplayFor(modelitem => item.InkId)
+                                                </td>
+                                                <td class="td2 cinkname">
+                                                    @Html.DisplayFor(modelitem => item.InkName)
+                                                </td>
+                                                <td class="td2 cinkcout">
+                                                    @Html.DisplayFor(modelitem => item.Count)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.Price)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.Status)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.CreateDate)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.ProcessDate)
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                                        <button type="button" class="btn btn-outline-secondary addstockbtn">入库</button>
+                                                        <button type="button" class="btn btn-outline-secondary delInbtn">删除</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            }
+                        }
+                    </table>
+                    @{
+
+                        if (inkList != null && inkList.Count > 0)
+                        {
+                            @Html.Partial("Pager")
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

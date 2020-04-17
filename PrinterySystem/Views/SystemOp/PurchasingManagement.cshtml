@@ -1,0 +1,853 @@
+﻿@{
+    ViewBag.Title = "采购处理";
+    Layout = "~/Views/Shared/_LayoutSysManager.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Dashboradasset/css/all.css">
+</head>
+<body>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">采购单处理</h1>
+        <p class="lead">点击按钮可切换</p>
+    </div>
+    @*<div class="row">
+            <div class="col-3">
+                <div class="list-group list-group-horizontal-lg" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">纸张采购</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">油墨采购</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                        <table class="table table-responsive-md table-hover">
+                            <thead>
+                                <tr>
+                                    <th>采购单号</th>
+                                    <th>纸张编号</th>
+                                    <th>纸张名称</th>
+                                    <th>入库数量</th>
+                                    <th>总价格</th>
+                                    <th>创建人</th>
+                                    <th>处理人</th>
+                                    <th>当前状态</th>
+                                    <th>创建日期</th>
+                                    <th>处理日期</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            @{
+                                var paperList = ViewBag.PaperPurchase as List<Printery.Domain.ViewModel.PurchasingPaperViewModel>;
+                                if (paperList != null)
+                                {
+                                    <tbody>
+                                        @{
+                                            foreach (var item in paperList)
+                                            {
+                                                <tr>
+                                                    <td class="td1 guid">
+                                                        @Html.DisplayFor(modelitem => item.PurchasingID)
+                                                    </td>
+                                                    <td class="td1 paperid">
+                                                        @Html.DisplayFor(modelitem => item.PaperId)
+                                                    </td>
+                                                    <td class="td1 papername">
+                                                        @Html.DisplayFor(modelitem => item.PaperName)
+                                                    </td>
+                                                    <td class="td1 papercout">
+                                                        @Html.DisplayFor(modelitem => item.Count)
+                                                    </td>
+                                                    <td class="td1">
+                                                        @Html.DisplayFor(modelitem => item.Price)
+                                                    </td>
+                                                    <td class="td1">
+                                                        @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                                    </td>
+                                                    <td class="td1">
+                                                        @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                                    </td>
+                                                    <td class="td1">
+                                                        @Html.DisplayFor(modelitem => item.Status)
+                                                    </td>
+                                                    <td class="td1">
+                                                        @Html.DisplayFor(modelitem => item.CreateDate)
+                                                    </td>
+                                                    <td class="td1">
+                                                        @Html.DisplayFor(modelitem => item.ProcessDate)
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                                            <button type="button" class="btn btn-outline-secondary psabtn">入库</button>
+                                                            <button type="button" class="btn btn-outline-secondary delpabtn">删除</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                }
+                            }
+
+                        </table>
+                        @{
+
+                            if (paperList != null && paperList.Count > 0)
+                            {
+                                @Html.Partial("Pager1")
+
+                            }
+                        }
+                    </div>
+                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                        <table class="table table-responsive-md table-hover">
+                            <thead>
+                                <tr>
+                                    <th>采购单号</th>
+                                    <th>油墨编号</th>
+                                    <th>油墨名称</th>
+                                    <th>入库数量</th>
+                                    <th>总价格</th>
+                                    <th>创建人</th>
+                                    <th>处理人</th>
+                                    <th>当前状态</th>
+                                    <th>创建日期</th>
+                                    <th>处理日期</th>
+                                </tr>
+                            </thead>
+                            @{
+                                var inkList = ViewBag.InkPurchase as List<Printery.Domain.ViewModel.PurchasingInkViewModel>;
+                                if (inkList != null)
+                                {
+                                    <tbody>
+                                        @{
+                                            foreach (var item in inkList)
+                                            {
+                                                <tr>
+                                                    <td class="td2 guid">
+                                                        @Html.DisplayFor(modelitem => item.PurchasingID)
+                                                    </td>
+                                                    <td class="td2 cinkid">
+                                                        @Html.DisplayFor(modelitem => item.InkId)
+                                                    </td>
+                                                    <td class="td2 cinkname">
+                                                        @Html.DisplayFor(modelitem => item.InkName)
+                                                    </td>
+                                                    <td class="td2 cinkcout">
+                                                        @Html.DisplayFor(modelitem => item.Count)
+                                                    </td>
+                                                    <td class="td2">
+                                                        @Html.DisplayFor(modelitem => item.Price)
+                                                    </td>
+                                                    <td class="td2">
+                                                        @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                                    </td>
+                                                    <td class="td2">
+                                                        @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                                    </td>
+                                                    <td class="td2">
+                                                        @Html.DisplayFor(modelitem => item.Status)
+                                                    </td>
+                                                    <td class="td2">
+                                                        @Html.DisplayFor(modelitem => item.CreateDate)
+                                                    </td>
+                                                    <td class="td2">
+                                                        @Html.DisplayFor(modelitem => item.ProcessDate)
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                                            <button type="button" class="btn btn-outline-secondary addstockbtn">入库</button>
+                                                            <button type="button" class="btn btn-outline-secondary delInbtn">删除</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                }
+                            }
+                        </table>
+                        @{
+
+                            if (inkList != null && inkList.Count > 0)
+                            {
+                                @Html.Partial("Pager")
+
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <div class="mb-0">
+                    <div class="row">
+                        <div class="col-9">
+                            <button class="btn btn-outline-dark text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                纸张采购
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <form class="form-inline my-2 my-lg-0" method="post">
+                                <input class="form-control mr-sm-2" type="search" name="PostPaperName" placeholder="纸张名称" aria-label="Search">
+                                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-responsive-md table-hover">
+                        <thead>
+                            <tr>
+                                <th>采购单号</th>
+                                <th>纸张编号</th>
+                                <th>纸张名称</th>
+                                <th>入库数量</th>
+                                <th>总价格</th>
+                                <th>创建人</th>
+                                <th>处理人</th>
+                                <th>当前状态</th>
+                                <th>创建日期</th>
+                                <th>处理日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        @{
+                            var paperList = ViewBag.PaperPurchase as List<Printery.Domain.ViewModel.PurchasingPaperViewModel>;
+                            if (paperList != null)
+                            {
+                                <tbody>
+                                    @{
+                                        foreach (var item in paperList)
+                                        {
+                                            <tr>
+                                                <td class="td1 guid">
+                                                    @Html.DisplayFor(modelitem => item.PurchasingID)
+                                                </td>
+                                                <td class="td1 paperid">
+                                                    @Html.DisplayFor(modelitem => item.PaperId)
+                                                </td>
+                                                <td class="td1 papername">
+                                                    @Html.DisplayFor(modelitem => item.PaperName)
+                                                </td>
+                                                <td class="td1 papercout">
+                                                    @Html.DisplayFor(modelitem => item.Count)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.Price)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.Status)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.CreateDate)
+                                                </td>
+                                                <td class="td1">
+                                                    @Html.DisplayFor(modelitem => item.ProcessDate)
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                                        <button type="button" class="btn btn-outline-secondary psabtn">入库</button>
+                                                        <button type="button" class="btn btn-outline-secondary delpabtn">删除</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            }
+                        }
+
+                    </table>
+                    @{
+
+                        if (paperList != null && paperList.Count > 0)
+                        {
+                            @Html.Partial("Pager1")
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <div class="mb-0">
+                    <div class="row">
+                        <div class="col-9">
+                            <button class="btn btn-outline-danger text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                油墨采购
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <form class="form-inline my-2 my-lg-0" method="post">
+                                <input class="form-control mr-sm-2" type="search" name="PostInkName" placeholder="墨水名称" aria-label="Search">
+                                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-responsive-md table-hover">
+                        <thead>
+                            <tr>
+                                <th>采购单号</th>
+                                <th>油墨编号</th>
+                                <th>油墨名称</th>
+                                <th>入库数量</th>
+                                <th>总价格</th>
+                                <th>创建人</th>
+                                <th>处理人</th>
+                                <th>当前状态</th>
+                                <th>创建日期</th>
+                                <th>处理日期</th>
+                            </tr>
+                        </thead>
+                        @{
+                            var inkList = ViewBag.InkPurchase as List<Printery.Domain.ViewModel.PurchasingInkViewModel>;
+                            if (inkList != null)
+                            {
+                                <tbody>
+                                    @{
+                                        foreach (var item in inkList)
+                                        {
+                                            <tr>
+                                                <td class="td2 guid">
+                                                    @Html.DisplayFor(modelitem => item.PurchasingID)
+                                                </td>
+                                                <td class="td2 cinkid">
+                                                    @Html.DisplayFor(modelitem => item.InkId)
+                                                </td>
+                                                <td class="td2 cinkname">
+                                                    @Html.DisplayFor(modelitem => item.InkName)
+                                                </td>
+                                                <td class="td2 cinkcout">
+                                                    @Html.DisplayFor(modelitem => item.Count)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.Price)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.CreatePersonId)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.ProcessPersonId)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.Status)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.CreateDate)
+                                                </td>
+                                                <td class="td2">
+                                                    @Html.DisplayFor(modelitem => item.ProcessDate)
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm" role="group" aria-label="action">
+                                                        <button type="button" class="btn btn-outline-secondary addstockbtn">入库</button>
+                                                        <button type="button" class="btn btn-outline-secondary delInbtn">删除</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            }
+                        }
+                    </table>
+                    @{
+
+                        if (inkList != null && inkList.Count > 0)
+                        {
+                            @Html.Partial("Pager")
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="inkpurid">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨编号:</label>
+                            <label id="cuInkId"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨名称:</label>
+                            <label id="cuInkName"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>总价格:</label>
+                            <label id="cuPrice"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>创建人ID:</label>
+                            <label id="cuCreate"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>处理人ID:</label>
+                            <label id="cuProcess"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>数量:</label>
+                            <label id="cuCount"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>状态:</label>
+                            <label id="cuStatus"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ViewPaperModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title" id="papurid">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸品编号:</label>
+                            <label id="cuPaperId"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸品名称:</label>
+                            <label id="cuPaperName"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>总价格:</label>
+                            <label id="cuPaperPrice"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>创建人ID:</label>
+                            <label id="cuPaperCreate"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>处理人ID:</label>
+                            <label id="cuPaperProcess"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>数量:</label>
+                            <label id="cuPaperCount"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>状态:</label>
+                            <label id="cuPaperStatus"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="chackModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">订单号：</h5><h5 class="modal-title" id="chackModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>纸品编号:</label>
+                            <label id="paid"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>纸品名称:</label>
+                            <label id="paname"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>入库数量:</label>
+                            <label id="pacout"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>请输入入库价格：</label>
+                            <input type="number" class="form-control" id="paperstockPrice" placeholder="输入价格" value="" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="AddPaperStock()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="chackInkModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">订单号：</h5><h5 class="modal-title" id="chackInkModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>油墨编号:</label>
+                            <label id="inkkid"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>油墨名称:</label>
+                            <label id="inkkname"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>入库数量:</label>
+                            <label id="inkkcout"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>请输入入库价格：</label>
+                            <input type="text" class="form-control" id="InkstockPrice" placeholder="输入价格" value="" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="AddInkStock()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="removePaperModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">工单号：</h5><h5 class="modal-title" id="removepaper">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    确认删除该纸品入库纪录？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deletePaList()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="removeInkModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">工单号：</h5><h5 class="modal-title" id="removeink">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    确认删除该油墨入库纪录？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deleteInKList()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/Dashboradasset/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
+    <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(".td2").click(function () {
+            debugger;
+            var id = $(this).parent("tr");
+            var a = id.find(".guid");
+            var b = a.text();
+            $.ajax({
+                type: "POST",
+                url: "../Manager/GetInkPurchase",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { inkpurchaseId: b }
+                ),
+
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        $("#inkpurid").text("工单号：" + b);
+                    $.each(result, function (i, data) {
+                        $("#cuInkId").text(data.InkId);
+                        $("#cuInkName").text(data.InkName);
+                        $("#cuPrice").text(data.Price);
+                        $("#cuCreate").text(data.CreatePersonId);
+                        $("#cuProcess").text(data.ProcessPersonId);
+                        $("#cuCount").text(data.Count);
+                        $("#cuStatus").text(data.Status);
+                    });
+                    $('#ViewModal').modal('show');
+                }
+            })
+        });
+        $(".td1").click(function () {
+            debugger;
+            var id = $(this).parent("tr");
+            var a = id.find(".guid");
+            var b = a.text();
+            $.ajax({
+                type: "POST",
+                url: "../Manager/GetPaperPurchase",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { paperpurchaseid: b }
+                ),
+
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        $("#papurid").text("工单号：" + b);
+                    $.each(result, function (i, data) {
+                        $("#cuPaperId").text(data.PaperId);
+                        $("#cuPaperName").text(data.PaperName);
+                        $("#cuPaperPrice").text(data.Price);
+                        $("#cuPaperCreate").text(data.CreatePersonId);
+                        $("#cuPaperProcess").text(data.ProcessPersonId);
+                        $("#cuPaperCount").text(data.Count);
+                        $("#cuPaperStatus").text(data.Status);
+                    });
+                    $('#ViewPaperModal').modal('show');
+                }
+            })
+        });
+        $(".psabtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var d = a.find('.paperid')
+            var f = a.find('.papercout')
+            var h = a.find('.papername')
+            var b = c.text();
+            var e = d.text();
+            var g = f.text();
+            var i = h.text();
+            $("#chackModalLabel").text(b);
+            $("#paid").text(e);
+            $("#paname").text(i)
+            $("#pacout").text(g)
+            $('#chackModal').modal('show');
+        })
+        $(".addstockbtn").click(function () {
+            debugger;
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var d = a.find('.cinkid')
+            var f = a.find('.cinkcout')
+            var h = a.find('.cinkname')
+            var b = c.text();
+            var e = d.text();
+            var g = f.text();
+            var i = h.text();
+            $("#chackInkModalLabel").text(b);
+            $("#inkkid").text(e);
+            $("#inkkname").text(i)
+            $("#inkkcout").text(g)
+            $('#chackInkModal').modal('show');
+        })
+        $(".delpabtn").click(function () {
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removepaper").text(b);
+            $('#removePaperModal').modal('show');
+        })
+        $(".delInbtn").click(function () {
+            var div = $(this).parent("div")
+            var id = div.parent("td");
+            var a = id.parent("tr");
+            var c = a.find(".guid")
+            var b = c.text();
+            $("#removeink").text(b);
+            $('#removeInkModal').modal('show');
+        })
+        function AddPaperStock() {
+            debugger;
+            var paid = document.getElementById('paid').innerText
+            var paco = document.getElementById('pacout').innerText
+            var PurPrice = document.getElementById('paperstockPrice').value
+            var PurId = document.getElementById('chackModalLabel').innerText
+            var Processpersonid = document.getElementById('personid').innerText;
+            var re = {
+                Price: PurPrice,
+                PurchaseId: PurId,
+                PaperId: paid,
+                PaperCount: paco,
+                ProcessPersonId: Processpersonid
+            }
+            $('#chackModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/PushStockIn",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(re),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("纸品入库成功！")
+                    location.reload()
+                }
+
+            })
+        }
+        function AddInkStock() {
+            debugger;
+            var inkid = document.getElementById('inkkid').innerText
+            var inkco = document.getElementById('inkkcout').innerText
+            var PurPrice = document.getElementById('InkstockPrice').value
+            var PurId = document.getElementById('chackInkModalLabel').innerText
+            var Processpersonid = document.getElementById('personid').innerText;
+            var re = {
+                Price: PurPrice,
+                PurchaseId: PurId,
+                InkId: inkid,
+                InkCout: inkco,
+                ProcessPersonId: Processpersonid
+            }
+            $('#chackInkModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/PushStockInInk",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(re),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert("油墨入库成功！")
+                    location.reload()
+                }
+
+            })
+        }
+        function deletePaList() {
+            var purchaseid = document.getElementById('removepaper').innerText
+            $('#removePaperModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/DeletePaperPurchase",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { purchaseguid: purchaseid }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert("删除成功！")
+                    location.reload()
+                }
+            })
+        }
+        function deleteInKList() {
+            debugger;
+            var purchaseid = document.getElementById('removeink').innerText
+            $('#removeInkModal').modal('hide')
+            $(".modal-backdrop.fade").hide()
+            $.ajax({
+                type: "POST",
+                url: "../Manager/DeleteInkPurchase",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { purchaseguid: purchaseid }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert("删除成功！")
+                    location.reload()
+                }
+            })
+        }
+    </script>
+</body>
+</html>

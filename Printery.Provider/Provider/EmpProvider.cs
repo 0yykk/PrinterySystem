@@ -17,7 +17,9 @@ namespace Printery.Provider.Provider
         Task<EmployeeViewModel> GetEmployeeById(string id);
         Task<List<EmployeeViewModel>> GetAllEmployee();
         Task<List<DepartmentViewModel>> GetDepartment();
+        List<EmployeeViewModel> GetEmployeeByName(string name);
         List<PowerControlListViewModel> GetPowerContrlListById(string GroupId);
+        List<EmpGroupViewModel> GetUserGroupByName(string name);
         void UpdatePassword(string pwd,string empid);
         void UpdatePowerList(List<PowerControlListViewModel> powerlist);
         void AddUserGroupByGroupName(string GroupName);
@@ -76,10 +78,22 @@ namespace Printery.Provider.Provider
             dep = await _empRespository.GetDepartment();
             return dep;
         }
+        public List<EmployeeViewModel> GetEmployeeByName(string name)
+        {
+            var list = new List<EmployeeViewModel>();
+            list = _empRespository.GetEmployeeByName(name);
+            return list;
+        }
         public List<PowerControlListViewModel> GetPowerContrlListById(string GroupId)
         {
             var list = new List<PowerControlListViewModel>();
             list = _empRespository.GetPowerContrlListById(GroupId);
+            return list;
+        }
+        public List<EmpGroupViewModel> GetUserGroupByName(string name)
+        {
+            var list = new List<EmpGroupViewModel>();
+            list = _empRespository.GetUserGroupByName(name);
             return list;
         }
         public void UpdatePassword(string pwd, string empid)

@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    ViewBag.Title = "登录";
 }
 
 <!DOCTYPE html>
@@ -25,18 +26,18 @@
 <body class="text-center">
     <form class="form-signin" method="post">
         <img class="mb-4" src="~/Content/imges/icon/logo.jpg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
+        <h1 class="h3 mb-3 font-weight-normal">登录系统</h1>
+        <label for="inputuser" class="sr-only">用户名</label>
         <input value="@ViewBag.LoginUser" id="userId" type="text" name="login" class="form-control" placeholder="用户名" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Password</label>
+        <label for="inputPassword" class="sr-only">密码</label>
         <input value="@ViewBag.LoginPwd" type="password" id="password" name="password" class="form-control" placeholder="密码" required="">
         <div class="checkbox mb-3">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-muted">© 2017-2020</p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        @*<p class="mt-5 mb-3 text-muted">© 2017-2020</p>*@
     </form>
 
 

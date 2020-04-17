@@ -19,8 +19,11 @@ namespace Printery.Data.Respositories
         Task<TodayFocusViewModel> GetAllOrderDisplayByempid(string empid);
         Task<DashboradViewModel> GetDashboradDisplay(string empid);
         Task<List<DashboradBottomViewModel>> GetDashboradBottomDisplay(string empid);
+        Task<List<OrderViewModel>> SearchOrderByDate(DateTime? Date);
+        List<OrderViewModel> GetOrderByCustomer(string CustomerName);
         List<OrderViewModel> GetOrderByOrderId(string orderid);
-
+        List<BarChartViewModel> InitBarChart(string empid);
+        List<PieChartViewModel> InitPieChart(string empid);
         void ProcessOrder(string orderid, string processpersonid);
         void CreateOrder(OrderViewModel order);
         void EditOrder(OrderViewModel order);
@@ -136,6 +139,16 @@ namespace Printery.Data.Respositories
             }
             return list;
         }
+        public async Task<List<OrderViewModel>> SearchOrderByDate(DateTime? Date)
+        {
+            var list = new List<OrderViewModel>();
+            var storeProduceName = "[dbo].[Select_OrderByDate]";
+            var result = await _dbContext.Database.SqlQuery<OrderViewModel>(
+                $"{storeProduceName} @date",
+                new SqlParameter("@date", Date)
+                ).ToListAsync();
+            return result;
+        }
         public void CreateOrder(OrderViewModel order)
         {
             var storeProcedureName = "[dbo].[Create_Order]";
@@ -157,6 +170,30 @@ namespace Printery.Data.Respositories
                 new SqlParameter("@ProductName",order.ProductName)
                 ).SingleOrDefault();
         }
+        public List<OrderViewModel> GetOrderByCustomer(string CustomerName)
+        {
+            var orderList = from u in _db.Order
+                            where (u.CustomerName.Contains(CustomerName))
+                            select u;
+            var list = new List<OrderViewModel>();
+            foreach (var item in orderList)
+            {
+                var order = new OrderViewModel();
+                order.OrderId = item.OrderId;
+                order.Deadline = item.Deadline;
+                order.CustomerName = item.CustomerName;
+                order.Phone = item.Phone;
+                order.Status = item.Status;
+                order.Phone = item.Phone;
+                order.Price = item.Price;
+                order.OrderCreate = item.OrderCreate;
+                order.OrderProcess = item.OrderProcess;
+                order.CreatePersonId = item.CreatePersonId;
+                list.Add(order);
+            }
+            return list;
+
+        }
         public List<OrderViewModel> GetOrderByOrderId(string orderid)
         {
             var order = from u in _db.Order
@@ -175,6 +212,41 @@ namespace Printery.Data.Respositories
                 ordlist.Add(ord);
             }
             return ordlist;
+        }
+        public List<BarChartViewModel> InitBarChart(string empid)
+        {
+            var storeProcedureName = "[dbo].[Init_BarChart]";
+            var result =_dbContext.Database.SqlQuery<BarChartViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid", empid)
+                ).ToList();
+            var list = new List<BarChartViewModel>();
+            foreach (var i in result)
+            {
+                var ord = new BarChartViewModel();
+                ord.month = i.month;
+                ord.business = i.business;
+                ord.profit = i.profit;
+                list.Add(ord);
+            }
+            return list;
+        }
+        public List<PieChartViewModel> InitPieChart(string empid)
+        {
+            var storeProcedureName = "[dbo].[Init_PieChart]";
+            var result = _dbContext.Database.SqlQuery<PieChartViewModel>(
+                $"{storeProcedureName} @empid",
+                new SqlParameter("@empid", empid)
+                ).ToList();
+            var list = new List<PieChartViewModel>();
+            foreach (var i in result)
+            {
+                var ord = new PieChartViewModel();
+                ord.ProductName = i.ProductName;
+                ord.Count = i.Count;
+                list.Add(ord);
+            }
+            return list;
         }
         public void ProcessOrder(string orderid, string processpersonid)
         {

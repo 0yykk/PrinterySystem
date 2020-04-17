@@ -75,6 +75,74 @@ namespace PrinterySystem.Controllers
             };
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> OrderManagement(OrderViewModel order)
+        {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            var productlist = new List<ProductGoodsViewModel>();
+            var Orderlist = new List<OrderViewModel>();
+            string cusname = Request.Form["OrCustomer"];
+            DateTime? CreateDate = null;
+            if (Request.Form["CreateDate"] != null)
+            {
+                CreateDate = Convert.ToDateTime(Request.Form["CreateDate"]);
+            } 
+            if (sa.EmpId != null)
+            {
+                if (Orderlist != null&&CreateDate==null)
+                {
+                    productlist = await _productProvider.GetAllProduct();
+                    Orderlist = _orderProvider.GetOrderByCustomer(cusname);
+                }
+                if (CreateDate != null)
+                {
+                    productlist = await _productProvider.GetAllProduct();
+                    Orderlist = await _orderProvider.SearchOrderByDate(CreateDate);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("101"))
+                {
+                    if (Orderlist != null&& CreateDate == null)
+                    {
+                        productlist = await _productProvider.GetAllProduct();
+                        Orderlist = _orderProvider.GetOrderByCustomer(cusname);
+                    }
+                    if (CreateDate != null)
+                    {
+                        productlist = await _productProvider.GetAllProduct();
+                        Orderlist = await _orderProvider.SearchOrderByDate(CreateDate);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            ViewBag.ProductList = productlist;
+            int pageindex = 1;
+            var recordCount = Orderlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderId)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
         public ActionResult StockManagement()
         {
             string power = Session["Power"].ToString();
@@ -104,6 +172,35 @@ namespace PrinterySystem.Controllers
         {
             var PaperList = new List<PaperCViewModel>();
             PaperList = await _paperProvider.GetAllPaper();
+            int pageindex = 1;
+            var recordCount = PaperList.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.PaperList = PaperList.OrderByDescending(art => art.PaperId)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> PaperStockManagement(string papername)
+        {
+            var PaperList = new List<PaperCViewModel>();
+            string name = Request.Form["PostPaperName"];
+            if (name == null)
+            {
+                PaperList = await _paperProvider.GetAllPaper();
+            }
+            else
+            {
+                PaperList = _paperProvider.GetPaperByPapername(name);
+            }
             int pageindex = 1;
             var recordCount = PaperList.Count();
             if (Request.QueryString["page"] != null)
@@ -820,11 +917,69 @@ namespace PrinterySystem.Controllers
             };
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> PrintingInkStockManagement(string na)
+        {
+            var InkList = new List<InkCViewModel>();
+            string name = Request.Form["PostInkName"];
+            if (name == null)
+            {
+                InkList = await _inkProvider.GetAllInk();
+            }
+            else
+            {
+                InkList = _inkProvider.GetInkByName(name);
+            }
+            int pageindex = 1;
+            var recordCount = InkList.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.InkList = InkList.OrderByDescending(art => art.InkId)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
         public async Task<ActionResult> ProductStockManagement()
         {
 
             var productlist = new List<ProductGoodsViewModel>();
             productlist = await _productProvider.GetAllProduct();
+            int pageindex = 1;
+            var recordCount = productlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.ProductList = productlist.OrderByDescending(art => art.ProductID)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ProductStockManagement(string na)
+        {
+            string name = Request.Form["PostProdcutName"];
+            var productlist = new List<ProductGoodsViewModel>();
+            if (name == null)
+            {
+                productlist = await _productProvider.GetAllProduct();
+            }
+            else
+            {
+                productlist = _productProvider.GetProductByProductName(name);
+            }
             int pageindex = 1;
             var recordCount = productlist.Count();
             if (Request.QueryString["page"] != null)
@@ -890,6 +1045,74 @@ namespace PrinterySystem.Controllers
             };
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> OrderProcessing(OrderViewModel order)
+        {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            var productlist = new List<ProductGoodsViewModel>();
+            var Orderlist = new List<OrderViewModel>();
+            string cusname = Request.Form["OrCustomer"];
+            DateTime? CreateDate = null;
+            if (Request.Form["CreateDate"] != null)
+            {
+                CreateDate = Convert.ToDateTime(Request.Form["CreateDate"]);
+            }
+            if (sa.EmpId != null)
+            {
+                if (Orderlist != null && CreateDate == null)
+                {
+                    productlist = await _productProvider.GetAllProduct();
+                    Orderlist = _orderProvider.GetOrderByCustomer(cusname);
+                }
+                if (CreateDate != null)
+                {
+                    productlist = await _productProvider.GetAllProduct();
+                    Orderlist = await _orderProvider.SearchOrderByDate(CreateDate);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("101"))
+                {
+                    if (Orderlist != null && CreateDate == null)
+                    {
+                        productlist = await _productProvider.GetAllProduct();
+                        Orderlist = _orderProvider.GetOrderByCustomer(cusname);
+                    }
+                    if (CreateDate != null)
+                    {
+                        productlist = await _productProvider.GetAllProduct();
+                        Orderlist = await _orderProvider.SearchOrderByDate(CreateDate);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            ViewBag.ProductList = productlist;
+            int pageindex = 1;
+            var recordCount = Orderlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.OrderList = Orderlist.OrderByDescending(art => art.OrderId)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
         public async Task<ActionResult> ProduceManagement()
         {
             string power = Session["Power"].ToString();
@@ -908,6 +1131,62 @@ namespace PrinterySystem.Controllers
                 if (userpower.Contains("201"))
                 {
                     purchaselist = await _productProvider.GetAllProductPurchase();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            int pageindex = 1;
+            var recordCount = purchaselist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.PurchaseList = purchaselist.OrderByDescending(art => art.CreateDate)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ProduceManagement(string na)
+        {
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            string name = Request.Form["PostProductName"];
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            var purchaselist = new List<ProductGoodViewModel>();
+            if (sa.EmpId != null)
+            {
+                if (name == null)
+                {
+                    purchaselist = await _productProvider.GetAllProductPurchase();
+                }
+                else
+                {
+                    purchaselist = _productProvider.GetPurchaseByName(name);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("201"))
+                {
+                    if (name == null)
+                    {
+                        purchaselist = await _productProvider.GetAllProductPurchase();
+                    }
+                    else
+                    {
+                        purchaselist = _productProvider.GetPurchaseByName(name);
+                    }
                 }
                 else
                 {
@@ -951,6 +1230,101 @@ namespace PrinterySystem.Controllers
                 {
                     inklist = await _inkProvider.GetAllInkPurchasing();
                     paperlist = await _paperProvider.GetAllPaperPurchasing();
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            int pageindex = 1;
+            int pageindex1 = 1;
+            var recordCount = inklist.Count();
+            var recordCount1 = paperlist.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            if (Request.QueryString["page1"] != null)
+                pageindex1 = Convert.ToInt32(Request.QueryString["page1"]);
+            const int PAGE_SZ = 5;
+            ViewBag.InkPurchase = inklist.OrderByDescending(art => art.CreateDate)
+                .Skip((pageindex - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.PaperPurchase = paperlist.OrderByDescending(art => art.CreateDate)
+                .Skip((pageindex1 - 1) * PAGE_SZ)
+                .Take(PAGE_SZ).ToList();
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            ViewBag.Pager1 = new PagerHelper()
+            {
+                PageIndex = pageindex1,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount1,
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> PurchasingManagement(string na)
+        {
+            string papername = Request.Form["PostPaperName"];
+            string inkname = Request.Form["PostInkName"];
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            var inklist = new List<PurchasingInkViewModel>();
+            var paperlist = new List<PurchasingPaperViewModel>();
+            if (sa.EmpId != null)
+            {
+                if (papername == null && inkname == null)
+                {
+                    inklist = await _inkProvider.GetAllInkPurchasing();
+                    paperlist = await _paperProvider.GetAllPaperPurchasing();
+                }
+                else if (papername != null && inkname == null)
+                {
+                    inklist = await _inkProvider.GetAllInkPurchasing();
+                    paperlist = _paperProvider.GetPurchasingByName(papername);
+                }
+                else if (papername == null && inkname != null)
+                {
+                    paperlist = await _paperProvider.GetAllPaperPurchasing();
+                    inklist = _inkProvider.GetPurchasingByName(inkname);
+                }
+                else
+                {
+                    paperlist = _paperProvider.GetPurchasingByName(papername);
+                    inklist = _inkProvider.GetPurchasingByName(inkname);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("201"))
+                {
+                    if (papername == null && inkname == null)
+                    {
+                        inklist = await _inkProvider.GetAllInkPurchasing();
+                        paperlist = await _paperProvider.GetAllPaperPurchasing();
+                    }
+                    else if (papername != null && inkname == null)
+                    {
+                        inklist = await _inkProvider.GetAllInkPurchasing();
+                        paperlist = _paperProvider.GetPurchasingByName(papername);
+                    }
+                    else if (papername == null && inkname != null)
+                    {
+                        paperlist = await _paperProvider.GetAllPaperPurchasing();
+                        inklist = _inkProvider.GetPurchasingByName(inkname);
+                    }
+                    else
+                    {
+                        paperlist = _paperProvider.GetPurchasingByName(papername);
+                        inklist = _inkProvider.GetPurchasingByName(inkname);
+                    }
                 }
                 else
                 {

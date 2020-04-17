@@ -121,6 +121,68 @@ namespace PrinterySystem.Controllers
             };
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> UserGroupManager(string na)
+        {
+            string name = Request.Form["PostUserGroup"];
+            string power = Session["Power"].ToString();
+            string empid = Session["LoginId"].ToString();
+            var sa = new SAViewModel();
+            var userpower = new List<string>();
+            var empg = new List<EmpGroupViewModel>();
+            var powlist = new List<PowerListViewModel>();
+            userpower = _powerCheckProvider.CheckPower(power);
+            sa = _powerCheckProvider.CheckSAuser(empid);
+            if (sa.EmpId != null)
+            {
+                if (name == null)
+                {
+                    powlist = await _empProvider.GetAllPowerList();
+                    empg = await _empProvider.GetAllEmpGroup();
+                }
+                else
+                {
+                    powlist = await _empProvider.GetAllPowerList();
+                    empg = _empProvider.GetUserGroupByName(name);
+                }
+            }
+            else
+            {
+                if (userpower.Contains("1"))
+                {
+                    if (name == null)
+                    {
+                        powlist = await _empProvider.GetAllPowerList();
+                        empg = await _empProvider.GetAllEmpGroup();
+                    }
+                    else
+                    {
+                        powlist = await _empProvider.GetAllPowerList();
+                        empg = _empProvider.GetUserGroupByName(name);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("PowerError", "Account");
+                }
+            }
+            int pageindex = 1;
+            var recordCount = empg.Count();
+            if (Request.QueryString["page"] != null)
+                pageindex = Convert.ToInt32(Request.QueryString["page"]);
+            const int PAGE_SZ = 5;
+            ViewBag.EmpGroupList = empg.OrderByDescending(art => art.GroupId)
+            .Skip((pageindex - 1) * PAGE_SZ)
+            .Take(PAGE_SZ).ToList();
+            ViewBag.PowerList = powlist;
+            ViewBag.Pager = new PagerHelper()
+            {
+                PageIndex = pageindex,
+                PageSize = PAGE_SZ,
+                RecordCount = recordCount,
+            };
+            return View();
+        }
         # region 用户组处理api
         public JsonResult PowerListUpdate(List<PowerControlListViewModel> powerlist)
         {

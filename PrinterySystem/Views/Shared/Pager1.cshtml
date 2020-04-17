@@ -30,8 +30,8 @@
         {
             routeValues1["page1"] = _pager1.PageIndex - 1;
 
-            <li class="page-item">
-                @Html.ActionLink("«", _action1, routeValues1, new { @class = "page-link" })
+            <li class="page-item page-link">
+                @Html.ActionLink("«", _action1, routeValues1)
             </li>
         }
         @foreach (int p in _pager1.Pages)
@@ -49,7 +49,7 @@
             else
             {
                 routeValues1["page1"] = p;
-                <li>@Html.ActionLink(p.ToString(), _action1, routeValues1, new { @class = "page-link" })</li>
+                <li class="page-item page-link">@Html.ActionLink(p.ToString(), _action1, routeValues1)</li>
             }
         }
         @if (_pager1.PageIndex == _pager1.PageCount)
@@ -59,8 +59,8 @@
         else
         {
             routeValues1["page1"] = _pager1.PageIndex + 1;
-            <li class="page-item">
-                @Html.ActionLink("»", _action1, routeValues1, new { @class = "page-link" })
+            <li class="page-item page-link">
+                @Html.ActionLink("»", _action1, routeValues1)
             </li>
         }
     </ul>

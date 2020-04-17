@@ -19,7 +19,11 @@ namespace Printery.Provider.Provider
         Task<TodayFocusViewModel> GetAllOrderDisplayByempid(string empid);
         Task<DashboradViewModel> GetDashboradDisplay(string empid);
         Task<List<DashboradBottomViewModel>> GetDashboradBottomDisplay(string empid);
+        Task<List<OrderViewModel>> SearchOrderByDate(DateTime? Date);
+        List<OrderViewModel> GetOrderByCustomer(string CustomerName);
         List<OrderViewModel> GetOrderByOrderId(string orderid);
+        List<BarChartViewModel> InitBarChart(string empid);
+        List<PieChartViewModel> InitPieChart(string empid);
         void ProcessOrder(string orderid, string processpersonid);
         void CreateOrder(OrderViewModel order);
         void EditOrder(OrderViewModel order);
@@ -62,10 +66,34 @@ namespace Printery.Provider.Provider
             list = await _orderRespository.GetDashboradBottomDisplay(empid);
             return list;
         }
+        public async Task<List<OrderViewModel>> SearchOrderByDate(DateTime? Date)
+        {
+            var list = new List<OrderViewModel>();
+            list = await _orderRespository.SearchOrderByDate(Date);
+            return list;
+        }
+        public List<OrderViewModel> GetOrderByCustomer(string CustomerName)
+        {
+            var list = new List<OrderViewModel>();
+            list = _orderRespository.GetOrderByCustomer(CustomerName);
+            return list;
+        }
         public List<OrderViewModel> GetOrderByOrderId(string orderid)
         {
             var list = new List<OrderViewModel>();
             list = _orderRespository.GetOrderByOrderId(orderid);
+            return list;
+        }
+        public List<BarChartViewModel> InitBarChart(string empid)
+        {
+            var list = new List<BarChartViewModel>();
+            list = _orderRespository.InitBarChart(empid);
+            return list;
+        }
+        public List<PieChartViewModel> InitPieChart(string empid)
+        {
+            var list = new List<PieChartViewModel>();
+            list = _orderRespository.InitPieChart(empid);
             return list;
         }
         public void ProcessOrder(string orderid, string processpersonid)

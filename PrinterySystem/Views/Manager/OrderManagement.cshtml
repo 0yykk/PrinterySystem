@@ -17,16 +17,14 @@
     <div class="container-fluid mt-3 main">
         <div class="row mb-3">
             <div class="col-md-4">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="订单ID" aria-label="Search">
+                <form class="form-inline my-2 my-lg-0" method="post">
+                    <input class="form-control mr-sm-2" type="search" name="OrCustomer" placeholder="客户名称" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
             <div class="col-md-4">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
-                    <span>~</span>
-                    <input class="form-control mr-sm-2 col-md-2" type="search" placeholder="日期">
+                <form class="form-inline my-2 my-lg-0" method="post">
+                    <input class="form-control mr-sm-2" name="CreateDate" type="search" placeholder="订单创建日期" onclick="WdatePicker()">
                 </form>
             </div>
             <div class="col-md-4 text-right my-2 my-lg-0">
@@ -246,10 +244,10 @@
                         </div>
                     </div>
                     <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label>Email</label>
-                                <input type="text" class="form-control" id="edemail" placeholder="输入电子邮箱" value="" required="">
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Email</label>
+                            <input type="text" class="form-control" id="edemail" placeholder="输入电子邮箱" value="" required="">
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label>联系人</label>
                             <input type="text" class="form-control" id="edcontact" placeholder="输入联系人" value="" required="">
@@ -261,7 +259,7 @@
                             <input type="text" class="form-control" id="edtips" placeholder="输入备注（可选）" value="" required="">
                         </div>
                         <div class="col-md-6 mb-3">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -344,6 +342,7 @@
     <script src="~/Content/Dashboradasset/js/jquery-3.2.1.slim.min.js"></script>
     <script src="~/Content/Dashboradasset/js/popper.min.js"></script>
     <script src="~/Content/Dashboradasset/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/DatePicker/WdatePicker.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
@@ -384,21 +383,21 @@
             $('#removeModal').modal('hide')
             $(".modal-backdrop.fade").hide()
             $.ajax({
-            type: "POST",
-            url: "../Manager/DeleteOrder",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(
-                { orderguid: orderid }
-            ),
-            success: function (result) {
-                debugger;
-                if (result != null)
-                     alert(result)
+                type: "POST",
+                url: "../Manager/DeleteOrder",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { orderguid: orderid }
+                ),
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        alert(result)
                     location.reload()
-            }
-        })
+                }
+            })
         }
         function editorder() {
             debugger;
@@ -424,26 +423,26 @@
                 "Phone": phone,
                 "Email": email,
                 "Contact": contact,
-                "ProductName":""
+                "ProductName": ""
             }
             $('#editModal').modal('hide')
             $(".modal-backdrop.fade").hide()
             $.ajax({
-            type: "POST",
-            url: "../Manager/EditOrder",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(result),
+                type: "POST",
+                url: "../Manager/EditOrder",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(result),
 
-            success: function (e) {
-                debugger;
-                if (e != null)
-                    alert(e)
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert(e)
                     location.reload()
-            }
+                }
 
-        })
+            })
         }
         function addOrder() {
             debugger;
@@ -474,73 +473,73 @@
                 "Phone": phone,
                 "Email": email,
                 "Contact": contact,
-                "ProductName":$('#Product').val()
+                "ProductName": $('#Product').val()
             }
             $('#addModal').modal('hide')
             $(".modal-backdrop.fade").hide()
-        $.ajax({
-            type: "POST",
-            url: "../Manager/AddOrder",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(result),
-
-            success: function (e) {
-                debugger;
-                if (e != null)
-                    alert(e)
-                    location.reload()  
-            }
-
-        })
-        }
-         $(document).ready(function () {
-        $("#Product").change(function () {
-            var ddlprice = $("#eachPrice");
-            //debugger;
-
             $.ajax({
                 type: "POST",
-                url: "../Manager/GetPriceList",
-                data: JSON.stringify({
-                    pri: $('#Product').val()
-                }),
+                url: "../Manager/AddOrder",
+                contentType: "application/json;charset=UTF-8",
                 dataType: "json",
                 contentType: "application/json",
-                success: function (result) {
-                    //debugger;
-                    var html = "<option value=''>--选择单价--</option>";
-                    ddlprice.html("");
-                    $.each(result, function (i, data) {
-                        html += "<option value=" + data.eachPrice + ">" + data.eachPrice + "</option>";
-                    });
-                    ddlprice.append(html);
+                data: JSON.stringify(result),
+
+                success: function (e) {
+                    debugger;
+                    if (e != null)
+                        alert(e)
+                    location.reload()
                 }
-            });
+
+            })
+        }
+        $(document).ready(function () {
+            $("#Product").change(function () {
+                var ddlprice = $("#eachPrice");
+                //debugger;
+
+                $.ajax({
+                    type: "POST",
+                    url: "../Manager/GetPriceList",
+                    data: JSON.stringify({
+                        pri: $('#Product').val()
+                    }),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (result) {
+                        //debugger;
+                        var html = "<option value=''>--选择单价--</option>";
+                        ddlprice.html("");
+                        $.each(result, function (i, data) {
+                            html += "<option value=" + data.eachPrice + ">" + data.eachPrice + "</option>";
+                        });
+                        ddlprice.append(html);
+                    }
+                });
+            })
         })
-    })
 
         $(".td1").click(function () {
-        debugger;
-        var id = $(this).parent("tr");
-        var a = id.find(".guid");
-        var b = a.text();
-        $("#ctbody1").find('tr').empty();
-        $.ajax({
-            type: "POST",
-            url: "../Manager/GetOrder",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(
-                { orderguid: b }
-            ),
+            debugger;
+            var id = $(this).parent("tr");
+            var a = id.find(".guid");
+            var b = a.text();
+            $("#ctbody1").find('tr').empty();
+            $.ajax({
+                type: "POST",
+                url: "../Manager/GetOrder",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    { orderguid: b }
+                ),
 
-            success: function (result) {
-                debugger;
-                if (result != null)
-                    $("#viewmodeltitle").text("订单号："+b);
+                success: function (result) {
+                    debugger;
+                    if (result != null)
+                        $("#viewmodeltitle").text("订单号：" + b);
                     $.each(result, function (i, data) {
                         $("#cuName").text(data.CustomerName);
                         $("#cuAddress").text(data.Addressed);
@@ -548,10 +547,10 @@
                         $("#cuContact").text(data.Contact);
                         $("#cuProduct").text(data.ProductName);
                     });
-                $('#ViewModal').modal('show');
-            }
-        })
-    });
+                    $('#ViewModal').modal('show');
+                }
+            })
+        });
 
         $(".editbtn").click(function () {
             debugger;
